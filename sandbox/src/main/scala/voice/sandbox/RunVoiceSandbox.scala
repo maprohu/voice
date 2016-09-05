@@ -6,12 +6,16 @@ import akka.actor.ActorSystem
 import akka.stream.{ActorMaterializer, OverflowStrategy}
 import akka.stream.scaladsl.{Sink, Source}
 import akka.util.ByteString
+import com.sun.media.sound.FFT
 import toolbox8.akka.stream.Streams
+
+import scala.util.Random
 
 /**
   * Created by martonpapp on 04/09/16.
   */
 object RunVoiceSandbox {
+
 
   def main(args: Array[String]): Unit = {
     val format = new AudioFormat(44100.0f, 16, 1, true, true)
@@ -43,6 +47,11 @@ object RunVoiceSandbox {
       val numRead = line.read(buffer, 0, buffer.length)
       queue.offer(ByteString.fromArray(buffer, 0, numRead))
     }
+
+
+
+
   }
+
 
 }
