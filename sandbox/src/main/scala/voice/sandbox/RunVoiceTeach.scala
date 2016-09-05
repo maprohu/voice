@@ -65,6 +65,16 @@ object RunVoiceTeach {
 
       contents = new BorderPanel {
         add(
+          new Button("Play") {
+            val index =
+              table.selection.rows.head
+            AudioTools.play(
+              new File(s"../voice/target/samples/${index}.dat")
+            )
+          },
+          BorderPanel.Position.North
+        )
+        add(
           scrollPane,
           BorderPanel.Position.Center
         )

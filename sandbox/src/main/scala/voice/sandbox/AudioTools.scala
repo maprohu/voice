@@ -1,6 +1,6 @@
 package voice.sandbox
 
-import java.io.{File, FileOutputStream}
+import java.io.{File, FileInputStream, FileOutputStream}
 import javax.sound.sampled.{AudioFormat, AudioSystem}
 
 import akka.util.ByteString
@@ -42,5 +42,33 @@ object AudioTools {
     }
   }
 
+  def play(file: File) = {
+    new Thread() {
+      override def run(): Unit = {
+        val in = new FileInputStream(file)
+
+        val line = AudioSystem.getSourceDataLine(Format)
+        line.open(Format)
+
+        line.start()
+
+        line.getBufferSize
+
+        val buffer = Array.ofDim[Byte](1024 * 16)
+
+        Iterator
+          .continually(
+            in.read(buffer)
+          )
+          .takeWhile(_ != -1)
+          .foreach({ count =>
+            line.write(buffer, 0, count)
+          })
+
+        in.close()
+      }
+    }
+
+  }
 
 }
