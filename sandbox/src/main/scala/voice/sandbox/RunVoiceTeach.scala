@@ -1,10 +1,7 @@
 package voice.sandbox
 
-import java.awt.BorderLayout
 import java.io.File
 import javax.swing.table.AbstractTableModel
-
-import sun.jvm.hotspot.utilities.Interval
 
 import scala.swing.Table.{ElementMode, IntervalMode}
 import scala.swing.{Action, BorderPanel, Button, Label, MainFrame, ScrollPane, Table}
@@ -13,6 +10,8 @@ import scala.swing.{Action, BorderPanel, Button, Label, MainFrame, ScrollPane, T
   * Created by martonpapp on 05/09/16.
   */
 object RunVoiceTeach {
+  def dataFile(index: Int) =
+    new File(s"../voice/target/samples/${index}.dat")
 
   val Items =
     for {
@@ -65,11 +64,16 @@ object RunVoiceTeach {
 
       contents = new BorderPanel {
         add(
-          new Button("Play") {
+          Button("Play") {
             val index =
               table.selection.rows.head
             AudioTools.play(
-              new File(s"../voice/target/samples/${index}.dat")
+              dataFile(index)
+            )
+            val nextSelection = (index+1) % Items.size
+            table.selection.rows += nextSelection
+            table.peer.scrollRectToVisible(
+              table.peer.getCellRect(nextSelection, 0, true)
             )
           },
           BorderPanel.Position.North
@@ -93,7 +97,7 @@ object RunVoiceTeach {
                 val index =
                   table.selection.rows.head
                 val stopper = AudioTools.record(
-                  new File(s"../voice/target/samples/${index}.dat")
+                  dataFile(index)
                 )
                 def apply() = {
                   stopper()

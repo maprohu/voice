@@ -11,25 +11,35 @@ object RunVoicePlay {
   import AudioTools._
 
   def main(args: Array[String]): Unit = {
-    val in = new FileInputStream(File)
 
-    val line = AudioSystem.getSourceDataLine(Format)
-    line.open(Format)
+    play(
+      RunVoiceTeach.dataFile(32)
+//      VoiceFile
+    )
 
-    line.start()
+//    val in = new FileInputStream(
+////      RunVoiceTeach.dataFile(32)
+//      VoiceFile
+//    )
 
-    line.getBufferSize
-
-    val buffer = Array.ofDim[Byte](1024 * 16)
-
-    Iterator
-      .continually(
-        in.read(buffer)
-      )
-      .takeWhile(_ != -1)
-      .foreach({ count =>
-        line.write(buffer, 0, count)
-      })
+//    val line = AudioSystem.getSourceDataLine(Format)
+//    line.open(Format)
+//
+//    line.start()
+//
+//    line.getBufferSize
+//
+//    val buffer = Array.ofDim[Byte](1024 * 16)
+//
+//    Iterator
+//      .continually(
+//        in.read(buffer)
+//      )
+//      .takeWhile(_ != -1)
+//      .foreach({ count =>
+//        line.write(buffer, 0, count)
+//      })
+//    line.drain()
   }
 
 }

@@ -22,23 +22,36 @@ object AudioTools {
     line.open(Format)
     line.start()
 
-    val buffer = Array.ofDim[Byte](line.getBufferSize / 5)
 
-    val finish = Promise[Unit]()
+//    val finish = Promise[Unit]()
 
     new Thread() {
       override def run(): Unit = {
-        while (!finish.isCompleted) {
-          val numRead = line.read(buffer, 0, buffer.length)
-          out.write(buffer, 0, numRead)
-        }
+        val buffer = Array.ofDim[Byte](line.getBufferSize / 5)
+
+        Iterator
+          .continually(
+            line.read(buffer, 0, buffer.length)
+          )
+          .takeWhile(_ != 0)
+          .foreach({ numRead =>
+            out.write(buffer, 0, numRead)
+          })
+
+//        while (!finish.isCompleted) {
+//          val numRead = line.read(buffer, 0, buffer.length)
+//          out.write(buffer, 0, numRead)
+//        }
 
         out.close()
       }
     }.start()
 
     { () =>
-      finish.success()
+      line.drain()
+      line.stop()
+      line.close()
+//      finish.success()
     }
   }
 
@@ -66,9 +79,11 @@ object AudioTools {
           })
 
         in.close()
+        line.drain()
+        line.stop()
+        line.close()
       }
-    }
-
+    }.start()
   }
 
 }

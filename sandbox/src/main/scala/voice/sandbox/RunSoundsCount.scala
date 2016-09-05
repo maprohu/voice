@@ -14,6 +14,14 @@ object RunSoundsCount {
 
     )
 
+    println(
+      RunVoiceTeach
+        .Items
+        .zipWithIndex
+        .map({ case (sounds, idx) => s"$idx: ${sounds.mkString(" ")}"})
+        .mkString("\n")
+
+    )
   }
 
 }
