@@ -51,7 +51,8 @@ class AudioLogic(
   frameRate : Float = 1/60f
 ) extends GameLogic {
 
-  val BufferSize = 2000
+  val BufferSize = 2 << 11
+  val BufferSizeSqr = BufferSize * BufferSize
 
   val Format = new AudioFormat(44100.0f, 16, 1, true, true)
 
@@ -114,7 +115,7 @@ class AudioLogic(
 
   new Thread() {
     val fft = new FloatFFT_1D(BufferSize)
-    val b = Array.ofDim[Float](BufferSize * 2)
+    val b = Array.ofDim[Float](BufferSize)
 
     override def run(): Unit = {
       while (true) {
@@ -128,7 +129,7 @@ class AudioLogic(
           if (pv == BufferSize) pv = 0
         } while (pv != p)
 
-        fft.realForwardFull(b)
+        fft.realForward(b)
 
         spectrum.synchronized {
           var i = 0
@@ -136,7 +137,7 @@ class AudioLogic(
           do {
             val re = b(i)
             val im = b(i+1)
-            spectrum(t) = re*re + im*im
+            spectrum(t) = (re*re + im*im) / BufferSize
             i += 2
             t += 1
           } while (i < BufferSize)
@@ -152,6 +153,7 @@ class AudioLogic(
   val camera = new OrthographicCamera()
 
   val MaxSample = 0xFFFF / 2
+  val MaxSample2 = MaxSample * MaxSample
 
   val ColumnWidth = 2.0f / BufferSize
 
