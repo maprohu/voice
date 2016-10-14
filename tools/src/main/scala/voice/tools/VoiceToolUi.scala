@@ -17,12 +17,29 @@ object Labels {
 
 }
 
-class VoiceToolUi(ui: UI) {
+class VoiceToolUi(val ui: UI) {
+
+  def initial(
+    record: () => Unit
+  ) = {
+    Button(
+      "Record",
+      click = record
+    )
+  }
+
 
   def recordButton = {
     Button(
       "Record",
-      click = () => ui.display(recording)
+      click = () => ui.displaySync(recording)
+    )
+  }
+
+  def playButton = {
+    Button(
+      "Play",
+      click = () => ui.displaySync(playing)
     )
   }
 
@@ -31,26 +48,35 @@ class VoiceToolUi(ui: UI) {
   }
 
   def recording : Widget = {
-    Button(
-      "Stop Recording",
-      click = () => ui.display(recorded)
+    Column(
+      recordButton.copy(ability = Ability.Disabled),
+      playButton.copy(ability = Ability.Disabled),
+      Button(
+        "Stop Recording",
+        click = () => ui.displaySync(recorded)
+      )
     )
   }
 
   def recorded : Widget = {
     Column(
       recordButton,
+      playButton,
       Button(
-        "Play",
-        click = () => ui.display(playing)
+        "Stop",
+        ability = Ability.Disabled
       )
     )
   }
 
   def playing : Widget = {
-    Button(
-      "Stop Playing",
-      click = () => ui.display(recorded)
+    Column(
+      recordButton.copy(ability = Ability.Disabled),
+      playButton.copy(ability = Ability.Disabled),
+      Button(
+        "Stop Playing",
+        click = () => ui.displaySync(recorded)
+      )
     )
 
   }

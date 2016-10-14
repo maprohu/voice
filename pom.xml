@@ -16,5 +16,8 @@
     <modules>
         <module>sandbox</module>
         <module>tools</module>
+        <module>packaging</module>
+        <module>android</module>
+        <module>swing</module>
     </modules>
 </project>

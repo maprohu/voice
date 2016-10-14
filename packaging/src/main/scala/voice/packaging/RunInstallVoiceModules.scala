@@ -1,0 +1,33 @@
+package voice.packaging
+
+import java.io.File
+
+import toolbox6.packaging.MavenTools
+
+/**
+  * Created by pappmar on 05/10/2016.
+  */
+object RunInstallVoiceModules {
+
+  def main(args: Array[String]): Unit = {
+
+    val root = new File("../../../../..")
+
+    MavenTools.runMaven(
+      MavenTools.pom {
+        <packaging>pom</packaging>
+        <modules>
+          <module>{root}/maven-modules</module>
+          <module>{root}/toolbox6/modules</module>
+          <module>{root}/toolbox6</module>
+          <module>{root}/voice/modules</module>
+          <module>{root}/voice</module>
+        </modules>
+      },
+      "install"
+    )(_ => ())
+
+
+  }
+
+}

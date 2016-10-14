@@ -7,7 +7,6 @@ import akka.actor.ActorSystem
 import akka.stream.scaladsl.{Sink, Source}
 import akka.stream.{ActorMaterializer, OverflowStrategy}
 import akka.util.ByteString
-import toolbox8.akka.stream.Streams
 
 import scala.concurrent.Promise
 import scala.io.StdIn

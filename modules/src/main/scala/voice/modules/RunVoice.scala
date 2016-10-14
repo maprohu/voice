@@ -18,7 +18,10 @@ object RunVoice {
 
   val Modules = Seq[ConfiguredModule](
     VoiceModules.Sandbox,
-    VoiceModules.Tools
+    VoiceModules.Tools,
+    VoiceModules.Packaging,
+    VoiceModules.Android,
+    VoiceModules.Swing
   )
 
   def main(args: Array[String]): Unit = {
