@@ -51,18 +51,20 @@ class VoiceToolLogic(
             .play
             .runAsync
             .foreach({ p =>
-              state() = State(
-                stop = Some(
-                  "Playing",
-                  { () =>
-                    p.future.cancel()
-                  }
+              ui.run {
+                state() = State(
+                  stop = Some(
+                    "Playing",
+                    { () =>
+                      p.future.cancel()
+                    }
+                  )
                 )
-              )
 
-              p
-                .future
-                .foreach(_ => recorded(d))
+                p
+                  .future
+                  .foreach(_ => recorded(d))
+              }
             })
         })
       )

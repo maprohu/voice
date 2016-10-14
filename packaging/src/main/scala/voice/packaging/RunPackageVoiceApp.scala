@@ -19,8 +19,14 @@ object RunPackageVoiceApp {
               package={classOf[AndroidVoiceMain].getPackage.getName}
               android:versionCode="1"
               android:versionName="1.0">
+      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+      <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
       <application>
-        <activity android:name={s".${classOf[AndroidVoiceMain].getSimpleName}"}>
+        <activity
+          android:name={s".${classOf[AndroidVoiceMain].getSimpleName}"}
+          android:configChanges="keyboardHidden|orientation|screenSize"
+        >
           <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
@@ -38,8 +44,8 @@ object RunPackageVoiceApp {
 
     AndroidPackager.run(
       VoiceModules.Android,
-      manifest,
-      Seq("package", "android:apk")
+      manifest
+//      Seq("package", "android:apk")
     )({ f =>
       val to = pwd / up / 'sandbox / 'target / "app.apk"
       mkdir(to / up)
