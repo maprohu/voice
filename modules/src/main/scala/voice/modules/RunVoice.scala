@@ -21,6 +21,8 @@ object RunVoice {
     VoiceModules.Tools,
     VoiceModules.Packaging,
     VoiceModules.Android,
+    VoiceModules.Standalone,
+    VoiceModules.Testing,
     VoiceModules.Swing
   )
 
