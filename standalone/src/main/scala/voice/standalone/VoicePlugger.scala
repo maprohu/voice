@@ -1,7 +1,5 @@
 package voice.standalone
 
-import javax.json.JsonObject
-
 import toolbox6.jartree.api._
 import toolbox8.jartree.standaloneapi.{JarTreeStandaloneContext, Service}
 
@@ -13,6 +11,6 @@ class VoicePlugger
   with Service with Closable with JarUpdatable
 {
   override def close(): Unit = ()
-  override def update(param: JsonObject): Unit = ()
+  override def update(param: Array[Byte]): Unit = ()
 }
 
