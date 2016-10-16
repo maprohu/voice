@@ -53,7 +53,9 @@ object VoiceModules extends MavenCentralModule(
     "packaging",
     Toolbox6Modules.Packaging,
     VoiceModules,
-    Android
+    Android,
+    JarTree8Modules.Client,
+    Standalone
   )
 
   object Standalone extends ScalaModule(

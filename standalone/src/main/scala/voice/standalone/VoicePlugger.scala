@@ -1,15 +1,18 @@
 package voice.standalone
 
-import toolbox6.jartree.api.JarPlugger
-import toolbox8.jartree.standaloneapi.Service
+import javax.json.JsonObject
+
+import toolbox6.jartree.api._
+import toolbox8.jartree.standaloneapi.{JarTreeStandaloneContext, Service}
 
 /**
   * Created by martonpapp on 15/10/16.
   */
-class VoicePlugger extends JarPlugger[] {
-
+class VoicePlugger
+  extends ClosableJarPlugger[VoicePlugger, JarTreeStandaloneContext]
+  with Service with Closable with JarUpdatable
+{
+  override def close(): Unit = ()
+  override def update(param: JsonObject): Unit = ()
 }
 
-class VoiceService extends Service {
-
-}
