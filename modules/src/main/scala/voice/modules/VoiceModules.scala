@@ -62,7 +62,8 @@ object VoiceModules extends MavenCentralModule(
     "standalone",
     JarTreeModules.Api,
     JarTree8Modules.StandaloneApi,
-    mvn.`io.monix:monix_2.11:jar:2.0.4`
+    mvn.`io.monix:monix_2.11:jar:2.0.4`,
+    JarTree8Modules.Util
   )
 
   object Testing extends ScalaModule(
