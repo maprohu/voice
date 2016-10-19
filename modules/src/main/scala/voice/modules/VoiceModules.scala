@@ -2,6 +2,7 @@ package voice.modules
 
 import maven.modules.builder.{RootModuleContainer, ScalaModule}
 import maven.modules.utils.MavenCentralModule
+import toolbox6.modules.Toolbox6Modules.Logging
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
 import toolbox8.modules.JarTree8Modules
 
@@ -55,7 +56,8 @@ object VoiceModules extends MavenCentralModule(
     VoiceModules,
     Android,
     JarTree8Modules.Client,
-    Standalone
+    Standalone,
+    mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
   )
 
   object Standalone extends ScalaModule(
@@ -63,7 +65,8 @@ object VoiceModules extends MavenCentralModule(
     JarTreeModules.Api,
     JarTree8Modules.StandaloneApi,
     mvn.`io.monix:monix_2.11:jar:2.0.4`,
-    JarTree8Modules.Util
+    JarTree8Modules.Util,
+    Toolbox6Modules.Logging
   )
 
   object Testing extends ScalaModule(
