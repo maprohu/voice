@@ -71,8 +71,11 @@ object VoiceModules extends MavenCentralModule(
 
   object Testing extends ScalaModule(
     "testing",
-    VoiceModules,
-    JarTree8Modules.Standalone
+    mvn.`org.hid4java:hid4java:jar:0.4.0`
+
+//    VoiceModules,
+//    JarTree8Modules.Standalone
+
   )
 
 
