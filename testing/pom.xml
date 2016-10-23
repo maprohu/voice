@@ -108,29 +108,14 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
+            <groupId>toolbox8</groupId>
+            <artifactId>toolbox8-rpi-dbus</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.hid4java</groupId>
             <artifactId>hid4java</artifactId>
             <version>0.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>libdbus-java</groupId>
-            <artifactId>dbus</artifactId>
-            <version>2.8</version>
-        </dependency>
-        <dependency>
-            <groupId>libunix-java</groupId>
-            <artifactId>unix</artifactId>
-            <version>0.5</version>
-        </dependency>
-        <dependency>
-            <groupId>libmatthew-debug-java</groupId>
-            <artifactId>hexdump</artifactId>
-            <version>0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>libmatthew-debug-java</groupId>
-            <artifactId>debug-enable</artifactId>
-            <version>1.1</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>

@@ -5,7 +5,7 @@ import maven.modules.utils.MavenCentralModule
 import repack.modules.RepackModules
 import toolbox6.modules.Toolbox6Modules.Logging
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
-import toolbox8.modules.JarTree8Modules
+import toolbox8.modules.{JarTree8Modules, RpiModules, Toolbox8Modules}
 
 /**
   * Created by martonpapp on 29/08/16.
@@ -72,12 +72,9 @@ object VoiceModules extends MavenCentralModule(
 
   object Testing extends ScalaModule(
     "testing",
+    RpiModules.DBus,
 //    RepackModules.DBus,
-    mvn.`org.hid4java:hid4java:jar:0.4.0`,
-    mvn.`libdbus-java:dbus:jar:2.8`,
-    mvn.`libunix-java:unix:jar:0.5`,
-    mvn.`libmatthew-debug-java:hexdump:jar:0.2`,
-    mvn.`libmatthew-debug-java:debug-enable:jar:1.1`
+    mvn.`org.hid4java:hid4java:jar:0.4.0`
 
 //    VoiceModules,
 //    JarTree8Modules.Standalone
