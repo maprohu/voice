@@ -20,12 +20,27 @@ object RunDBus2 {
       .ListNames()
       .foreach(println)
 
-    println(
+    val is =
       conn
         .bluez
-        .root[Introspectable]
+        .untypedRoot
+        .asIntrospectable
         .introspect()
+
+    println(
+      is
     )
+
+    println(
+      is
+        .flatten
+        .flatMap(_.interfaces)
+          .groupBy(_.name)
+
+        .mkString("\n")
+
+    )
+
 
 //    println(
 //      conn
