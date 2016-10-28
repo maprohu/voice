@@ -2,7 +2,8 @@ package voice.modules
 
 import java.io.File
 
-import toolbox6.packaging.MavenTools
+import maven.modules.builder.MavenTools
+
 
 /**
   * Created by pappmar on 05/10/2016.

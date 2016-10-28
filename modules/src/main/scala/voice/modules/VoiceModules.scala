@@ -73,6 +73,7 @@ object VoiceModules extends MavenCentralModule(
   object Testing extends ScalaModule(
     "testing",
     RpiModules.DBus,
+    mvn.`com.typesafe.akka:akka-stream_2.11:2.4.11`,
 //    RepackModules.DBus,
     mvn.`org.hid4java:hid4java:jar:0.4.0`
 
