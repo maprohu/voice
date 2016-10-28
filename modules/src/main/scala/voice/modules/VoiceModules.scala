@@ -58,6 +58,8 @@ object VoiceModules extends MavenCentralModule(
     Android,
     JarTree8Modules.Client,
     Standalone,
+    RpiModules.Installer,
+    VoiceRpiModules.Home,
     mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
   )
 
