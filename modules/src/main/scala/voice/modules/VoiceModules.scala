@@ -13,7 +13,7 @@ import toolbox8.modules.{JarTree8Modules, RpiModules, Toolbox8Modules}
 object VoiceModules extends MavenCentralModule(
   "voice-modules",
   "voice-modules",
-  "1.0.0-SNAPSHOT"
+  "1.0.0"
 ){
 
   implicit val Root = RootModuleContainer("voice")

@@ -23,7 +23,8 @@ object RunVoice {
     VoiceModules.Android,
     VoiceModules.Standalone,
     VoiceModules.Testing,
-    VoiceModules.Swing
+    VoiceModules.Swing,
+    VoiceRpiModules.Home
   )
 
   def main(args: Array[String]): Unit = {

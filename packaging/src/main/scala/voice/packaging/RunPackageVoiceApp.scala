@@ -2,12 +2,13 @@ package voice.packaging
 
 import java.io.File
 
-import toolbox6.packaging.{AndroidPackager, MavenTools}
 import voice.android.AndroidVoiceMain
 import voice.modules.VoiceModules
 
 import scala.io.StdIn
 import ammonite.ops._
+import maven.modules.builder.MavenTools
+import toolbox6.packaging.AndroidPackager
 
 /**
   * Created by martonpapp on 10/10/16.

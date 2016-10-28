@@ -12,7 +12,7 @@ import voice.standalone.VoicePlugger
 object RunUpdateVoiceStandalone {
 
   def main(args: Array[String]): Unit = {
-    JarTreeStandaloneClient.run(
+    JarTreeStandaloneClient.runPlug(
       "localhost",
       9978,
       RunHierarchy(
