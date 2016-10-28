@@ -1,8 +1,11 @@
 package voice.rpi.home
 
+import java.io.FileInputStream
 import java.nio.file.{Files, Path, Paths}
 
-import akka.stream.scaladsl.{FileIO, Flow, Sink}
+import akka.event.Logging
+import akka.stream.Attributes
+import akka.stream.scaladsl.{FileIO, Flow, Sink, StreamConverters}
 import akka.util.ByteString
 import com.typesafe.scalalogging.LazyLogging
 import toolbox6.jartree.api.{JarPlugResponse, JarPlugger}
@@ -16,10 +19,17 @@ object VoiceHome extends Service {
     Future.successful(
       Flow.fromSinkAndSource(
         Sink.ignore,
-        FileIO.fromPath(
-          Paths.get("/dev/hidraw0"),
-          1
-        )
+        StreamConverters
+          .fromInputStream(
+            () => new FileInputStream("/dev/hidraw0"),
+            3
+          )
+//        FileIO
+//          .fromPath(
+//            Paths.get("/dev/hidraw0"),
+//            3
+//          )
+//          .log("hid").withAttributes(Attributes.logLevels(onElement = Logging.InfoLevel))
       )
     )
   }
