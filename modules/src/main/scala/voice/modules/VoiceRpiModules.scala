@@ -14,8 +14,16 @@ object VoiceRpiModules {
 
   implicit val Root = SubModuleContainer(VoiceModules.Root, "rpi")
 
+  object Core extends ScalaModule(
+    "core",
+    JarTree8Modules.Util,
+    Toolbox6Modules.Logging,
+    JarTreeModules.Util
+  )
+
   object Home extends ScalaModule(
     "home",
+    Core,
     JarTree8Modules.Util,
     Toolbox6Modules.Logging,
     JarTreeModules.Util

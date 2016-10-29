@@ -24,7 +24,8 @@ object RunVoice {
     VoiceModules.Standalone,
     VoiceModules.Testing,
     VoiceModules.Swing,
-    VoiceRpiModules.Home
+    VoiceRpiModules.Home,
+    VoiceRpiModules.Core
   )
 
   def main(args: Array[String]): Unit = {
