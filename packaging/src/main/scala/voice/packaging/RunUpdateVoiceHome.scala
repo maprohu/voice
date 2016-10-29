@@ -1,5 +1,8 @@
 package voice.packaging
 
+import java.io.File
+
+import maven.modules.builder.MavenTools
 import toolbox6.jartree.packaging.JarTreePackaging.RunHierarchy
 import toolbox8.jartree.client.JarTreeStandaloneClient
 import toolbox8.modules.JarTree8Modules
@@ -14,6 +17,11 @@ import voice.standalone.VoicePlugger
 object RunUpdateVoiceHome {
 
   def main(args: Array[String]): Unit = {
+    MavenTools.runMavenProject(
+      new File("../voice/rpi/home"),
+      Seq("install")
+    )
+
     JarTreeStandaloneClient.runPlug(
       Rpis.Home.host,
       runHierarchy = RunHierarchy(

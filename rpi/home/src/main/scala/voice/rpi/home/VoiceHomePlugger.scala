@@ -21,15 +21,16 @@ object VoiceHome extends Service {
         Sink.ignore,
         StreamConverters
           .fromInputStream(
-            () => new FileInputStream("/dev/hidraw0"),
-            3
+            () => new FileInputStream("/dev/hidraw0")
+//            3
           )
 //        FileIO
 //          .fromPath(
 //            Paths.get("/dev/hidraw0"),
 //            3
 //          )
-//          .log("hid").withAttributes(Attributes.logLevels(onElement = Logging.InfoLevel))
+          .log("hid").withAttributes(Attributes.logLevels(onFinish = Logging.InfoLevel, onFailure = Logging.InfoLevel))
+//          .log("hid")
       )
     )
   }
