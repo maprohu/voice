@@ -16,11 +16,14 @@ object RunCatVoiceHome {
   def main(args: Array[String]): Unit = {
     JarTreeStandaloneClient.runCat(
       Rpis.Home.host,
-      sink = { _ =>
+      sink = { mat =>
         Flow[ByteString]
           .log("hid").withAttributes(Attributes.logLevels(onElement = Logging.DebugLevel))
-          .via(VoiceHid.Parser)
-          .log("button").withAttributes(Attributes.logLevels(onElement = Logging.InfoLevel))
+          .via(
+            VoiceHid
+              .parser(mat.actorSystem.scheduler, mat.actorSystem.dispatcher)
+              .log("button").withAttributes(Attributes.logLevels(onElement = Logging.InfoLevel))
+          )
           .to(Sink.ignore)
       }
     )
