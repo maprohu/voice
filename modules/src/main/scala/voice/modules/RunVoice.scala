@@ -17,6 +17,7 @@ object RunVoice {
   )
 
   val Modules = Seq[ConfiguredModule](
+    VoiceModules.Audio,
     VoiceModules.Sandbox,
     VoiceModules.Tools,
     VoiceModules.Packaging,

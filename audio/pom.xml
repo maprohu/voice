@@ -1,7 +1,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>voice</groupId>
-    <artifactId>voice-testing</artifactId>
+    <artifactId>voice-audio</artifactId>
     <version>2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <build>
@@ -108,49 +108,19 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-rpi-dbus</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-audio</artifactId>
+            <groupId>toolbox6</groupId>
+            <artifactId>toolbox6-macros</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-jartree-client</artifactId>
+            <artifactId>toolbox8-akka-stream</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-rpi-installer</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-standalone</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-rpi-core</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-stream_2.11</artifactId>
-            <version>2.4.11</version>
-        </dependency>
-        <dependency>
-            <groupId>com.jsyn</groupId>
-            <artifactId>jsyn</artifactId>
-            <version>16.7.6</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.21</version>
+            <groupId>io.monix</groupId>
+            <artifactId>monix_2.11</artifactId>
+            <version>2.0.5</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>

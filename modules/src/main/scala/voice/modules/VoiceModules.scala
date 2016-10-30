@@ -5,7 +5,7 @@ import maven.modules.utils.MavenCentralModule
 import repack.modules.RepackModules
 import toolbox6.modules.Toolbox6Modules.Logging
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
-import toolbox8.modules.{JarTree8Modules, RpiModules, Toolbox8Modules}
+import toolbox8.modules.{Akka8Modules, JarTree8Modules, RpiModules, Toolbox8Modules}
 
 /**
   * Created by martonpapp on 29/08/16.
@@ -24,6 +24,13 @@ object VoiceModules extends MavenCentralModule(
     Toolbox6Modules.Macros,
     mvn.`com.lihaoyi:scalarx_2.11:jar:0.3.1`,
     mvn.`io.monix:monix-eval_2.11:jar:2.0.4`
+  )
+
+  object Audio extends ScalaModule(
+    "audio",
+    Toolbox6Modules.Macros,
+    Akka8Modules.Stream,
+    mvn.`io.monix:monix_2.11:jar:2.0.5`
   )
 
   object Swing extends ScalaModule(
@@ -75,9 +82,16 @@ object VoiceModules extends MavenCentralModule(
   object Testing extends ScalaModule(
     "testing",
     RpiModules.DBus,
+    Audio,
+    JarTree8Modules.Client,
+    RpiModules.Installer,
+    Standalone,
+    VoiceRpiModules.Core,
     mvn.`com.typesafe.akka:akka-stream_2.11:2.4.11`,
+    mvn.`com.jsyn:jsyn:jar:16.7.6`,
+    mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
 //    RepackModules.DBus,
-    mvn.`org.hid4java:hid4java:jar:0.4.0`
+//    mvn.`org.hid4java:hid4java:jar:0.4.0`,
 
 //    VoiceModules,
 //    JarTree8Modules.Standalone
