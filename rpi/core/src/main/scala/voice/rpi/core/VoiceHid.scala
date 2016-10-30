@@ -1,6 +1,6 @@
 package voice.rpi.core
 
-import java.io.FileInputStream
+import java.io.{File, FileInputStream}
 
 import akka.actor.Scheduler
 import akka.event.Logging
@@ -9,6 +9,7 @@ import akka.stream.scaladsl.{Flow, Keep, Sink, Source, StreamConverters}
 import akka.util.ByteString
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
 import monix.execution.Cancelable
+import voice.audio.Talker
 
 import scala.collection.immutable._
 import scala.concurrent.{ExecutionContext, ExecutionException, Promise}
@@ -106,18 +107,24 @@ object VoiceHid extends StrictLogging {
     out: Source[LogicalEvent, _] = Source.empty
   )
 
-  def parser(implicit
-    scheduler: Scheduler,
+  def parser(
+    dir: File,
+    scheduler: Scheduler
+  )(implicit
     executionContext: ExecutionContext
   ) = {
-    new Running(scheduler).Parser
+    new Running(dir, scheduler).Parser
   }
 
   class Running(
+    dir: File,
     scheduler: Scheduler
   )(implicit
     executionContext: ExecutionContext
   ) {
+    val voiceController = new VoiceController(
+      new Talker(new File(dir, "talker"))
+    )
     val EmptyState = emptyState()
 
     def emptyState(out: Source[LogicalEvent, _] = Source.empty) : ScanState = {
@@ -257,6 +264,10 @@ object VoiceHid extends StrictLogging {
         })
         .buffer(1, OverflowStrategy.backpressure)
         .flatMapConcat(_.out)
+        .map({ e =>
+          voiceController.feedback(e)
+          e
+        })
 
   }
 

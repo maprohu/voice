@@ -18,7 +18,8 @@ object VoiceRpiModules {
     "core",
     JarTree8Modules.Util,
     Toolbox6Modules.Logging,
-    JarTreeModules.Util
+    JarTreeModules.Util,
+    VoiceModules.Audio
   )
 
   object Home extends ScalaModule(

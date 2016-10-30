@@ -1,5 +1,7 @@
 package voice.testing
 
+import java.io.File
+
 import akka.event.Logging
 import akka.stream.Attributes
 import akka.stream.scaladsl.{Flow, Sink}
@@ -25,42 +27,46 @@ object RunCatVoiceHome {
         import mat._
         Flow[ByteString]
           .via(
-            VoiceHid.parser(mat.actorSystem.scheduler, mat.actorSystem.dispatcher)
+            VoiceHid.parser(
+              new File("../voice/target/runcat"),
+              mat.actorSystem.scheduler
+            )
           )
-          .to(
-            Sink.foreach({ e =>
-              val play = e match {
-                case LogicalClick(ButtonA) =>
-                  Some(
-                    (
-                      300,
-                      100.millis
-                      )
-                  )
-                case LogicalClick(ButtonB) =>
-                  Some(
-                    (
-                      400,
-                      100.millis
-                    )
-                  )
-                case _ =>
-                  None
-              }
-
-              play
-                .foreach({ case (fq, t) =>
-                    AudioTools
-                      .play(
-                        AudioTools
-                          .sine(
-                            fq,
-                            t
-                          )
-                      )
-                })
-            })
-          )
+          .to(Sink.ignore)
+//          .to(
+//            Sink.foreach({ e =>
+//              val play = e match {
+//                case LogicalClick(ButtonA) =>
+//                  Some(
+//                    (
+//                      300,
+//                      100.millis
+//                      )
+//                  )
+//                case LogicalClick(ButtonB) =>
+//                  Some(
+//                    (
+//                      400,
+//                      100.millis
+//                    )
+//                  )
+//                case _ =>
+//                  None
+//              }
+//
+//              play
+//                .foreach({ case (fq, t) =>
+//                    AudioTools
+//                      .play(
+//                        AudioTools
+//                          .sine(
+//                            fq,
+//                            t
+//                          )
+//                      )
+//                })
+//            })
+//          )
       }
     )
   }

@@ -14,11 +14,11 @@ object RunJSyn {
   def main(args: Array[String]): Unit = {
     val syn = JSyn.createSynthesizer()
     syn.start(
-//      44100,
-//      AudioDeviceManager.USE_DEFAULT_DEVICE,
-//      1,
-//      AudioDeviceManager.USE_DEFAULT_DEVICE,
-//      1
+      44100,
+      AudioDeviceManager.USE_DEFAULT_DEVICE,
+      2,
+      AudioDeviceManager.USE_DEFAULT_DEVICE,
+      2
     )
 
     val osc = new SineOscillator()
@@ -32,7 +32,7 @@ object RunJSyn {
     osc.frequency.set(345.0)
     osc.amplitude.set(0.6)
 
-    out.stop()
+    out.start()
 
     StdIn.readLine()
 

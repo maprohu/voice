@@ -1,6 +1,9 @@
 package voice.audio
 
-import javax.sound.sampled.{AudioFormat, AudioSystem, LineEvent, LineListener}
+import java.io.File
+import java.net.URLEncoder
+import java.nio.file.Files
+import javax.sound.sampled._
 
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
@@ -208,5 +211,34 @@ object ArrayTools {
     }
 
     a
+  }
+}
+
+class Talker(cacheDir: File) {
+  cacheDir.mkdirs()
+
+  def error() = {
+    cached("error")
+  }
+
+  def cached(what: String) = {
+    import ammonite.ops._
+    import ammonite.ops.ImplicitWd._
+    val file = new File(cacheDir, s"${URLEncoder.encode(what, "UTF-8")}.wav")
+    if (file.createNewFile()) {
+      %%(
+        "pico2wave",
+        s"--wave=${file.getCanonicalFile.getAbsolutePath}",
+        what
+      )
+    }
+    val stream = AudioSystem.getAudioInputStream(
+      file
+    )
+    val format = stream.getFormat
+    val info = new DataLine.Info(classOf[Clip], format)
+    val clip = AudioSystem.getLine(info).asInstanceOf[Clip]
+    clip.open(stream)
+    clip.start()
   }
 }

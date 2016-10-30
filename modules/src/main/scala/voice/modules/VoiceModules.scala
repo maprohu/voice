@@ -30,7 +30,8 @@ object VoiceModules extends MavenCentralModule(
     "audio",
     Toolbox6Modules.Macros,
     Akka8Modules.Stream,
-    mvn.`io.monix:monix_2.11:jar:2.0.5`
+    mvn.`io.monix:monix_2.11:jar:2.0.5`,
+    mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.7.8`
   )
 
   object Swing extends ScalaModule(
