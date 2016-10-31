@@ -27,7 +27,7 @@ import scala.collection.JavaConversions._
   */
 object VoiceHid {
 
-  val HidFileName = "hidraw0"
+  val HidFileName = "bt4ok"
   val DevPath = Paths.get("/dev")
   val HidFilePath = DevPath.resolve(HidFileName)
 

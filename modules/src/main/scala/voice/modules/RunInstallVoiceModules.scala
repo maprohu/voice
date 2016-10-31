@@ -19,7 +19,6 @@ object RunInstallVoiceModules {
         <packaging>pom</packaging>
         <modules>
           <module>{root}/maven-modules</module>
-          <module>{root}/toolbox6/modules</module>
           <module>{root}/toolbox6</module>
           <module>{root}/toolbox8/modules</module>
           <module>{root}/toolbox8</module>

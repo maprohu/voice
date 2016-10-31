@@ -223,7 +223,6 @@ object ArrayTools {
 
 object Talker {
   def play(file: File) = {
-    println(file)
     val stream = AudioSystem.getAudioInputStream(
       file
     )
@@ -274,7 +273,6 @@ class Talker(
 
     q
       .onComplete({ _ =>
-        println("xx")
         promise.completeWith(
           Talker.play(
             file
