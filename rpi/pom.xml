@@ -15,6 +15,7 @@
     </build>
     <modules>
         <module>home</module>
+        <module>mobile</module>
         <module>core</module>
     </modules>
 </project>

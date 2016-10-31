@@ -7,10 +7,17 @@ import javax.sound.sampled._
 
 import akka.stream.Materializer
 import akka.stream.scaladsl.Source
+import monix.eval.Task
+import monix.execution.Scheduler
 import monix.execution.atomic.Atomic
+import monix.reactive.Consumer
+import monix.reactive.OverflowStrategy.Unbounded
+import monix.reactive.observers.BufferedSubscriber
+import monix.reactive.subjects.{ConcurrentSubject, PublishToOneSubject}
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
 import scala.collection.immutable._
+import scala.concurrent.{ExecutionContext, Future, Promise}
 import scala.reflect.ClassTag
 
 
@@ -214,14 +221,68 @@ object ArrayTools {
   }
 }
 
-class Talker(cacheDir: File) {
+object Talker {
+  def play(file: File) = {
+    println(file)
+    val stream = AudioSystem.getAudioInputStream(
+      file
+    )
+    val format = stream.getFormat
+    val info = new DataLine.Info(classOf[Clip], format)
+    val clip = AudioSystem.getLine(info).asInstanceOf[Clip]
+    val promise = Promise[Unit]()
+    clip.addLineListener(
+      new LineListener {
+        override def update(event: LineEvent): Unit = {
+          event.getType match {
+            case LineEvent.Type.STOP =>
+              promise.trySuccess()
+              clip.drain()
+              clip.stop()
+              clip.close()
+              stream.close()
+            case _ =>
+          }
+        }
+      }
+    )
+    clip.open(stream)
+    clip.start()
+
+    promise.future
+  }
+}
+class Talker(
+  cacheDir: File
+)(implicit
+  executionContext: ExecutionContext
+) {
   cacheDir.mkdirs()
 
   def error() = {
     cached("error")
   }
 
-  def cached(what: String) = {
+  var queue = Future.successful()
+
+  def cached(what: String) = synchronized {
+    val file = cache(what)
+
+    val promise = Promise[Unit]()
+    val q = queue
+    queue = promise.future
+
+    q
+      .onComplete({ _ =>
+        println("xx")
+        promise.completeWith(
+          Talker.play(
+            file
+          )
+        )
+      })
+  }
+  def cache(what: String) = synchronized {
     import ammonite.ops._
     import ammonite.ops.ImplicitWd._
     val file = new File(cacheDir, s"${URLEncoder.encode(what, "UTF-8")}.wav")
@@ -232,13 +293,6 @@ class Talker(cacheDir: File) {
         what
       )
     }
-    val stream = AudioSystem.getAudioInputStream(
-      file
-    )
-    val format = stream.getFormat
-    val info = new DataLine.Info(classOf[Clip], format)
-    val clip = AudioSystem.getLine(info).asInstanceOf[Clip]
-    clip.open(stream)
-    clip.start()
+    file
   }
 }

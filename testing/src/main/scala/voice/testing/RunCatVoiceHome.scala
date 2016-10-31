@@ -9,8 +9,7 @@ import akka.util.ByteString
 import toolbox8.jartree.client.JarTreeStandaloneClient
 import toolbox8.rpi.installer.Rpis
 import voice.audio.AudioTools
-import voice.rpi.core.VoiceHid
-import voice.rpi.core.VoiceHid.{ButtonA, ButtonB, LogicalClick}
+import voice.rpi.core.{VoiceHid, VoiceParser}
 
 import scala.concurrent.duration._
 import AudioTools.Implicits._
@@ -21,16 +20,16 @@ import AudioTools.Implicits._
 object RunCatVoiceHome {
 
   def main(args: Array[String]): Unit = {
+    import monix.execution.Scheduler.Implicits.global
     JarTreeStandaloneClient.runCat(
       Rpis.Home.host,
       sink = { mat =>
-        import mat._
         Flow[ByteString]
           .via(
-            VoiceHid.parser(
+            new VoiceParser(
               new File("../voice/target/runcat"),
               mat.actorSystem.scheduler
-            )
+            ).Parser
           )
           .to(Sink.ignore)
 //          .to(

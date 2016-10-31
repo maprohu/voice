@@ -68,6 +68,7 @@ object VoiceModules extends MavenCentralModule(
     Standalone,
     RpiModules.Installer,
     VoiceRpiModules.Home,
+    VoiceRpiModules.Mobile,
     mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
   )
 

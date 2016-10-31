@@ -19,11 +19,20 @@ object VoiceRpiModules {
     JarTree8Modules.Util,
     Toolbox6Modules.Logging,
     JarTreeModules.Util,
-    VoiceModules.Audio
+    VoiceModules.Audio,
+    mvn.`io.monix:monix_2.11:jar:2.0.5`
   )
 
   object Home extends ScalaModule(
     "home",
+    Core,
+    JarTree8Modules.Util,
+    Toolbox6Modules.Logging,
+    JarTreeModules.Util
+  )
+
+  object Mobile extends ScalaModule(
+    "mobile",
     Core,
     JarTree8Modules.Util,
     Toolbox6Modules.Logging,

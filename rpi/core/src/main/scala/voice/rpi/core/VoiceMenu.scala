@@ -1,10 +1,10 @@
 package voice.rpi.core
 
-import java.awt.Menu
 
 import akka.stream.scaladsl.Sink
-import voice.rpi.core.VoiceHid.{LogicalEvent, Running}
+import voice.audio.Talker
 import voice.rpi.core.VoiceMenu.Menu
+import voice.rpi.core.VoiceParser.LogicalEvent
 
 import scala.collection.immutable._
 import scala.concurrent.Future
@@ -24,29 +24,55 @@ object VoiceMenu {
     def name: String
   }
 
+  case class Context(
+    talker: Talker
+  )
+
+
   case class State(
     next: LogicalEvent => Future[State]
   )
 
-  def sink(
-    running: Running
+  def entering(
+    menu: Menu
+  )(implicit
+    context: Context
   ) = {
-    def announce(item: Item) = {
-      running
-        .voiceController
-        .talker
-        .cached(
-          item.name
-        )
-    }
-
-    Sink
-      .foldAsync[State, LogicalEvent](
-        State()
-      )({ (state, event) =>
-    })
-
+    context
+      .talker
+      .cached(
+        s"entering ${menu.name}"
+      )
   }
+
+  def menuState(
+    menu: Menu
+  )(implicit
+    context: Context
+  ) = {
+    entering(menu)
+  }
+
+//  def sink(
+//    running: Running
+//  ) = {
+//    def announce(item: Item) = {
+//      running
+//        .voiceController
+//        .talker
+//        .cached(
+//          item.name
+//        )
+//    }
+//
+//    Sink
+//      .foldAsync[State, LogicalEvent](
+//        State(???)
+//      )({ (state, event) =>
+//        ???
+//      })
+//
+//  }
 
 }
 

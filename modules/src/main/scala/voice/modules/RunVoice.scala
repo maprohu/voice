@@ -26,6 +26,7 @@ object RunVoice {
     VoiceModules.Testing,
     VoiceModules.Swing,
     VoiceRpiModules.Home,
+    VoiceRpiModules.Mobile,
     VoiceRpiModules.Core
   )
 
