@@ -3,7 +3,6 @@ package voice.packaging
 import java.io.File
 
 import maven.modules.builder.MavenTools
-import toolbox6.jartree.packaging.JarTreePackaging.RunHierarchy
 import toolbox8.jartree.client.JarTreeStandaloneClient
 import toolbox8.modules.JarTree8Modules
 import toolbox8.rpi.installer.Rpis
@@ -22,12 +21,15 @@ object RunUpdateVoiceHome {
       Seq("install")
     )
 
+    val module =
+      VoiceRpiModules.Home
+    val runClassName =
+      classOf[VoiceHomePlugger].getName
+
     JarTreeStandaloneClient.runPlug(
       Rpis.Home.host,
-      runHierarchy = RunHierarchy(
-        VoiceRpiModules.Home,
-        runClassName = classOf[VoiceHomePlugger].getName
-      ),
+      module = module,
+      runClassName = runClassName,
       target = JarTree8Modules.Standalone
     )
   }

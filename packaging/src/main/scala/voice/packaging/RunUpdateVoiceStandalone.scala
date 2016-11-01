@@ -1,6 +1,5 @@
 package voice.packaging
 
-import toolbox6.jartree.packaging.JarTreePackaging.RunHierarchy
 import toolbox8.jartree.client.JarTreeStandaloneClient
 import toolbox8.modules.JarTree8Modules
 import toolbox8.rpi.installer.Rpis
@@ -13,12 +12,12 @@ import voice.standalone.VoicePlugger
 object RunUpdateVoiceStandalone {
 
   def main(args: Array[String]): Unit = {
+    val module = VoiceModules.Standalone
+    val runClassName = classOf[VoicePlugger].getName
     JarTreeStandaloneClient.runPlug(
       Rpis.Home.host,
-      runHierarchy = RunHierarchy(
-        VoiceModules.Standalone,
-        runClassName = classOf[VoicePlugger].getName
-      ),
+      module = module,
+      runClassName = runClassName,
       target = JarTree8Modules.Standalone
     )
   }
