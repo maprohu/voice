@@ -20,6 +20,11 @@ object VoiceModules {
     Toolbox8Modules.Modules
   )
 
+  object Core extends ScalaModule(
+    "core",
+    Toolbox6Modules.Macros
+  )
+
   object Tools extends ScalaModule(
     "tools",
     UiModules.Ast,

@@ -16,6 +16,7 @@
     <modules>
         <module>rpi</module>
         <module>modules</module>
+        <module>core</module>
         <module>audio</module>
         <module>sandbox</module>
         <module>tools</module>
