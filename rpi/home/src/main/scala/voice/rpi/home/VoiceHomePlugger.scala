@@ -5,7 +5,7 @@ import java.nio.file.{Files, Path, Paths}
 
 import akka.event.Logging
 import akka.stream.Attributes
-import akka.stream.scaladsl.{FileIO, Flow, Sink, StreamConverters}
+import akka.stream.scaladsl.{FileIO, Flow, Sink, Source, StreamConverters}
 import akka.util.ByteString
 import com.typesafe.scalalogging.LazyLogging
 import toolbox6.jartree.api.{JarPlugResponse, JarPlugger}
@@ -19,18 +19,19 @@ object VoiceHome extends Service {
     Future.successful(
       Flow.fromSinkAndSource(
         Sink.ignore,
-        StreamConverters
-          .fromInputStream(
-            () => new FileInputStream("/dev/hidraw0")
-//            3
-          )
-//        FileIO
-//          .fromPath(
-//            Paths.get("/dev/hidraw0"),
-//            3
+        Source.maybe
+//        StreamConverters
+//          .fromInputStream(
+//            () => new FileInputStream("/dev/hidraw0")
+////            3
 //          )
-          .log("hid").withAttributes(Attributes.logLevels(onFinish = Logging.InfoLevel, onFailure = Logging.InfoLevel))
-//          .log("hid")
+////        FileIO
+////          .fromPath(
+////            Paths.get("/dev/hidraw0"),
+////            3
+////          )
+//          .log("hid").withAttributes(Attributes.logLevels(onFinish = Logging.InfoLevel, onFailure = Logging.InfoLevel))
+////          .log("hid")
       )
     )
   }

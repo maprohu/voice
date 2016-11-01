@@ -95,6 +95,7 @@ object VoiceModules {
     JarTree8Modules.Client,
     RpiModules.Installer,
     Standalone,
+    Core,
     VoiceRpiModules.Core,
     mvn.`com.typesafe.akka:akka-stream_2.11:2.4.11`,
     mvn.`com.jsyn:jsyn:jar:16.7.6`,

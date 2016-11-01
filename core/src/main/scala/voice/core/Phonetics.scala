@@ -16,147 +16,151 @@ case class Consonant(
 
 ) extends VocalTract
 
-case class Phone(
-  id: String,
-  vocalTract: VocalTract
-)
 
-object Phones {
-  import toolbox6.macros.Macros.{valName => id}
+object Phones extends Enumeration {
+//  object Implicits {
+//    implicit def toPhone(v: Val) : Phone = v.asInstanceOf[Phone]
+//  }
+  final case class Phone(
+    word: String,
+    vocalTract: VocalTract
+  ) extends Val
+
+  lazy val toSet = values.asInstanceOf[collection.immutable.SortedSet[Phone]]
+
 
   val A = Phone(
-    id,
+    "alfa",
     Vowel()
   )
   val AA = Phone(
-    id,
+    "ugly",
     Vowel()
   )
   val E = Phone(
-    id,
+    "echo",
     Vowel()
   )
   val EE = Phone(
-    id,
+    "amy",
     Vowel()
   )
   val I = Phone(
-    id,
+    "india",
     Vowel()
   )
   val O = Phone(
-    id,
+    "oscar",
     Vowel()
   )
   val OE = Phone(
-    id,
+    "urgent",
     Vowel()
   )
   val U = Phone(
-    id,
+    "uniform",
     Vowel()
   )
   val UE = Phone(
-    id,
+    "uber",
     Vowel()
   )
 
 
-
   val B = Phone(
-    id,
+    "bravo",
     Consonant()
   )
   val C = Phone(
-    id,
+    "zwack",
     Consonant()
   )
   val CS = Phone(
-    id,
+    "charlie",
     Consonant()
   )
   val D = Phone(
-    id,
+    "delta",
     Consonant()
   )
   val DZ = Phone(
-    id,
+    "jazzy",
     Consonant()
   )
   val DZS = Phone(
-    id,
+    "joker",
     Consonant()
   )
   val G = Phone(
-    id,
+    "golf",
     Consonant()
   )
   val GY = Phone(
-    id,
+    "dewberry",
     Consonant()
   )
   val H = Phone(
-    id,
+    "hotel",
     Consonant()
   )
   val J = Phone(
-    id,
+    "ewing",
     Consonant()
   )
   val K = Phone(
-    id,
+    "kilo",
     Consonant()
   )
   val L = Phone(
-    id,
+    "lima",
     Consonant()
   )
   val M = Phone(
-    id,
+    "mike",
     Consonant()
   )
   val N = Phone(
-    id,
+    "november",
     Consonant()
   )
   val NY = Phone(
-    id,
+    "newborn",
     Consonant()
   )
   val P = Phone(
-    id,
+    "poker",
     Consonant()
   )
   val R = Phone(
-    id,
+    "romeo",
     Consonant()
   )
   val S = Phone(
-    id,
+    "sugar",
     Consonant()
   )
   val SZ = Phone(
-    id,
+    "sierra",
     Consonant()
   )
   val T = Phone(
-    id,
+    "tango",
     Consonant()
   )
   val TY = Phone(
-    id,
+    "matthew",
     Consonant()
   )
   val V = Phone(
-    id,
+    "victor",
     Consonant()
   )
   val Z = Phone(
-    id,
+    "zulu",
     Consonant()
   )
   val ZS = Phone(
-    id,
+    "closure",
     Consonant()
   )
 
