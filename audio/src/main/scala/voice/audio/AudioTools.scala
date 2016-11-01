@@ -279,6 +279,8 @@ class Talker(
           )
         )
       })
+
+    queue
   }
   def cache(what: String) = synchronized {
     import ammonite.ops._

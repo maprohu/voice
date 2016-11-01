@@ -2,7 +2,7 @@ package voice.modules
 
 import maven.modules.builder.{RootModuleContainer, ScalaModule}
 import maven.modules.utils.MavenCentralModule
-import repack.modules.RepackModules
+import mvnmod.modules.MvnmodModules
 import toolbox6.modules.Toolbox6Modules.Logging
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
 import toolbox8.modules.{Akka8Modules, JarTree8Modules, RpiModules, Toolbox8Modules}
@@ -10,13 +10,15 @@ import toolbox8.modules.{Akka8Modules, JarTree8Modules, RpiModules, Toolbox8Modu
 /**
   * Created by martonpapp on 29/08/16.
   */
-object VoiceModules extends MavenCentralModule(
-  "voice-modules",
-  "voice-modules",
-  "1.0.0"
-){
+object VoiceModules {
 
   implicit val Root = RootModuleContainer("voice")
+
+  object Modules extends ScalaModule(
+    "modules",
+    MvnmodModules.Builder,
+    Toolbox8Modules.Modules
+  )
 
   object Tools extends ScalaModule(
     "tools",
@@ -62,7 +64,7 @@ object VoiceModules extends MavenCentralModule(
   object Packaging extends ScalaModule(
     "packaging",
     Toolbox6Modules.Packaging,
-    VoiceModules,
+    VoiceModules.Modules,
     Android,
     JarTree8Modules.Client,
     Standalone,

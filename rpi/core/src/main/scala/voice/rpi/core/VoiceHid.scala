@@ -6,19 +6,24 @@ import java.util.concurrent.TimeUnit
 
 import akka.actor.Scheduler
 import akka.event.Logging
-import akka.stream.{Attributes, Materializer, OverflowStrategy}
+import akka.stream.ActorAttributes.SupervisionStrategy
+import akka.stream.ThrottleMode.Shaping
+import akka.stream._
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, StreamConverters}
 import akka.util.ByteString
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
 import monix.execution.Cancelable
-import monix.execution.cancelables.CompositeCancelable
+import monix.execution.atomic.Atomic
+import monix.execution.cancelables.{CompositeCancelable, MultiAssignmentCancelable}
 import monix.reactive.Observable
 import monix.reactive.OverflowStrategy.Unbounded
+import toolbox8.akka.stream.Flows
+import toolbox8.common.FilesTools
 import voice.audio.Talker
 import voice.rpi.core.VoiceParser.{LogicalClick, LogicalLongClick, ScanState}
 
 import scala.collection.immutable._
-import scala.concurrent.{ExecutionContext, ExecutionException, Promise}
+import scala.concurrent.{ExecutionContext, ExecutionException, Future, Promise}
 import scala.concurrent.duration._
 import scala.collection.JavaConversions._
 
@@ -39,75 +44,114 @@ class VoiceHid(implicit
   import VoiceHid._
   import materializer.executionContext
 
-  val cancel = CompositeCancelable()
+  private val cancelSource = CompositeCancelable()
 
-  {
-    def connectToHid(): Unit = {
-      def connectToExisting() : Unit = {
+  private val cancelWaitFile = MultiAssignmentCancelable()
+  cancelSource += cancelWaitFile
+
+
+  private val completed =
+    Source
+      .repeat()
+      .mapAsync(1)({ _ =>
+        val fut = FilesTools.waitForFile(
+          HidFilePath
+        )
+        cancelWaitFile := fut
+        fut
+      })
+      .takeWhile(identity)
+      .throttle(1, 3.seconds, 1, Shaping)
+      .flatMapConcat({ _ =>
         StreamConverters
           .fromInputStream(
             () => new FileInputStream(HidFilePath.toFile)
           )
-          .mergeMat(
-            Source.maybe
-          )(Keep.right)
-          .mapAsync(1)({ e =>
-            queue.offer(e)
+      })
+      .withAttributes(ActorAttributes.supervisionStrategy(Supervision.resumingDecider))
+      .via(
+        Flows
+          .stopper
+          .mapMaterializedValue({ c =>
+            cancelSource += c
           })
-          .watchTermination()({ (promise, done) =>
-            val c = Cancelable({ () =>
-              logger.info("stopping hid")
-              promise.trySuccess(None)
-            })
-            cancel += c
-            done.onComplete({ o =>
-              logger.info("hid reading complete: {}", o)
-              cancel -= c
-            })
-            done.onFailure({
-              case ex =>
-                logger.warn("hid failed", ex)
-                connectToHid()
-            })
-          })
-          .to(Sink.ignore)
-          .run()
-      }
-
-      logger.info("creating dev watcher")
-      val watcher = DevPath.getFileSystem().newWatchService()
-      logger.info("registering dev watcher")
-      DevPath.register(
-        watcher,
-        StandardWatchEventKinds.ENTRY_CREATE
       )
-      logger.info("watcher registered")
-      if (HidFilePath.toFile.exists()) {
-        logger.info(s"${HidFilePath} exists, start reading")
-        watcher.close()
-        connectToExisting()
-      } else {
-        logger.info(s"${HidFilePath} does not exists, start watching")
-        new Thread() {
-          override def run(): Unit = {
-            while (!HidFilePath.toFile.exists()) {
-              logger.info("polling hid file")
-              watcher.poll(3, TimeUnit.SECONDS)
-            }
+      .mapAsync(1)({ e =>
+        queue.offer(e)
+      })
+      .toMat(
+        Sink.ignore
+      )(Keep.right)
+      .run()
 
-            logger.info("hid file created")
-            watcher.close()
 
-            connectToExisting()
-          }
-        }.start()
-      }
-    }
+//    def connectToHid(): Unit = {
+//      def connectToExisting() : Unit = {
+//        StreamConverters
+//          .fromInputStream(
+//            () => new FileInputStream(HidFilePath.toFile)
+//          )
+//          .mergeMat(
+//            Source.maybe,
+//            eagerComplete = true
+//          )(Keep.right)
+//          .mapAsync(1)({ e =>
+//            queue.offer(e)
+//          })
+//          .watchTermination()({ (promise, done) =>
+//            val c = Cancelable({ () =>
+//              logger.info("stopping hid")
+//              promise.trySuccess(None)
+//            })
+//            cancel += c
+//            done.onComplete({ o =>
+//              logger.info("hid reading complete: {}", o)
+//              cancel -= c
+//            })
+//            done.onFailure({
+//              case ex =>
+//                logger.warn("hid failed", ex)
+//                connectToHid()
+//            })
+//          })
+//          .to(Sink.ignore)
+//          .run()
+//      }
+//
+//      logger.info("creating dev watcher")
+//      val watcher = DevPath.getFileSystem().newWatchService()
+//      logger.info("registering dev watcher")
+//      DevPath.register(
+//        watcher,
+//        StandardWatchEventKinds.ENTRY_CREATE
+//      )
+//      logger.info("watcher registered")
+//      if (HidFilePath.toFile.exists()) {
+//        logger.info(s"${HidFilePath} exists, start reading")
+//        watcher.close()
+//        connectToExisting()
+//      } else {
+//        logger.info(s"${HidFilePath} does not exists, start watching")
+//        new Thread() {
+//          override def run(): Unit = {
+//            while (!HidFilePath.toFile.exists()) {
+//              logger.info("polling hid file")
+//              watcher.poll(3, TimeUnit.SECONDS)
+//            }
+//
+//            logger.info("hid file created")
+//            watcher.close()
+//
+//            connectToExisting()
+//          }
+//        }.start()
+//      }
+//    }
+//
+//    connectToHid()
+//  }
 
-    connectToHid()
-  }
-
-  val (queue, publisher) =
+  private val (queue, publisher) =
     Source
       .queue[ByteString](0, OverflowStrategy.backpressure)
       .toMat(
@@ -115,13 +159,18 @@ class VoiceHid(implicit
       )(Keep.both)
       .run()
 
-  cancel += Cancelable({ () =>
-    logger.info("stopping hid queue")
-    queue.complete()
-  })
-
-
   val input = Source.fromPublisher(publisher)
+
+  def stop() = {
+    logger.info("stopping hid source")
+    cancelSource.cancel()
+
+    completed
+      .onComplete({ _ =>
+        logger.info("stopping hid queue")
+        queue.complete()
+      })
+  }
 
 }
 
@@ -280,6 +329,7 @@ class VoiceParser(
 
   }
 
+  val invalidModeTalker = Atomic(Future.successful())
 
   val Parser =
     Flow[ByteString]
@@ -302,26 +352,40 @@ class VoiceParser(
       })
       .log("hid_bytes3").withAttributes(Attributes.logLevels(onElement = Logging.DebugLevel))
       .map({ bs3 =>
-        require(bs3(0) == FirstByteConstantValue)
-        val bits = ((bs3(2) & 0xFF) << 8) | (bs3(1) & 0xFF)
+        if (bs3(0) != FirstByteConstantValue) {
+          invalidModeTalker
+            .transform({ f =>
+              if (f.isCompleted) {
+                voiceController
+                  .talker
+                  .cached("incorrect controller mode")
+              } else {
+                f
+              }
+            })
 
-        bits match {
-          case 0x0005 => Released
-          case 0x0105 => ButtonA
-          case 0x0015 => ButtonB
-          case 0x0085 => ButtonC
-          case 0x0025 => ButtonD
-          case 0x0405 => ButtonLow
-          case 0x0805 => ButtonHigh
-          case 0x0009 => JoystickLeft
-          case 0x0001 => JoystickRight
-          case 0x0006 => JoystickDown
-          case 0x0004 => JoystickUp
-          case 0x000a => JoystickDownLeft
-          case 0x0002 => JoystickDownRight
-          case 0x0008 => JoystickUpLeft
-          case 0x0000 => JoystickUpRight
-          case _ => Unknown
+          Unknown
+        } else {
+          val bits = ((bs3(2) & 0xFF) << 8) | (bs3(1) & 0xFF)
+
+          bits match {
+            case 0x0005 => Released
+            case 0x0105 => ButtonA
+            case 0x0015 => ButtonB
+            case 0x0085 => ButtonC
+            case 0x0025 => ButtonD
+            case 0x0405 => ButtonLow
+            case 0x0805 => ButtonHigh
+            case 0x0009 => JoystickLeft
+            case 0x0001 => JoystickRight
+            case 0x0006 => JoystickDown
+            case 0x0004 => JoystickUp
+            case 0x000a => JoystickDownLeft
+            case 0x0002 => JoystickDownRight
+            case 0x0008 => JoystickUpLeft
+            case 0x0000 => JoystickUpRight
+            case _ => Unknown
+          }
         }
       })
       .statefulMapConcat({ () =>

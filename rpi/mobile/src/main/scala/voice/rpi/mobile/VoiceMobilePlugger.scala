@@ -13,9 +13,11 @@ import toolbox6.jartree.api.{JarPlugResponse, JarPlugger}
 import toolbox6.jartree.util.JarTreeTools
 import toolbox8.jartree.standaloneapi.{JarTreeStandaloneContext, PeerInfo, Service}
 
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
+import scala.concurrent.duration._
 import monix.execution.Scheduler.Implicits.global
 import voice.rpi.core.{VoiceHid, VoiceParser}
+
 
 object VoiceMobile {
   val Dir = new File("/opt/voicer")
@@ -33,16 +35,17 @@ class VoiceMobile(implicit
     actorSystem.scheduler
   )
 
-  voiceHid
-    .input
-    .via(
-      parser.Parser
-    )
-    .runWith(
-      Sink.foreach({ e =>
-        logger.info("input: {}", e)
-      })
-    )
+  val complete =
+    voiceHid
+      .input
+      .via(
+        parser.Parser
+      )
+      .runWith(
+        Sink.foreach({ e =>
+          logger.info("input: {}", e)
+        })
+      )
 
 
   override def apply(info: PeerInfo): Future[Flow[ByteString, ByteString, _]] = {
@@ -55,7 +58,17 @@ class VoiceMobile(implicit
   }
 
   override def close(): Unit = {
-    voiceHid.cancel.cancel()
+    logger.info("stopping voice hid")
+    voiceHid.stop()
+
+    logger.info("waiting for shutdown")
+
+    Await.ready(
+      complete,
+      15.seconds
+    )
+
+    logger.info("shutown completed")
   }
 }
 

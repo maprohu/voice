@@ -2,7 +2,6 @@ package voice.modules
 
 import maven.modules.builder.{RootModuleContainer, ScalaModule, SubModuleContainer}
 import maven.modules.utils.MavenCentralModule
-import repack.modules.RepackModules
 import toolbox6.modules.Toolbox6Modules.Logging
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
 import toolbox8.modules.{JarTree8Modules, RpiModules, Toolbox8Modules}
@@ -20,6 +19,7 @@ object VoiceRpiModules {
     Toolbox6Modules.Logging,
     JarTreeModules.Util,
     VoiceModules.Audio,
+    Toolbox8Modules.Common,
     mvn.`io.monix:monix_2.11:jar:2.0.5`
   )
 

@@ -20,9 +20,7 @@ object RunInstallVoiceModules {
         <modules>
           <module>{root}/maven-modules</module>
           <module>{root}/toolbox6</module>
-          <module>{root}/toolbox8/modules</module>
           <module>{root}/toolbox8</module>
-          <module>{root}/voice/modules</module>
           <module>{root}/voice</module>
         </modules>
       },

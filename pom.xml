@@ -15,6 +15,7 @@
     </build>
     <modules>
         <module>rpi</module>
+        <module>modules</module>
         <module>audio</module>
         <module>sandbox</module>
         <module>tools</module>
