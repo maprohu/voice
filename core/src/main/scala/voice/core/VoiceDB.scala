@@ -13,14 +13,16 @@ object VoiceDB {
   sealed trait Key[V]
   sealed trait RecordingsKey extends Key[RecordingValue]
   case object RecordingsKey0 extends RecordingsKey
-  case class RecordingKey(
+
+  sealed trait RecordingKey extends Key[RecordingValue]
+  case class RecordingKey0(
     id: Int
-  ) extends Key[RecordingValue]
+  ) extends RecordingKey
 
   sealed trait RecordingsValue
   case class RecordingsValue0(
     nextId: Int,
-    items: Seq[(Seq[PhoneID])]
+    items: Seq[(RecordingKey, Seq[PhoneID])]
   ) extends RecordingsValue
 
   sealed trait RecordingValue
