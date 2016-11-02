@@ -2,7 +2,7 @@ package voice.packaging
 
 import akka.stream.scaladsl.{Flow, Source, StreamConverters}
 import maven.modules.builder.ModulePath
-import toolbox8.akka.stream.Sinks
+import toolbox8.akka.stream.{Flows, Sinks}
 import toolbox8.jartree.client.JarTreeStandaloneClient
 import toolbox8.jartree.extra.hello.HelloExec
 import toolbox8.modules.{Extra8Modules, JarTree8Modules}
@@ -35,12 +35,7 @@ object RunExecHello {
         module = module,
         runClassName = runClassName,
         target = ModulePath(Extra8Modules.Shared, None),
-        runWith =
-          Flow
-            .fromSinkAndSource(
-              Sinks.Dump,
-              Source.maybe
-            )
+        runWith = Flows.Dump
       )
   }
 
