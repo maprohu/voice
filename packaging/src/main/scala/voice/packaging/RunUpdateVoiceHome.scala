@@ -4,7 +4,8 @@ import java.io.File
 
 import maven.modules.builder.MavenTools
 import toolbox8.jartree.client.JarTreeStandaloneClient
-import toolbox8.modules.JarTree8Modules
+import toolbox8.jartree.extra.server.ExecPlugger
+import toolbox8.modules.{Extra8Modules, JarTree8Modules}
 import toolbox8.rpi.installer.Rpis
 import voice.modules.{VoiceModules, VoiceRpiModules}
 import voice.rpi.home.VoiceHomePlugger
@@ -15,7 +16,13 @@ import voice.standalone.VoicePlugger
   */
 object RunUpdateVoiceHome {
 
-  val Target = Rpis.Localhost
+//  val Target = Rpis.Localhost
+  val Target = Rpis.Home
+
+  val module = Extra8Modules.Server
+  val runClassName = classOf[ExecPlugger].getName
+//  val module = VoiceRpiModules.Home
+//  val runClassName = classOf[VoiceHomePlugger].getName
 
   def main(args: Array[String]): Unit = {
 //    MavenTools.runMavenProject(
@@ -23,15 +30,11 @@ object RunUpdateVoiceHome {
 //      Seq("install")
 //    )
 
-    val module =
-      VoiceRpiModules.Home
-    val runClassName =
-      classOf[VoiceHomePlugger].getName
 
     JarTreeStandaloneClient
       .target(
         Target.host,
-        Target.port
+        Target.servicePort
       )
       .runPlug(
         module = module,

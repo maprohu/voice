@@ -18,6 +18,7 @@ case class Consonant(
 
 
 object Phones extends Enumeration {
+  type PhoneID = String
 //  object Implicits {
 //    implicit def toPhone(v: Val) : Phone = v.asInstanceOf[Phone]
 //  }

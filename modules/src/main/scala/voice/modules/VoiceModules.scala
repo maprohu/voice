@@ -1,9 +1,7 @@
 package voice.modules
 
 import maven.modules.builder.{RootModuleContainer, ScalaModule}
-import maven.modules.utils.MavenCentralModule
 import mvnmod.modules.MvnmodModules
-import toolbox6.modules.Toolbox6Modules.Logging
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
 import toolbox8.modules._
 
@@ -22,15 +20,20 @@ object VoiceModules {
 
   object Core extends ScalaModule(
     "core",
-    Toolbox6Modules.Macros
+    Toolbox6Modules.Macros,
+    Toolbox6Modules.Pickling,
+    Toolbox8Modules.Leveldb
   )
 
   object Tools extends ScalaModule(
     "tools",
-    UiModules.Ast,
-    Toolbox6Modules.Macros,
-    mvn.`com.lihaoyi:scalarx_2.11:jar:0.3.1`,
-    mvn.`io.monix:monix-eval_2.11:jar:2.0.4`
+    Core,
+    Toolbox8Modules.Leveldb
+
+//    UiModules.Ast,
+//    Toolbox6Modules.Macros,
+//    mvn.`com.lihaoyi:scalarx_2.11:jar:0.3.1`,
+//    mvn.`io.monix:monix-eval_2.11:jar:2.0.4`
   )
 
   object Audio extends ScalaModule(
@@ -41,17 +44,17 @@ object VoiceModules {
     mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.7.8`
   )
 
-  object Swing extends ScalaModule(
-    "swing",
-    UiModules.Swing,
-    Tools
-  )
+//  object Swing extends ScalaModule(
+//    "swing",
+//    UiModules.Swing,
+//    Tools
+//  )
 
-  object Android extends ScalaModule(
-    "android",
-    UiModules.Android,
-    Tools
-  )
+//  object Android extends ScalaModule(
+//    "android",
+//    UiModules.Android,
+//    Tools
+//  )
 
   object Sandbox extends ScalaModule(
     "sandbox",
@@ -70,9 +73,9 @@ object VoiceModules {
     "packaging",
     Toolbox6Modules.Packaging,
     VoiceModules.Modules,
-    Android,
+//    Android,
     JarTree8Modules.Client,
-    Standalone,
+//    Standalone,
     RpiModules.Installer,
     VoiceRpiModules.Home,
     VoiceRpiModules.Mobile,
@@ -81,27 +84,32 @@ object VoiceModules {
     mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
   )
 
-  object Standalone extends ScalaModule(
-    "standalone",
-    JarTreeModules.Api,
-    JarTree8Modules.StandaloneApi,
-    mvn.`io.monix:monix_2.11:jar:2.0.4`,
-    JarTree8Modules.Util,
-    Toolbox6Modules.Logging
-  )
+//  object Standalone extends ScalaModule(
+//    "standalone",
+//    JarTreeModules.Api,
+//    JarTree8Modules.StandaloneApi,
+//    mvn.`io.monix:monix_2.11:jar:2.0.4`,
+//    JarTree8Modules.Util,
+//    Toolbox6Modules.Logging
+//  )
 
   object Testing extends ScalaModule(
     "testing",
+    Tools,
     RpiModules.DBus,
     Audio,
     JarTree8Modules.Client,
     RpiModules.Installer,
-    Standalone,
+//    Standalone,
     Core,
     VoiceRpiModules.Core,
+    Extra8Modules.Hello,
     mvn.`com.typesafe.akka:akka-stream_2.11:2.4.11`,
     mvn.`com.jsyn:jsyn:jar:16.7.6`,
     mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
+//    mvn.`org.fusesource.leveldbjni:leveldbjni-all:jar:1.8`
+//    mvn.`org.fusesource.leveldbjni:leveldbjni-linux64:jar:1.8`
+
 //    RepackModules.DBus,
 //    mvn.`org.hid4java:hid4java:jar:0.4.0`,
 

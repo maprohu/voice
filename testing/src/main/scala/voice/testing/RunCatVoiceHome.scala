@@ -21,51 +21,54 @@ object RunCatVoiceHome {
 
   def main(args: Array[String]): Unit = {
     import monix.execution.Scheduler.Implicits.global
-    JarTreeStandaloneClient.runCat(
-      Rpis.Home.host,
-      sink = { mat =>
-        Flow[ByteString]
-          .via(
-            new VoiceParser(
-              new File("../voice/target/runcat"),
-              mat.actorSystem.scheduler
-            ).Parser
-          )
-          .to(Sink.ignore)
-//          .to(
-//            Sink.foreach({ e =>
-//              val play = e match {
-//                case LogicalClick(ButtonA) =>
-//                  Some(
-//                    (
-//                      300,
-//                      100.millis
-//                      )
-//                  )
-//                case LogicalClick(ButtonB) =>
-//                  Some(
-//                    (
-//                      400,
-//                      100.millis
-//                    )
-//                  )
-//                case _ =>
-//                  None
-//              }
-//
-//              play
-//                .foreach({ case (fq, t) =>
-//                    AudioTools
-//                      .play(
-//                        AudioTools
-//                          .sine(
-//                            fq,
-//                            t
-//                          )
-//                      )
-//                })
-//            })
-//          )
+    JarTreeStandaloneClient
+      .target(
+        Rpis.Home.host
+      )
+      .runCat(
+        sink = { mat =>
+          Flow[ByteString]
+            .via(
+              new VoiceParser(
+                new File("../voice/target/runcat"),
+                mat.actorSystem.scheduler
+              ).Parser
+            )
+            .to(Sink.ignore)
+  //          .to(
+  //            Sink.foreach({ e =>
+  //              val play = e match {
+  //                case LogicalClick(ButtonA) =>
+  //                  Some(
+  //                    (
+  //                      300,
+  //                      100.millis
+  //                      )
+  //                  )
+  //                case LogicalClick(ButtonB) =>
+  //                  Some(
+  //                    (
+  //                      400,
+  //                      100.millis
+  //                    )
+  //                  )
+  //                case _ =>
+  //                  None
+  //              }
+  //
+  //              play
+  //                .foreach({ case (fq, t) =>
+  //                    AudioTools
+  //                      .play(
+  //                        AudioTools
+  //                          .sine(
+  //                            fq,
+  //                            t
+  //                          )
+  //                      )
+  //                })
+  //            })
+  //          )
       }
     )
   }

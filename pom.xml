@@ -21,9 +21,6 @@
         <module>sandbox</module>
         <module>tools</module>
         <module>packaging</module>
-        <module>android</module>
-        <module>standalone</module>
         <module>testing</module>
-        <module>swing</module>
     </modules>
 </project>

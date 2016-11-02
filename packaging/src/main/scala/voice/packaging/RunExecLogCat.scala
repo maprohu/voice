@@ -28,7 +28,7 @@ object RunExecLogCat {
     JarTreeStandaloneClient
       .target(
         Target.host,
-        Target.port
+        Target.sshPort
       )
       .runExec(
         module = module,

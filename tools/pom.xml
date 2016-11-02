@@ -105,24 +105,14 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>toolbox6</groupId>
-            <artifactId>toolbox6-ui-ast</artifactId>
+            <groupId>voice</groupId>
+            <artifactId>voice-core</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>toolbox6</groupId>
-            <artifactId>toolbox6-macros</artifactId>
+            <groupId>toolbox8</groupId>
+            <artifactId>toolbox8-leveldb</artifactId>
             <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lihaoyi</groupId>
-            <artifactId>scalarx_2.11</artifactId>
-            <version>0.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>io.monix</groupId>
-            <artifactId>monix-eval_2.11</artifactId>
-            <version>2.0.4</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
