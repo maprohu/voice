@@ -150,6 +150,11 @@
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>voice</groupId>
+            <artifactId>voice-rpi-exec</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.21</version>
