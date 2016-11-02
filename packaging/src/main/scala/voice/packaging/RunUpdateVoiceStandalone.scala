@@ -14,12 +14,15 @@ object RunUpdateVoiceStandalone {
   def main(args: Array[String]): Unit = {
     val module = VoiceModules.Standalone
     val runClassName = classOf[VoicePlugger].getName
-    JarTreeStandaloneClient.runPlug(
-      Rpis.Home.host,
-      module = module,
-      runClassName = runClassName,
-      target = JarTree8Modules.Standalone
-    )
+    JarTreeStandaloneClient
+      .target(
+        Rpis.Home.host
+      )
+      .runPlug(
+        module = module,
+        runClassName = runClassName,
+        target = JarTree8Modules.Standalone
+      )
   }
 
 }

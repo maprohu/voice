@@ -15,23 +15,29 @@ import voice.standalone.VoicePlugger
   */
 object RunUpdateVoiceHome {
 
+  val Target = Rpis.Localhost
+
   def main(args: Array[String]): Unit = {
-    MavenTools.runMavenProject(
-      new File("../voice/rpi/home"),
-      Seq("install")
-    )
+//    MavenTools.runMavenProject(
+//      new File("../voice/rpi/home"),
+//      Seq("install")
+//    )
 
     val module =
       VoiceRpiModules.Home
     val runClassName =
       classOf[VoiceHomePlugger].getName
 
-    JarTreeStandaloneClient.runPlug(
-      Rpis.Home.host,
-      module = module,
-      runClassName = runClassName,
-      target = JarTree8Modules.Standalone
-    )
+    JarTreeStandaloneClient
+      .target(
+        Target.host,
+        Target.port
+      )
+      .runPlug(
+        module = module,
+        runClassName = runClassName,
+        target = JarTree8Modules.Standalone
+      )
   }
 
 }

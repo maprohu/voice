@@ -19,12 +19,15 @@ object RunUpdateVoiceMobileHome {
 //      Seq("install")
 //    )
 
-    JarTreeStandaloneClient.runPlug(
-      Rpis.MobileHomeWlan.host,
-      module = VoiceRpiModules.Mobile,
-      runClassName = classOf[VoiceMobilePlugger].getName,
-      target = JarTree8Modules.Standalone
-    )
+    JarTreeStandaloneClient
+      .target(
+        Rpis.MobileHomeWlan.host
+      )
+      .runPlug(
+        module = VoiceRpiModules.Mobile,
+        runClassName = classOf[VoiceMobilePlugger].getName,
+        target = JarTree8Modules.Standalone
+      )
   }
 
 }

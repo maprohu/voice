@@ -5,7 +5,7 @@ import maven.modules.utils.MavenCentralModule
 import mvnmod.modules.MvnmodModules
 import toolbox6.modules.Toolbox6Modules.Logging
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
-import toolbox8.modules.{Akka8Modules, JarTree8Modules, RpiModules, Toolbox8Modules}
+import toolbox8.modules._
 
 /**
   * Created by martonpapp on 29/08/16.
@@ -76,6 +76,7 @@ object VoiceModules {
     RpiModules.Installer,
     VoiceRpiModules.Home,
     VoiceRpiModules.Mobile,
+    Extra8Modules.Hello,
     mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
   )
 

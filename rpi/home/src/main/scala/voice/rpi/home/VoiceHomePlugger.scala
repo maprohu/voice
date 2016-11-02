@@ -15,13 +15,15 @@ class VoiceHome(
   cache: JarCacheLike
 )(implicit
   executionContext: ExecutionContext
-) extends Service {
+) extends Service with LazyLogging {
+  logger.info("created")
   val jarTree = new JarTree(
     classOf[VoiceHome].getClassLoader,
     cache
   )
 
   override def apply(info: PeerInfo): Future[Flow[ByteString, ByteString, _]] = {
+    logger.info("apply")
     Future.successful(
       ExecServer
         .flow(
@@ -38,7 +40,10 @@ class VoiceHomePlugger
   extends JarPlugger[Service, JarTreeStandaloneContext]
   with LazyLogging {
 
+  logger.info(s"created")
+
   override def pullAsync(previous: Service, context: JarTreeStandaloneContext): Future[JarPlugResponse[Service]] = {
+    logger.info("pulling")
     import context._
     import actorSystem.dispatcher
     Future.successful(
