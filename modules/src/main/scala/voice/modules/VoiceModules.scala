@@ -22,7 +22,8 @@ object VoiceModules {
     "core",
     Toolbox6Modules.Macros,
     Toolbox6Modules.Pickling,
-    Toolbox8Modules.Leveldb
+    Toolbox8Modules.Leveldb,
+    Akka8Modules.Actor
   )
 
   object Tools extends ScalaModule(
