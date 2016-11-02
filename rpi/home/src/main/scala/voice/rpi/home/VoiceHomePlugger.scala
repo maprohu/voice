@@ -3,7 +3,7 @@ package voice.rpi.home
 import akka.stream.scaladsl.{FileIO, Flow, Sink, Source, StreamConverters}
 import akka.util.ByteString
 import com.typesafe.scalalogging.LazyLogging
-import toolbox6.jartree.api.{JarCacheLike, JarPlugResponse, JarPlugger}
+import toolbox6.jartree.api.{JarCacheLike, JarPlugResponse, JarPlugger, PullParams}
 import toolbox6.jartree.impl.JarTree
 import toolbox6.jartree.util.JarTreeTools
 import toolbox8.jartree.extra.server.ExecServer
@@ -42,13 +42,16 @@ class VoiceHomePlugger
 
   logger.info(s"created")
 
-  override def pullAsync(previous: Service, context: JarTreeStandaloneContext): Future[JarPlugResponse[Service]] = {
+  override def pull(
+    params: PullParams[Service, JarTreeStandaloneContext]
+  ): Future[JarPlugResponse[Service]] = {
+    import params._
     logger.info("pulling")
     import context._
     import actorSystem.dispatcher
     Future.successful(
       JarTreeTools.andThenResponse(
-        new VoiceHome(context.jarCache),
+        new VoiceHome(context.jarTreeContext.cache),
         () => previous.close()
       )
     )

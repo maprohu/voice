@@ -16,6 +16,7 @@
     <modules>
         <module>home</module>
         <module>mobile</module>
+        <module>exec</module>
         <module>core</module>
     </modules>
 </project>

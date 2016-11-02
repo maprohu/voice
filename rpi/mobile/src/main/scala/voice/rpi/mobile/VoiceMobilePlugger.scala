@@ -9,13 +9,13 @@ import akka.stream.{Attributes, Materializer}
 import akka.stream.scaladsl.{FileIO, Flow, Sink, Source, StreamConverters}
 import akka.util.ByteString
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
-import toolbox6.jartree.api.{JarPlugResponse, JarPlugger}
-import toolbox6.jartree.util.JarTreeTools
+import toolbox6.jartree.api.{JarPlugResponse, JarPlugger, PullParams}
 import toolbox8.jartree.standaloneapi.{JarTreeStandaloneContext, PeerInfo, Service}
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import monix.execution.Scheduler.Implicits.global
+import toolbox6.jartree.util.JarTreeTools
 import voice.rpi.core.{VoiceHid, VoiceParser}
 
 
@@ -76,7 +76,10 @@ class VoiceMobilePlugger
   extends JarPlugger[Service, JarTreeStandaloneContext]
   with LazyLogging {
 
-  override def pullAsync(previous: Service, context: JarTreeStandaloneContext): Future[JarPlugResponse[Service]] = {
+  override def pull(
+    params: PullParams[Service, JarTreeStandaloneContext]
+  ): Future[JarPlugResponse[Service]] = {
+    import params._
     import context._
     Future.successful(
       JarTreeTools.andThenResponse(

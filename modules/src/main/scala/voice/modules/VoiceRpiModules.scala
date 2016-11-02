@@ -41,6 +41,11 @@ object VoiceRpiModules {
     JarTreeModules.Util
   )
 
+  object Exec extends ScalaModule(
+    "exec",
+    Extra8Modules.Shared
+  )
+
 
 
 
