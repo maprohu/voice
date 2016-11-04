@@ -14,14 +14,14 @@ object VoiceModules {
 
   object Modules extends ScalaModule(
     "modules",
-    MvnmodModules.Builder,
+    MvnmodModules.Builder.R2,
     Toolbox8Modules.Modules
   )
 
   object Core extends ScalaModule(
     "core",
-    Toolbox6Modules.Macros,
-    Toolbox6Modules.Pickling,
+    Toolbox6Modules.Macros.R1,
+    Toolbox6Modules.Pickling.R1,
     Toolbox8Modules.Leveldb,
     Akka8Modules.Actor
   )
@@ -39,7 +39,7 @@ object VoiceModules {
 
   object Audio extends ScalaModule(
     "audio",
-    Toolbox6Modules.Macros,
+    Toolbox6Modules.Macros.R1,
     Akka8Modules.Stream,
     mvn.`io.monix:monix_2.11:jar:2.0.5`,
     mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.7.8`
