@@ -107,7 +107,7 @@ object VoiceModules {
     Extra8Modules.Hello,
     mvn.`com.typesafe.akka:akka-stream_2.11:jar:2.4.11`,
     mvn.`com.jsyn:jsyn:jar:16.7.6`,
-    mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
+    Toolbox6Modules.Logback
 //    mvn.`org.fusesource.leveldbjni:leveldbjni-all:jar:1.8`
 //    mvn.`org.fusesource.leveldbjni:leveldbjni-linux64:jar:1.8`
 

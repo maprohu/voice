@@ -155,9 +155,9 @@
             <version>16.7.6</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.21</version>
+            <groupId>toolbox6</groupId>
+            <artifactId>toolbox6-logback</artifactId>
+            <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
