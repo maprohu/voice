@@ -200,20 +200,21 @@ object VoiceParser extends StrictLogging {
   sealed trait JoystickEvent extends ControllerEvent with LogicalEvent {
     val asSource = Source.single(this)
   }
+  sealed trait JoystickActiveEvent extends JoystickEvent
   case object ButtonA extends ButtonEvent
   case object ButtonB extends ButtonEvent
   case object ButtonC extends ButtonEvent
   case object ButtonD extends ButtonEvent
   case object ButtonHigh extends ButtonEvent
   case object ButtonLow extends ButtonEvent
-  case object JoystickUp extends JoystickEvent
-  case object JoystickDown extends JoystickEvent
-  case object JoystickLeft extends JoystickEvent
-  case object JoystickRight extends JoystickEvent
-  case object JoystickUpLeft extends JoystickEvent
-  case object JoystickDownLeft extends JoystickEvent
-  case object JoystickUpRight extends JoystickEvent
-  case object JoystickDownRight extends JoystickEvent
+  case object JoystickUp extends JoystickActiveEvent
+  case object JoystickDown extends JoystickActiveEvent
+  case object JoystickLeft extends JoystickActiveEvent
+  case object JoystickRight extends JoystickActiveEvent
+  case object JoystickUpLeft extends JoystickActiveEvent
+  case object JoystickDownLeft extends JoystickActiveEvent
+  case object JoystickUpRight extends JoystickActiveEvent
+  case object JoystickDownRight extends JoystickActiveEvent
   case object Released extends ControllerEvent with JoystickEvent
   case object Unknown extends ControllerEvent
 
@@ -236,6 +237,30 @@ object VoiceParser extends StrictLogging {
     out: Source[LogicalEvent, _] = Source.empty
   )
 
+  def decodePhysical(
+    bs3: ByteString
+  ) :ControllerEvent = {
+    val bits = ((bs3(2) & 0xFF) << 8) | (bs3(1) & 0xFF)
+
+    bits match {
+      case 0x0005 => Released
+      case 0x0105 => ButtonA
+      case 0x0015 => ButtonB
+      case 0x0085 => ButtonC
+      case 0x0025 => ButtonD
+      case 0x0405 => ButtonLow
+      case 0x0805 => ButtonHigh
+      case 0x0009 => JoystickLeft
+      case 0x0001 => JoystickRight
+      case 0x0006 => JoystickDown
+      case 0x0004 => JoystickUp
+      case 0x000a => JoystickDownLeft
+      case 0x0002 => JoystickDownRight
+      case 0x0008 => JoystickUpLeft
+      case 0x0000 => JoystickUpRight
+      case _ => Unknown
+    }
+  }
 }
 
 class VoiceParser(
@@ -329,6 +354,7 @@ class VoiceParser(
 
   }
 
+
   val invalidModeTalker = Atomic(Future.successful())
 
   val Parser =
@@ -366,26 +392,7 @@ class VoiceParser(
 
           Unknown
         } else {
-          val bits = ((bs3(2) & 0xFF) << 8) | (bs3(1) & 0xFF)
-
-          bits match {
-            case 0x0005 => Released
-            case 0x0105 => ButtonA
-            case 0x0015 => ButtonB
-            case 0x0085 => ButtonC
-            case 0x0025 => ButtonD
-            case 0x0405 => ButtonLow
-            case 0x0805 => ButtonHigh
-            case 0x0009 => JoystickLeft
-            case 0x0001 => JoystickRight
-            case 0x0006 => JoystickDown
-            case 0x0004 => JoystickUp
-            case 0x000a => JoystickDownLeft
-            case 0x0002 => JoystickDownRight
-            case 0x0008 => JoystickUpLeft
-            case 0x0000 => JoystickUpRight
-            case _ => Unknown
-          }
+          decodePhysical(bs3)
         }
       })
       .statefulMapConcat({ () =>

@@ -1,9 +1,8 @@
 package voice.modules
 
-import maven.modules.builder.{RootModuleContainer, ScalaModule, SubModuleContainer}
-import mvnmod.builder.MavenCentralModule
+import mvnmod.builder.{MavenCentralModule, ScalaModule, SubModuleContainer}
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
-import toolbox8.modules.{Extra8Modules, JarTree8Modules, RpiModules, Toolbox8Modules}
+import toolbox8.modules._
 
 /**
   * Created by martonpapp on 29/08/16.
@@ -14,6 +13,7 @@ object VoiceRpiModules {
 
   object Core extends ScalaModule(
     "core",
+    Akka8Modules.Actor,
     JarTree8Modules.Util,
     Toolbox6Modules.Logging.R1,
     JarTreeModules.Util.R1,

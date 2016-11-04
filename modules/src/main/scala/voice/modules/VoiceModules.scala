@@ -1,6 +1,6 @@
 package voice.modules
 
-import maven.modules.builder.{RootModuleContainer, ScalaModule}
+import mvnmod.builder.{RootModuleContainer, ScalaModule}
 import mvnmod.modules.MvnmodModules
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
 import toolbox8.modules._
@@ -14,7 +14,7 @@ object VoiceModules {
 
   object Modules extends ScalaModule(
     "modules",
-    MvnmodModules.Builder.R2,
+    MvnmodModules.Builder,
     Toolbox8Modules.Modules
   )
 
@@ -105,7 +105,7 @@ object VoiceModules {
     Core,
     VoiceRpiModules.Core,
     Extra8Modules.Hello,
-    mvn.`com.typesafe.akka:akka-stream_2.11:2.4.11`,
+    mvn.`com.typesafe.akka:akka-stream_2.11:jar:2.4.11`,
     mvn.`com.jsyn:jsyn:jar:16.7.6`,
     mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
 //    mvn.`org.fusesource.leveldbjni:leveldbjni-all:jar:1.8`

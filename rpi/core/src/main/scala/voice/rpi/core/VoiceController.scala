@@ -22,7 +22,7 @@ class VoiceController(
     }
   }
 
-  def name(button: JoystickEvent) = {
+  def name(button: JoystickActiveEvent) = {
     button match {
       case JoystickDown => "down"
       case JoystickUp => "up"
@@ -46,7 +46,7 @@ class VoiceController(
         talker.cached(name(c))
       case LogicalLongClick(c) =>
         talker.cached(s"long ${name(c)}")
-      case e : JoystickEvent =>
+      case e : JoystickActiveEvent =>
         talker.cached(name(e))
       case _ =>
         talker.error()
