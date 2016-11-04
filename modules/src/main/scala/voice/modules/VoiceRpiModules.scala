@@ -1,7 +1,7 @@
 package voice.modules
 
 import maven.modules.builder.{RootModuleContainer, ScalaModule, SubModuleContainer}
-import maven.modules.utils.MavenCentralModule
+import mvnmod.poms.MavenCentralModule
 import toolbox6.modules.Toolbox6Modules.Logging
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
 import toolbox8.modules.{Extra8Modules, JarTree8Modules, RpiModules, Toolbox8Modules}
