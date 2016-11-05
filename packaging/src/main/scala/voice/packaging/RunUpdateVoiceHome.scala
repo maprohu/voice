@@ -2,14 +2,12 @@ package voice.packaging
 
 import java.io.File
 
-import maven.modules.builder.MavenTools
 import toolbox8.jartree.client.JarTreeStandaloneClient
 import toolbox8.jartree.extra.server.ExecPlugger
 import toolbox8.modules.{Extra8Modules, JarTree8Modules}
 import toolbox8.rpi.installer.Rpis
 import voice.modules.{VoiceModules, VoiceRpiModules}
 import voice.rpi.home.VoiceHomePlugger
-import voice.standalone.VoicePlugger
 
 /**
   * Created by martonpapp on 16/10/16.

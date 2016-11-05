@@ -1,7 +1,7 @@
 package voice.packaging
 
 import akka.stream.scaladsl.{Flow, Source, StreamConverters}
-import maven.modules.builder.ModulePath
+import mvnmod.builder.ModulePath
 import toolbox8.akka.stream.{Flows, Sinks}
 import toolbox8.jartree.client.JarTreeStandaloneClient
 import toolbox8.jartree.extra.hello.{HelloExec, HelloLeveldbExec}

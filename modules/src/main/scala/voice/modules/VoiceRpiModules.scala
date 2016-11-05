@@ -13,6 +13,7 @@ object VoiceRpiModules {
 
   object Core extends ScalaModule(
     "core",
+    VoiceModules.Core,
     Akka8Modules.Actor,
     JarTree8Modules.Util,
     Toolbox6Modules.Logging.R1,

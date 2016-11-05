@@ -58,3 +58,9 @@ class VoiceHomePlugger
   }
 }
 
+case class VoiceHomeActors(
+
+
+
+)
+

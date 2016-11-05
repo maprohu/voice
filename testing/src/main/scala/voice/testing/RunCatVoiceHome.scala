@@ -9,7 +9,6 @@ import akka.util.ByteString
 import toolbox8.jartree.client.JarTreeStandaloneClient
 import toolbox8.rpi.installer.Rpis
 import voice.audio.AudioTools
-import voice.rpi.core.VoiceParser
 
 import scala.concurrent.duration._
 import AudioTools.Implicits._
