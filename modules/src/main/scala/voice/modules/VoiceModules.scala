@@ -23,7 +23,9 @@ object VoiceModules {
     Toolbox6Modules.Macros.R1,
     Toolbox6Modules.Pickling.R1,
     Toolbox8Modules.Leveldb,
-    Akka8Modules.Actor
+    Akka8Modules.Actor,
+    Audio,
+    Toolbox8Modules.Common
   )
 
   object Tools extends ScalaModule(
@@ -101,22 +103,12 @@ object VoiceModules {
     Audio,
     JarTree8Modules.Client,
     RpiModules.Installer,
-//    Standalone,
     Core,
     VoiceRpiModules.Core,
     Extra8Modules.Hello,
     mvn.`com.typesafe.akka:akka-stream_2.11:jar:2.4.11`,
     mvn.`com.jsyn:jsyn:jar:16.7.6`,
     Toolbox6Modules.Logback
-//    mvn.`org.fusesource.leveldbjni:leveldbjni-all:jar:1.8`
-//    mvn.`org.fusesource.leveldbjni:leveldbjni-linux64:jar:1.8`
-
-//    RepackModules.DBus,
-//    mvn.`org.hid4java:hid4java:jar:0.4.0`,
-
-//    VoiceModules,
-//    JarTree8Modules.Standalone
-
   )
 
 

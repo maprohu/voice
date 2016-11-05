@@ -1,9 +1,9 @@
-package voice.rpi.core
+package voice.core
 
 import akka.actor.Actor
-import akka.actor.Actor.Receive
 import akka.util.ByteString
-import voice.rpi.core.VoiceParser.ControllerEvent
+import voice.core.VoiceParser.ControllerEvent
+
 import scala.collection.immutable._
 
 /**
@@ -35,6 +35,8 @@ object FeedbackActor {
     state: HidLogicalActor.State,
     event: ControllerEvent
   ) extends Feedback
+  case object InvalidMixerPull extends Feedback
+  case object InvalidMixerFeed extends Feedback
 
 
 }

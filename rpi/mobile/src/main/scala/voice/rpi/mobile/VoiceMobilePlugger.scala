@@ -16,7 +16,8 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
 import monix.execution.Scheduler.Implicits.global
 import toolbox6.jartree.util.JarTreeTools
-import voice.rpi.core.{VoiceHid, VoiceParser}
+import voice.core.{VoiceHid, VoiceParser}
+import voice.rpi.core.VoiceParser
 
 
 object VoiceMobile {

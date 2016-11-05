@@ -1,31 +1,24 @@
-package voice.rpi.core
+package voice.core
 
 import java.io.{File, FileInputStream}
 import java.nio.file._
-import java.util.concurrent.TimeUnit
 
 import akka.actor.Scheduler
 import akka.event.Logging
-import akka.stream.ActorAttributes.SupervisionStrategy
 import akka.stream.ThrottleMode.Shaping
 import akka.stream._
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, StreamConverters}
 import akka.util.ByteString
-import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
-import monix.execution.Cancelable
+import com.typesafe.scalalogging.StrictLogging
 import monix.execution.atomic.Atomic
 import monix.execution.cancelables.{CompositeCancelable, MultiAssignmentCancelable}
-import monix.reactive.Observable
-import monix.reactive.OverflowStrategy.Unbounded
 import toolbox8.akka.stream.Flows
 import toolbox8.common.FilesTools
 import voice.audio.Talker
-import voice.rpi.core.VoiceParser.{LogicalClick, LogicalLongClick, ScanState}
 
 import scala.collection.immutable._
-import scala.concurrent.{ExecutionContext, ExecutionException, Future, Promise}
 import scala.concurrent.duration._
-import scala.collection.JavaConversions._
+import scala.concurrent.{ExecutionContext, Future, Promise}
 
 /**
   * Created by maprohu on 29-10-2016.

@@ -19,7 +19,7 @@ object RunTalker {
 //    Talker.play(talker.cache("hello"))
 
     talker.cached("choof parashounak")
-    talker.cached("Hello! How are you?")
+//    talker.cached("Hello! How are you?")
 
     println("csuf")
 

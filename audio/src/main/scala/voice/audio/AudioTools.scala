@@ -29,17 +29,20 @@ object AudioTools {
   type Samples = Iterable[Float]
   type Sound = Source[Float, _]
 
-  val SampleSizeInBytes = 2
-  val SampleSizeInBits = SampleSizeInBytes * 8
-  val SamplesPerSecond = 44100
-  val SecondsPerSample = 1f / SamplesPerSecond
-  val MaxSampleValue = ( 1 << (SampleSizeInBits - 1) ) - 1
+  val Channels = 2
+  val BytesPerChannelPerSample = 2
+  val BytesPerSample = 2 * Channels
+  val BitsPerChannlePerSample = BytesPerChannelPerSample * 8
+  val SamplesPerChannelPerSecond = 44100f
+  val SamplesPerSecond = SamplesPerChannelPerSecond * Channels
+  val SecondsPerSamplePerChannel = 1f / SamplesPerChannelPerSecond
+  val MaxSampleValue = ( 1 << (BitsPerChannlePerSample - 1) ) - 1
 
 
   val audioFormat = new AudioFormat(
-    SamplesPerSecond.toFloat,
-    SampleSizeInBits,
-    1, // mono
+    SamplesPerChannelPerSecond,
+    BitsPerChannlePerSample,
+    Channels,
     true, // signed
     true // big-endian
   )
@@ -59,13 +62,12 @@ object AudioTools {
     )
     sdl.open()
     sdl.start()
-    val bufferSizeInBytesApprox = SampleSizeInBytes
-//    val bufferSizeInBytesApprox = sdl.getBufferSize / 5
-    val BufferSizeInBytes = bufferSizeInBytesApprox - (bufferSizeInBytesApprox % SampleSizeInBytes)
-    val BufferSizeInSamples = BufferSizeInBytes / SampleSizeInBytes
-//    val buffer = Array.ofDim[Byte](BufferSize)
+    println(sdl.getBufferSize)
+//    val bufferSizeInBytesApprox = BytesPerSample
+//    val BufferSizeInBytes = bufferSizeInBytesApprox - (bufferSizeInBytesApprox % BytesPerSample)
+//    val BufferSizeInSamples = BufferSizeInBytes / BytesPerSample
     what
-      .grouped(BufferSizeInSamples)
+      .grouped(1024 * 8)
       .runForeach({ bs =>
         val ba : Array[Byte] =
           bs
@@ -107,24 +109,51 @@ object AudioTools {
     ((duration.toMillis * SamplesPerSecond) / 1000).toInt
   }
 
+  def forEachChannel(
+    size: Int,
+    get: () => Float,
+    inc: () => Unit
+  ) = {
+    var ch = 0
+    var v : Float = 0
+
+    ArrayTools
+      .create[Float](
+        size * Channels,
+        () => {
+          if (ch == 0) {
+            v = get()
+          }
+          v
+        },
+        () => {
+          ch += 1
+
+          if (ch == Channels) {
+            ch = 0
+            inc()
+          }
+        }
+      )
+  }
+
   def sine(
     periodsPerSecond: Float, // aka. frequency
     duration: FiniteDuration
   ) : Samples = {
     val samplesPerPeriod =
-      (SamplesPerSecond / periodsPerSecond).toInt
+      (SamplesPerChannelPerSecond / periodsPerSecond).toInt
 
     val period = {
       var x = 0.0
       val inc = (2 * Math.PI) / samplesPerPeriod
 
-      ArrayTools
-        .create[Float](
-          samplesPerPeriod,
-          () => Math.sin(x).toFloat / 2,
-          () => x += inc
-        )
-        .to[Iterable]
+       forEachChannel(
+         samplesPerPeriod,
+         () => Math.sin(x).toFloat / 2,
+         () => x += inc
+       )
+       .to[Iterable]
     }
 
     Stream
@@ -233,6 +262,7 @@ object Talker {
     clip.addLineListener(
       new LineListener {
         override def update(event: LineEvent): Unit = {
+          println(event)
           event.getType match {
             case LineEvent.Type.STOP =>
               promise.trySuccess()

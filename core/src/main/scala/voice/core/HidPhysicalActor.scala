@@ -1,9 +1,9 @@
-package voice.rpi.core
+package voice.core
 
-import akka.actor.{Actor, ActorRef}
+import akka.actor.Actor
 import akka.util.ByteString
 import toolbox8.akka.actor.Target
-import voice.rpi.core.FeedbackActor.InvalidInput
+import voice.core.FeedbackActor.InvalidInput
 
 /**
   * Created by maprohu on 02-11-2016.

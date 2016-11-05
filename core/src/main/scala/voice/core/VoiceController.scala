@@ -1,7 +1,7 @@
-package voice.rpi.core
+package voice.core
 
 import voice.audio.Talker
-import voice.rpi.core.VoiceParser._
+import voice.core.VoiceParser._
 
 /**
   * Created by maprohu on 30-10-2016.

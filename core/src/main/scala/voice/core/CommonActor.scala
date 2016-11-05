@@ -1,4 +1,4 @@
-package voice.rpi.core
+package voice.core
 
 import akka.actor.ActorRef
 

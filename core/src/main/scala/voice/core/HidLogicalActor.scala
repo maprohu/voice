@@ -1,18 +1,18 @@
-package voice.rpi.core
+package voice.core
 
 import akka.actor.Actor
+import toolbox8.akka.actor.Target
+import voice.core.FeedbackActor.InvalidPhysicalInput
 
 import scala.concurrent.Promise
-import toolbox8.akka.actor.Target
-import voice.rpi.core.FeedbackActor.{InvalidInput, InvalidPhysicalInput}
 
 /**
   * Created by maprohu on 04-11-2016.
   */
 class HidLogicalActor extends Actor {
+  import HidLogicalActor._
   import VoiceParser._
   import context.dispatcher
-  import HidLogicalActor._
 
   val out = Target()
   val feedback = Target()

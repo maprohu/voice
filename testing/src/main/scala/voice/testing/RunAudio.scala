@@ -16,12 +16,19 @@ object RunAudio {
 
   def main(args: Array[String]): Unit = {
 
-    import AkkaStreamTools.Debug._
-    import AudioTools.Implicits._
+//    import AkkaStreamTools.Debug._
+    implicit val m = AkkaStreamTools.Debug.materializer
+//    import AudioTools.Implicits._
 
+    StdIn.readLine()
 
+    val s =
     Source
       .repeat("x")
+
+    StdIn.readLine()
+
+    s
       .runForeach(println)
 
 //    AudioTools
