@@ -105,6 +105,21 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>toolbox8</groupId>
+            <artifactId>toolbox8-jartree-app</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>voice</groupId>
+            <artifactId>voice-modules</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>voice</groupId>
+            <artifactId>voice-rpi-home</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>voice</groupId>
             <artifactId>voice-tools</artifactId>
             <version>2-SNAPSHOT</version>
@@ -143,11 +158,6 @@
             <groupId>toolbox8</groupId>
             <artifactId>toolbox8-jartree-extra-hello</artifactId>
             <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-stream_2.11</artifactId>
-            <version>2.4.11</version>
         </dependency>
         <dependency>
             <groupId>com.jsyn</groupId>

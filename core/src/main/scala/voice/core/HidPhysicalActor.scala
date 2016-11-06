@@ -1,14 +1,31 @@
 package voice.core
 
-import akka.actor.Actor
+import akka.Done
+import akka.actor.{Actor, ActorRef, PoisonPill}
+import akka.event.Logging
+import akka.stream.ActorMaterializer
+import akka.stream.scaladsl.{Keep, Sink}
 import akka.util.ByteString
+import com.typesafe.scalalogging.LazyLogging
+import monix.execution.Cancelable
+import monix.execution.cancelables.{AssignableCancelable, BooleanCancelable}
+import toolbox6.logging.LogTools
 import toolbox8.akka.actor.Target
 import voice.core.FeedbackActor.InvalidInput
+import voice.core.HidPhysicalActor.SetOut
+import akka.pattern._
+import toolbox8.akka.stream.Flows
+
+import scala.concurrent.duration._
 
 /**
   * Created by maprohu on 02-11-2016.
   */
-class HidPhysicalActor extends Actor {
+import HidPhysicalActor._
+class HidPhysicalActor extends Actor with LazyLogging with LogTools {
+  val log = Logging(context.system, this)
+  import context.dispatcher
+  implicit val materializer = ActorMaterializer()
 
   var feedback = Target()
   var out = Target()
@@ -18,6 +35,49 @@ class HidPhysicalActor extends Actor {
   )
 
   var state = State(ByteString.empty)
+  var cancellable : BooleanCancelable = BooleanCancelable()
+
+
+  def startReading() = {
+    if (!cancellable.isCanceled) {
+      log.info("start hid reading")
+
+      val (result, stop) = VoiceHid
+        .hidSource
+        .viaMat(
+          Flows.stopper[ByteString]
+        )(Keep.both)
+        .to(
+          Sink.actorRef(self, Done)
+        )
+        .run()
+
+      cancellable = stop
+
+      result
+        .onComplete({ v =>
+          log.info("hid reading stopped: {}", v)
+
+          context
+            .system
+            .scheduler
+            .scheduleOnce(
+              5.seconds,
+              self,
+              StartHid
+            )
+        })
+
+    }
+  }
+
+  @scala.throws[Exception](classOf[Exception])
+  override def preStart(): Unit = {
+    super.preStart()
+    log.info("starting hid physical")
+
+    startReading
+  }
 
   def process(
     bs: ByteString
@@ -56,5 +116,27 @@ class HidPhysicalActor extends Actor {
   override def receive: Receive = {
     case bs : ByteString =>
       process(state.buffer ++ bs)
+    case s : SetOut =>
+      out.set(s.ref)
+    case StartHid =>
+      startReading()
+
   }
+
+  @scala.throws[Exception](classOf[Exception])
+  override def postStop(): Unit = {
+    cancellable.cancel()
+    super.postStop()
+  }
+}
+
+object HidPhysicalActor {
+
+  case class SetOut(
+    ref: ActorRef
+  )
+
+  case object StartHid
+
+
 }

@@ -98,6 +98,9 @@ object VoiceModules {
 
   object Testing extends ScalaModule(
     "testing",
+    JarTree8Modules.App,
+    Modules,
+    VoiceRpiModules.Home,
     Tools,
     RpiModules.DBus,
     Audio,
@@ -106,7 +109,6 @@ object VoiceModules {
     Core,
     VoiceRpiModules.Core,
     Extra8Modules.Hello,
-    mvn.`com.typesafe.akka:akka-stream_2.11:jar:2.4.11`,
     mvn.`com.jsyn:jsyn:jar:16.7.6`,
     Toolbox6Modules.Logback
   )

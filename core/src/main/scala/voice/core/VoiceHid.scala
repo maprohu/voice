@@ -9,10 +9,10 @@ import akka.stream.ThrottleMode.Shaping
 import akka.stream._
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, StreamConverters}
 import akka.util.ByteString
-import com.typesafe.scalalogging.StrictLogging
+import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
 import monix.execution.atomic.Atomic
 import monix.execution.cancelables.{CompositeCancelable, MultiAssignmentCancelable}
-import toolbox8.akka.stream.Flows
+import toolbox8.akka.stream.{Flows, Sources}
 import toolbox8.common.FilesTools
 import voice.audio.Talker
 
@@ -23,11 +23,69 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 /**
   * Created by maprohu on 29-10-2016.
   */
-object VoiceHid {
+object VoiceHid extends LazyLogging {
 
   val HidFileName = "bt4ok"
   val DevPath = Paths.get("/dev")
   val HidFilePath = DevPath.resolve(HidFileName)
+
+  def hidSource = {
+    StreamConverters
+      .fromInputStream(
+        () => new FileInputStream(HidFilePath.toFile)
+      )
+  }
+
+  def read(implicit
+    executionContext: ExecutionContext
+  ) : Source[ByteString, CompositeCancelable] = {
+    Sources
+      .singleMaterializedValue(() => CompositeCancelable())
+      .flatMapConcat({ cancelSource =>
+        logger.info("hid stream initializing")
+
+        val cancelWaitFile = MultiAssignmentCancelable()
+        cancelSource += cancelWaitFile
+
+        Source
+          .repeat()
+          .mapAsync(1)({ _ =>
+            logger.info("waiting for hid device file")
+            val fut = FilesTools.waitForFile(
+              HidFilePath
+            )
+            cancelWaitFile := fut
+            fut
+          })
+          .takeWhile(identity)
+          .throttle(1, 3.seconds, 1, Shaping)
+          .flatMapConcat({ _ =>
+            if (HidFilePath.toFile.exists()) {
+              logger.info("start reading hid device file")
+              StreamConverters
+                .fromInputStream(
+                  () => new FileInputStream(HidFilePath.toFile)
+                )
+                .mapMaterializedValue({ m =>
+                  m
+                    .onComplete(r => logger.info("read result: {}", r))
+                })
+            } else {
+              Source.empty
+            }
+          })
+          .withAttributes(ActorAttributes.supervisionStrategy(Supervision.resumingDecider))
+          .via(
+            Flows
+              .stopper
+              .mapMaterializedValue({ c =>
+                cancelSource += c
+              })
+          )
+        })
+
+
+  }
 
 }
 

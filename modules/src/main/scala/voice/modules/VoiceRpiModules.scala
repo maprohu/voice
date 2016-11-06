@@ -26,11 +26,7 @@ object VoiceRpiModules {
   object Home extends ScalaModule(
     "home",
     Core,
-    JarTree8Modules.Util,
-    Toolbox6Modules.Logging.R1,
-    JarTreeModules.Util.R1,
-    Extra8Modules.Server,
-    JarTreeModules.Impl.R1
+    JarTree8Modules.Akka
   )
 
   object Mobile extends ScalaModule(
