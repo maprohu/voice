@@ -3,10 +3,11 @@ package voice.core
 import akka.Done
 import akka.actor.{Actor, ActorRef, PoisonPill}
 import akka.event.Logging
-import akka.stream.ActorMaterializer
+import akka.stream.{ActorMaterializer, KillSwitches}
 import akka.stream.scaladsl.{Keep, Sink}
 import akka.util.ByteString
 import com.typesafe.scalalogging.LazyLogging
+import monix.execution.Cancelable
 import monix.execution.cancelables.{AssignableCancelable, BooleanCancelable}
 import toolbox6.logging.LogTools
 import toolbox8.akka.actor.{SetOut, Target}
@@ -42,27 +43,29 @@ class HidPhysicalActor extends Actor with LazyLogging with LogTools {
       val (result, stop) = VoiceHid
         .hidSource
         .viaMat(
-          Flows.stopper[ByteString]
+          KillSwitches.single
         )(Keep.both)
         .to(
           Sink.actorRef(self, Done)
         )
         .run()
 
-      cancellable = stop
+      cancellable = BooleanCancelable(() => stop.shutdown())
 
       result
         .onComplete({ v =>
           log.info("hid reading stopped: {}", v)
 
-          context
-            .system
-            .scheduler
-            .scheduleOnce(
-              5.seconds,
-              self,
-              StartHid
-            )
+          if (!cancellable.isCanceled) {
+            context
+              .system
+              .scheduler
+              .scheduleOnce(
+                5.seconds,
+                self,
+                StartHid
+              )
+          }
         })
 
     }
@@ -122,6 +125,7 @@ class HidPhysicalActor extends Actor with LazyLogging with LogTools {
 
   @scala.throws[Exception](classOf[Exception])
   override def postStop(): Unit = {
+    log.info("stopping hid actor")
     cancellable.cancel()
     super.postStop()
   }
