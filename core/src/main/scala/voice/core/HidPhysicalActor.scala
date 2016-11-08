@@ -7,13 +7,10 @@ import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{Keep, Sink}
 import akka.util.ByteString
 import com.typesafe.scalalogging.LazyLogging
-import monix.execution.Cancelable
 import monix.execution.cancelables.{AssignableCancelable, BooleanCancelable}
 import toolbox6.logging.LogTools
-import toolbox8.akka.actor.Target
+import toolbox8.akka.actor.{SetOut, Target}
 import voice.core.FeedbackActor.InvalidInput
-import voice.core.HidPhysicalActor.SetOut
-import akka.pattern._
 import toolbox8.akka.stream.Flows
 
 import scala.concurrent.duration._
@@ -132,9 +129,6 @@ class HidPhysicalActor extends Actor with LazyLogging with LogTools {
 
 object HidPhysicalActor {
 
-  case class SetOut(
-    ref: ActorRef
-  )
 
   case object StartHid
 
