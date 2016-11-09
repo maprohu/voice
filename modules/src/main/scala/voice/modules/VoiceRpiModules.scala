@@ -17,7 +17,7 @@ object VoiceRpiModules {
     Akka8Modules.Actor,
     JarTree8Modules.Util,
     Toolbox6Modules.Logging.R1,
-    JarTreeModules.Util.R1,
+    JarTreeModules.Util.Snapshot,
     VoiceModules.Audio,
     Toolbox8Modules.Common,
     mvn.`io.monix:monix_2.11:jar:2.0.5`
