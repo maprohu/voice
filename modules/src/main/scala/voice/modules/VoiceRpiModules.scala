@@ -14,13 +14,10 @@ object VoiceRpiModules {
   object Core extends ScalaModule(
     "core",
     VoiceModules.Core,
-    Akka8Modules.Actor,
     JarTree8Modules.Util,
-    Toolbox6Modules.Logging.R1,
-    JarTreeModules.Util.Snapshot,
     VoiceModules.Audio,
     Toolbox8Modules.Common,
-    mvn.`io.monix:monix_2.11:jar:2.0.5`
+    mvn.`io.monix:monix_2.11:jar:2.0.6`
   )
 
   object Home extends ScalaModule(
@@ -33,8 +30,8 @@ object VoiceRpiModules {
     "mobile",
     Core,
     JarTree8Modules.Util,
-    Toolbox6Modules.Logging.R1,
-    JarTreeModules.Util.R1
+    Toolbox6Modules.Logging,
+    JarTreeModules.Util
   )
 
   object Exec extends ScalaModule(

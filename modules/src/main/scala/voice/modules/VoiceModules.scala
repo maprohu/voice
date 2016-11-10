@@ -20,8 +20,8 @@ object VoiceModules {
 
   object Core extends ScalaModule(
     "core",
-    Toolbox6Modules.Macros.R1,
-    Toolbox6Modules.Pickling.R1,
+    Toolbox6Modules.Macros,
+    Toolbox6Modules.Pickling,
     Toolbox8Modules.Leveldb,
     Akka8Modules.Actor,
     Audio,
@@ -32,32 +32,15 @@ object VoiceModules {
     "tools",
     Core,
     Toolbox8Modules.Leveldb
-
-//    UiModules.Ast,
-//    Toolbox6Modules.Macros,
-//    mvn.`com.lihaoyi:scalarx_2.11:jar:0.3.1`,
-//    mvn.`io.monix:monix-eval_2.11:jar:2.0.4`
   )
 
   object Audio extends ScalaModule(
     "audio",
-    Toolbox6Modules.Macros.R1,
+    Toolbox6Modules.Macros,
     Akka8Modules.Stream,
-    mvn.`io.monix:monix_2.11:jar:2.0.5`,
+    mvn.`io.monix:monix_2.11:jar:2.0.6`,
     mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.7.8`
   )
-
-//  object Swing extends ScalaModule(
-//    "swing",
-//    UiModules.Swing,
-//    Tools
-//  )
-
-//  object Android extends ScalaModule(
-//    "android",
-//    UiModules.Android,
-//    Tools
-//  )
 
   object Sandbox extends ScalaModule(
     "sandbox",
@@ -76,9 +59,7 @@ object VoiceModules {
     "packaging",
     Toolbox6Modules.Packaging,
     VoiceModules.Modules,
-//    Android,
     JarTree8Modules.Client,
-//    Standalone,
     RpiModules.Installer,
     VoiceRpiModules.Home,
     VoiceRpiModules.Mobile,
@@ -86,15 +67,6 @@ object VoiceModules {
     VoiceRpiModules.Exec,
     mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
   )
-
-//  object Standalone extends ScalaModule(
-//    "standalone",
-//    JarTreeModules.Api,
-//    JarTree8Modules.StandaloneApi,
-//    mvn.`io.monix:monix_2.11:jar:2.0.4`,
-//    JarTree8Modules.Util,
-//    Toolbox6Modules.Logging
-//  )
 
   object Testing extends ScalaModule(
     "testing",
