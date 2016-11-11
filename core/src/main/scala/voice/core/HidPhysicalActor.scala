@@ -4,8 +4,9 @@ import events._
 import akka.Done
 import akka.actor.{Actor, ActorRef, PoisonPill}
 import akka.event.Logging
+import akka.stream.ThrottleMode.Shaping
 import akka.stream.{ActorMaterializer, KillSwitches}
-import akka.stream.scaladsl.{Keep, Sink}
+import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.util.ByteString
 import boopickle.DefaultBasic.PicklerGenerator
 import com.typesafe.scalalogging.LazyLogging
@@ -16,6 +17,7 @@ import toolbox8.akka.actor.{SetOut, Target}
 import voice.core.FeedbackActor.InvalidInput
 import toolbox8.akka.stream.Flows
 
+import scala.concurrent.Await
 import scala.concurrent.duration._
 
 /**
@@ -39,38 +41,59 @@ class HidPhysicalActor extends Actor with LazyLogging with LogTools {
 
 
   def startReading() = {
-    if (!cancellable.isCanceled) {
-      log.info("start hid reading")
+    log.info("start hid reading")
 
-      val (result, stop) = VoiceHid
-        .hidSource
-        .viaMat(
-          KillSwitches.single
-        )(Keep.both)
-        .to(
-          Sink.actorRef(self, Done)
-        )
-        .run()
-
-      cancellable = BooleanCancelable(() => stop.shutdown())
-
-      result
-        .onComplete({ v =>
-          log.info("hid reading stopped: {}", v)
-
-          if (!cancellable.isCanceled) {
-            context
-              .system
-              .scheduler
-              .scheduleOnce(
-                5.seconds,
-                self,
-                StartHid
-              )
+    Source
+      .repeat()
+      .throttle(1, 5.seconds, 1, Shaping)
+      .flatMapConcat({ _ =>
+        log.info("read attempt starting")
+        VoiceHid.hidSource
+      })
+      .viaMat(
+        KillSwitches.single
+      )(Keep.right)
+      .to(Sink.actorRef(self, Done))
+      .mapMaterializedValue({ kill =>
+        cancellable = BooleanCancelable({ () =>
+          quietly {
+            kill.shutdown()
           }
         })
+      })
 
-    }
+//    if (!cancellable.isCanceled) {
+//      log.info("start hid reading")
+//
+//      val (result, stop) = VoiceHid
+//        .hidSource
+//        .viaMat(
+//          KillSwitches.single
+//        )(Keep.both)
+//        .to(
+//          Sink.actorRef(self, Done)
+//        )
+//        .run()
+//
+//      cancellable = BooleanCancelable(() => stop.shutdown())
+//
+//      result
+//        .onComplete({ v =>
+//          log.info("hid reading stopped: {}", v)
+//
+//          if (!cancellable.isCanceled) {
+//            context
+//              .system
+//              .scheduler
+//              .scheduleOnce(
+//                5.seconds,
+//                self,
+//                StartHid
+//              )
+//          }
+//        })
+//
+//    }
   }
 
   @scala.throws[Exception](classOf[Exception])
@@ -106,7 +129,11 @@ class HidPhysicalActor extends Actor with LazyLogging with LogTools {
           keep.tail
         )
       } else {
-        out.send(ce)
+        out.send(
+          PhysicalEvent(
+            ce
+          )
+        )
         process(tail)
       }
     } else {
@@ -120,8 +147,8 @@ class HidPhysicalActor extends Actor with LazyLogging with LogTools {
       process(state.buffer ++ bs)
     case s : SetOut =>
       out.set(s.ref)
-    case StartHid =>
-      startReading()
+//    case StartHid =>
+//      startReading()
 
   }
 
@@ -138,7 +165,7 @@ object HidPhysicalActor {
 
 
 
-  case object StartHid
+//  case object StartHid
 
 
 }

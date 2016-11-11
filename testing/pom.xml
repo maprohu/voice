@@ -106,6 +106,11 @@
     <dependencies>
         <dependency>
             <groupId>toolbox8</groupId>
+            <artifactId>toolbox8-jartree-testing</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>toolbox8</groupId>
             <artifactId>toolbox8-jartree-app</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>

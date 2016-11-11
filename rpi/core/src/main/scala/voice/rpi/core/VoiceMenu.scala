@@ -3,7 +3,7 @@ package voice.rpi.core
 
 import akka.stream.scaladsl.Sink
 import voice.audio.Talker
-import voice.core.VoiceParser.LogicalEvent
+import voice.core.events.LogicalEvent
 import voice.rpi.core.VoiceMenu.Menu
 
 import scala.collection.immutable._

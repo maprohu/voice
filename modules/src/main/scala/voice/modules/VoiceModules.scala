@@ -70,6 +70,7 @@ object VoiceModules {
 
   object Testing extends ScalaModule(
     "testing",
+    JarTree8Modules.Testing,
     JarTree8Modules.App,
     Modules,
     VoiceRpiModules.Home,

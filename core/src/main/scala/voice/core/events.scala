@@ -16,9 +16,7 @@ case class LogicalLongClick(
 
 sealed trait ControllerEvent
 trait ButtonEvent extends ControllerEvent
-trait JoystickEvent extends ControllerEvent with LogicalEvent {
-  val asSource = Source.single(this)
-}
+trait JoystickEvent extends ControllerEvent with LogicalEvent
 trait JoystickActiveEvent extends JoystickEvent
 case object ButtonA extends ButtonEvent
 case object ButtonB extends ButtonEvent

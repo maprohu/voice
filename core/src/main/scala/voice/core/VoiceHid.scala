@@ -30,7 +30,7 @@ object VoiceHid extends LazyLogging {
   val DevPath = Paths.get("/dev")
   val HidFilePath = DevPath.resolve(HidFileName)
 
-  def hidSource = {
+  val hidSource = {
     StreamConverters
       .fromInputStream(
         () => new FileInputStream(HidFilePath.toFile)
@@ -332,7 +332,7 @@ class VoiceParser(
         e match {
           case Released =>
             emptyState(
-              Released.asSource
+              Source.single(Released)
             )
           case j : JoystickEvent =>
             joysticState(j)
@@ -342,7 +342,7 @@ class VoiceParser(
             EmptyState
         }
       },
-      out = joystickEvent.asSource
+      out = Source.single(joystickEvent)
 
     )
   }
