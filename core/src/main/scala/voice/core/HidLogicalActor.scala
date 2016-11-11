@@ -1,5 +1,6 @@
 package voice.core
 
+import events._
 import akka.actor.Actor
 import toolbox8.akka.actor.Target
 import voice.core.FeedbackActor.InvalidPhysicalInput
@@ -37,7 +38,7 @@ class HidLogicalActor extends Actor {
   }
 
   override def receive: Receive = {
-    case event : ControllerEvent =>
+    case PhysicalEvent(event : ControllerEvent) =>
       (state, event) match {
         case (Normal, b : ButtonEvent) =>
           val promise = Promise[LogicalEvent]()

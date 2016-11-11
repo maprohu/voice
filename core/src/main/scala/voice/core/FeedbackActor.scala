@@ -1,8 +1,8 @@
 package voice.core
 
+import events._
 import akka.actor.Actor
 import akka.util.ByteString
-import voice.core.VoiceParser.ControllerEvent
 
 import scala.collection.immutable._
 

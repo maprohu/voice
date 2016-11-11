@@ -1,11 +1,13 @@
 package voice.core
 
+import events._
 import akka.Done
 import akka.actor.{Actor, ActorRef, PoisonPill}
 import akka.event.Logging
 import akka.stream.{ActorMaterializer, KillSwitches}
 import akka.stream.scaladsl.{Keep, Sink}
 import akka.util.ByteString
+import boopickle.DefaultBasic.PicklerGenerator
 import com.typesafe.scalalogging.LazyLogging
 import monix.execution.Cancelable
 import monix.execution.cancelables.{AssignableCancelable, BooleanCancelable}
@@ -132,6 +134,8 @@ class HidPhysicalActor extends Actor with LazyLogging with LogTools {
 }
 
 object HidPhysicalActor {
+
+
 
 
   case object StartHid

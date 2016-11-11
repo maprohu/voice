@@ -9,6 +9,7 @@ import akka.stream.ThrottleMode.Shaping
 import akka.stream._
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, StreamConverters}
 import akka.util.ByteString
+import boopickle.DefaultBasic.PicklerGenerator
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
 import monix.execution.atomic.Atomic
 import monix.execution.cancelables.{CompositeCancelable, MultiAssignmentCancelable}
@@ -226,6 +227,7 @@ class VoiceHid(implicit
 }
 
 object VoiceParser extends StrictLogging {
+  import events._
 
   val LongClickDuration = 500.millis
 
@@ -246,40 +248,13 @@ object VoiceParser extends StrictLogging {
   val PosHigh = 11
   val PosLow = 10
 
-  sealed trait ControllerEvent
-  sealed trait ButtonEvent extends ControllerEvent
-  sealed trait JoystickEvent extends ControllerEvent with LogicalEvent {
-    val asSource = Source.single(this)
-  }
-  sealed trait JoystickActiveEvent extends JoystickEvent
-  case object ButtonA extends ButtonEvent
-  case object ButtonB extends ButtonEvent
-  case object ButtonC extends ButtonEvent
-  case object ButtonD extends ButtonEvent
-  case object ButtonHigh extends ButtonEvent
-  case object ButtonLow extends ButtonEvent
-  case object JoystickUp extends JoystickActiveEvent
-  case object JoystickDown extends JoystickActiveEvent
-  case object JoystickLeft extends JoystickActiveEvent
-  case object JoystickRight extends JoystickActiveEvent
-  case object JoystickUpLeft extends JoystickActiveEvent
-  case object JoystickDownLeft extends JoystickActiveEvent
-  case object JoystickUpRight extends JoystickActiveEvent
-  case object JoystickDownRight extends JoystickActiveEvent
-  case object Released extends ControllerEvent with JoystickEvent
-  case object Unknown extends ControllerEvent
+
 
   sealed trait Outcome
   case object Click extends Outcome
   case object LongClick extends Outcome
 
-  sealed trait LogicalEvent
-  case class LogicalClick(
-    button: ButtonEvent
-  ) extends LogicalEvent
-  case class LogicalLongClick(
-    button: ButtonEvent
-  ) extends LogicalEvent
+
 
   val Noop = () => ()
 
@@ -312,6 +287,8 @@ object VoiceParser extends StrictLogging {
       case _ => Unknown
     }
   }
+
+
 }
 
 class VoiceParser(
@@ -321,6 +298,7 @@ class VoiceParser(
   executionContext: ExecutionContext,
   sch: monix.execution.Scheduler
 ) {
+  import events._
   import VoiceParser._
 
   val voiceController = new VoiceController(

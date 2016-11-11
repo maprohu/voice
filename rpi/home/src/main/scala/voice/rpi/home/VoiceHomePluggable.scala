@@ -11,12 +11,15 @@ import akka.pattern._
 import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
 import toolbox8.akka.actor.ActorSystemTools
+import voice.core.events.Picklers
 
 /**
   * Created by maprohu on 06-11-2016.
   */
 class VoiceHomePluggable extends Pluggable with LazyLogging {
   override def plug(context: PlugContext): Future[Plugged] = {
+    val registration = Picklers.register
+
     logger.info(s"plugging")
     implicit val actorSystem = context.actorSystem
 
@@ -36,6 +39,11 @@ class VoiceHomePluggable extends Pluggable with LazyLogging {
             hidPhysicalActor,
             10.seconds
           )
+        }
+
+        override def postUnplug(): Future[Any] = {
+          registration.unregister()
+          super.postUnplug()
         }
       }
     )

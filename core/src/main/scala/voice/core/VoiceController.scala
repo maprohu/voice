@@ -1,5 +1,6 @@
 package voice.core
 
+import events._
 import voice.audio.Talker
 import voice.core.VoiceParser._
 
