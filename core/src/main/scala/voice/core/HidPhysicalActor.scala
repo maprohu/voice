@@ -2,16 +2,17 @@ package voice.core
 
 import events._
 import akka.Done
+import akka.actor.Status.Failure
 import akka.actor.{Actor, ActorRef, PoisonPill}
 import akka.event.Logging
 import akka.stream.ThrottleMode.Shaping
-import akka.stream.{ActorMaterializer, KillSwitches}
+import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy}
 import akka.stream.scaladsl.{Keep, Sink, Source}
 import akka.util.ByteString
 import boopickle.DefaultBasic.PicklerGenerator
 import com.typesafe.scalalogging.LazyLogging
 import monix.execution.Cancelable
-import monix.execution.cancelables.{AssignableCancelable, BooleanCancelable}
+import monix.execution.cancelables.{AssignableCancelable, BooleanCancelable, CompositeCancelable}
 import toolbox6.logging.LogTools
 import toolbox8.akka.actor.{SetOut, Target}
 import voice.core.FeedbackActor.InvalidInput
@@ -26,8 +27,8 @@ import scala.concurrent.duration._
 import HidPhysicalActor._
 class HidPhysicalActor extends Actor with LazyLogging with LogTools {
   val log = Logging(context.system, this)
-  import context.dispatcher
-  implicit val materializer = ActorMaterializer()
+//  import context.dispatcher
+  implicit val materializer = ActorMaterializer.create(context.system)
 
   var feedback = Target()
   var out = Target()
@@ -37,7 +38,7 @@ class HidPhysicalActor extends Actor with LazyLogging with LogTools {
   )
 
   var state = State(ByteString.empty)
-  var cancellable : BooleanCancelable = BooleanCancelable()
+  val cancellable = CompositeCancelable()
 
 
   def startReading() = {
@@ -53,47 +54,17 @@ class HidPhysicalActor extends Actor with LazyLogging with LogTools {
       .viaMat(
         KillSwitches.single
       )(Keep.right)
-      .to(Sink.actorRef(self, Done))
+      .to(Sink.actorRef(self, StreamComplete))
       .mapMaterializedValue({ kill =>
-        cancellable = BooleanCancelable({ () =>
+        cancellable += Cancelable({ () =>
+          log.info("stopping hid stream")
           quietly {
             kill.shutdown()
           }
         })
       })
+      .run()
 
-//    if (!cancellable.isCanceled) {
-//      log.info("start hid reading")
-//
-//      val (result, stop) = VoiceHid
-//        .hidSource
-//        .viaMat(
-//          KillSwitches.single
-//        )(Keep.both)
-//        .to(
-//          Sink.actorRef(self, Done)
-//        )
-//        .run()
-//
-//      cancellable = BooleanCancelable(() => stop.shutdown())
-//
-//      result
-//        .onComplete({ v =>
-//          log.info("hid reading stopped: {}", v)
-//
-//          if (!cancellable.isCanceled) {
-//            context
-//              .system
-//              .scheduler
-//              .scheduleOnce(
-//                5.seconds,
-//                self,
-//                StartHid
-//              )
-//          }
-//        })
-//
-//    }
   }
 
   @scala.throws[Exception](classOf[Exception])
@@ -144,24 +115,41 @@ class HidPhysicalActor extends Actor with LazyLogging with LogTools {
 
   override def receive: Receive = {
     case bs : ByteString =>
+      log.debug("hid input: {}", bs)
       process(state.buffer ++ bs)
     case s : SetOut =>
+      log.info("setting output to: {}", s.ref)
+
       out.set(s.ref)
-//    case StartHid =>
-//      startReading()
+    case Stop =>
+      log.info("received Stop")
+      cancellable.cancel()
+
+    case StreamComplete =>
+      log.info("stream is complete, stopping")
+      context.stop(self)
+
+    case f : Failure =>
+      log.warning("error in stream: {}", f)
+      context.stop(self)
+
+    case other =>
+      log.warning("unknown message: {}", other)
 
   }
 
-  @scala.throws[Exception](classOf[Exception])
   override def postStop(): Unit = {
-    log.info("stopping hid actor")
-    cancellable.cancel()
     super.postStop()
+    log.info("stopping hid actor")
+    quietly { materializer.shutdown() }
+    cancellable.cancel()
   }
 }
 
 object HidPhysicalActor {
 
+  case object Stop
+  case object StreamComplete
 
 
 

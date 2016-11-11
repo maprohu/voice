@@ -15,23 +15,23 @@ case class LogicalLongClick(
 
 
 sealed trait ControllerEvent
-trait ButtonEvent extends ControllerEvent
-trait JoystickEvent extends ControllerEvent with LogicalEvent
-trait JoystickActiveEvent extends JoystickEvent
-case object ButtonA extends ButtonEvent
-case object ButtonB extends ButtonEvent
-case object ButtonC extends ButtonEvent
-case object ButtonD extends ButtonEvent
-case object ButtonHigh extends ButtonEvent
-case object ButtonLow extends ButtonEvent
-case object JoystickUp extends JoystickActiveEvent
-case object JoystickDown extends JoystickActiveEvent
-case object JoystickLeft extends JoystickActiveEvent
-case object JoystickRight extends JoystickActiveEvent
-case object JoystickUpLeft extends JoystickActiveEvent
-case object JoystickDownLeft extends JoystickActiveEvent
-case object JoystickUpRight extends JoystickActiveEvent
-case object JoystickDownRight extends JoystickActiveEvent
+sealed trait ButtonEvent
+sealed trait JoystickEvent extends LogicalEvent
+sealed trait JoystickActiveEvent extends JoystickEvent
+case object ButtonA extends ButtonEvent with ControllerEvent
+case object ButtonB extends ButtonEvent with ControllerEvent
+case object ButtonC extends ButtonEvent with ControllerEvent
+case object ButtonD extends ButtonEvent with ControllerEvent
+case object ButtonHigh extends ButtonEvent with ControllerEvent
+case object ButtonLow extends ButtonEvent with ControllerEvent
+case object JoystickUp extends JoystickActiveEvent with ControllerEvent
+case object JoystickDown extends JoystickActiveEvent with ControllerEvent
+case object JoystickLeft extends JoystickActiveEvent with ControllerEvent
+case object JoystickRight extends JoystickActiveEvent with ControllerEvent
+case object JoystickUpLeft extends JoystickActiveEvent with ControllerEvent
+case object JoystickDownLeft extends JoystickActiveEvent with ControllerEvent
+case object JoystickUpRight extends JoystickActiveEvent with ControllerEvent
+case object JoystickDownRight extends JoystickActiveEvent with ControllerEvent
 case object Released extends ControllerEvent with JoystickEvent
 case object Unknown extends ControllerEvent
 
@@ -45,21 +45,22 @@ trait Picky extends Pickled {
 
 object Picklers {
 
-  implicit val picklerPhysicalEvent = {
+//  implicit val picklerPhysicalEvent = {
+//    import boopickle.Default._
+//    PicklerGenerator.generatePickler[PhysicalEvent]
+//  }
+
+  def createPickler = {
     import boopickle.Default._
-    PicklerGenerator.generatePickler[PhysicalEvent]
+
+    compositePickler[Pickled]
+      .addConcreteType[PhysicalEvent]
   }
 
   def register = {
-    val pickler = {
-      import boopickle.DefaultBasic._
-      compositePickler[Pickled]
-        .addConcreteType[PhysicalEvent]
-    }
-
     BoopickleSerializer.register(
       Ids.VoiceCore,
-      pickler
+      createPickler
     )
   }
 }

@@ -56,7 +56,7 @@ object RunVoiceHidDump {
             .resolveOne()
       } yield {
         hidActor ! SetOut(out)
-        StdIn.readLine("enter")
+        StdIn.readLine("enter...")
       }
 
       fut

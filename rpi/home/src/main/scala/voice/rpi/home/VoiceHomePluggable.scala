@@ -36,8 +36,9 @@ class VoiceHomePluggable extends Pluggable with LazyLogging {
           logger.info(s"unplugging")
 
           gracefulStop(
-            hidPhysicalActor,
-            10.seconds
+            target = hidPhysicalActor,
+            timeout = 10.seconds,
+            stopMessage = HidPhysicalActor.Stop
           )
         }
 
