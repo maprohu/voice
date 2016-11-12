@@ -2,7 +2,7 @@ package voice.core
 
 import javax.sound.sampled.{AudioSystem, LineEvent, LineListener}
 
-import akka.actor.Actor
+import akka.actor.{Actor, ActorRef}
 import akka.actor.Actor.Receive
 import akka.stream.{ActorMaterializer, OverflowStrategy}
 import akka.stream.scaladsl.{Keep, Sink, SinkQueueWithCancel, Source}
@@ -19,12 +19,14 @@ import akka.pattern._
 /**
   * Created by maprohu on 05-11-2016.
   */
-class MixerActor extends Actor {
+class MixerActor(
+  config: MixerActor.Config
+) extends Actor {
+  import config._
   import MixerActor._
   import context.dispatcher
   implicit val materializer = ActorMaterializer()
 
-  val feedback = Target()
 
   val line =
     AudioSystem
@@ -89,16 +91,15 @@ class MixerActor extends Actor {
   def pull() = {
     state match {
       case Normal =>
-        feedback.send(
+        feedback !
           FeedbackActor.InvalidMixerPull
-        )
       case p : Playing =>
         if (shouldFeed) {
           Future
             .sequence(
               p
                 .streams
-                .map(_.pull())
+                .map(_.pull().recover({case ex => None}))
             )
             .map(Feed.apply)
             .pipeTo(self)
@@ -120,9 +121,8 @@ class MixerActor extends Actor {
   ) = {
     state match {
       case Normal =>
-        feedback.send(
+        feedback !
           FeedbackActor.InvalidMixerFeed
-        )
       case p: Playing =>
         val (pActive, data) = if (f.data.exists(_.isEmpty)) {
           val (inactives, actives) =
@@ -208,6 +208,9 @@ class MixerActor extends Actor {
 }
 
 object MixerActor {
+  case class Config(
+    feedback: ActorRef
+  )
 
   import AudioTools._
 

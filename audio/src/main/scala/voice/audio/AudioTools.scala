@@ -145,12 +145,41 @@ object AudioTools {
       (SamplesPerChannelPerSecond / periodsPerSecond).toInt
 
     val period = {
+      var x = -2.0f
+      val inc = 4.0f / samplesPerPeriod
+
+      forEachChannel(
+        samplesPerPeriod,
+        () => Math.abs(x) - 1f,
+        () => x += inc
+      )
+        .to[Iterable]
+    }
+
+    Stream
+      .continually(
+        period
+      )
+      .flatten
+      .take(
+        sampleCount(duration)
+      )
+  }
+
+  def square(
+    periodsPerSecond: Float, // aka. frequency
+    duration: FiniteDuration
+  ) : Samples = {
+    val samplesPerPeriod =
+      (SamplesPerChannelPerSecond / periodsPerSecond).toInt
+
+    val period = {
       var x = -1.0f
       val inc = 2.0f / samplesPerPeriod
 
       forEachChannel(
         samplesPerPeriod,
-        () => x,
+        () => Math.signum(x),
         () => x += inc
       )
         .to[Iterable]
