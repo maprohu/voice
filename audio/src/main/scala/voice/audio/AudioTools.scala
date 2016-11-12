@@ -137,6 +137,64 @@ object AudioTools {
       )
   }
 
+  def saw(
+    periodsPerSecond: Float, // aka. frequency
+    duration: FiniteDuration
+  ) : Samples = {
+    val samplesPerPeriod =
+      (SamplesPerChannelPerSecond / periodsPerSecond).toInt
+
+    val period = {
+      var x = -1.0f
+      val inc = 2.0f / samplesPerPeriod
+
+      forEachChannel(
+        samplesPerPeriod,
+        () => x,
+        () => x += inc
+      )
+        .to[Iterable]
+    }
+
+    Stream
+      .continually(
+        period
+      )
+      .flatten
+      .take(
+        sampleCount(duration)
+      )
+  }
+
+  def triangle(
+    periodsPerSecond: Float, // aka. frequency
+    duration: FiniteDuration
+  ) : Samples = {
+    val samplesPerPeriod =
+      (SamplesPerChannelPerSecond / periodsPerSecond).toInt
+
+    val period = {
+      var x = -1.0f
+      val inc = 2.0f / samplesPerPeriod
+
+      forEachChannel(
+        samplesPerPeriod,
+        () => x,
+        () => x += inc
+      )
+        .to[Iterable]
+    }
+
+    Stream
+      .continually(
+        period
+      )
+      .flatten
+      .take(
+        sampleCount(duration)
+      )
+  }
+
   def sine(
     periodsPerSecond: Float, // aka. frequency
     duration: FiniteDuration
