@@ -136,13 +136,18 @@ class MixerActor(
               .map(_._2)
               .toSet
 
+          val streams =
+            p
+              .streams
+              .zipWithIndex
+              .filterNot(i => removeIndices.contains(i._2))
+              .map(_._1)
+
+          println(streams.size)
+
           (
             Playing(
-              p
-                .streams
-                .zipWithIndex
-                .filterNot(i => removeIndices.contains(i._2))
-                .map(_._1)
+              streams
             ),
             actives.map(_._1.get)
           )

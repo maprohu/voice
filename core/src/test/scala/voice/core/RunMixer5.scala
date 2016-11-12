@@ -12,7 +12,7 @@ import scala.util.Random
 /**
   * Created by maprohu on 05-11-2016.
   */
-object RunMixer4 {
+object RunMixer5 {
 
   val MinFrequency = 100f
   val MaxFrequency = 10000f
@@ -62,12 +62,30 @@ object RunMixer4 {
       )
       println(frequency)
 
+      val freqs =
+        Stream
+          .from(1)
+          .map(_ * frequency)
+          .takeWhile(_ < MaxFrequency)
+          .toIndexedSeq
+
+
+      println(freqs)
+
+
 
       mixer ! Play(
-        sine(
-          frequency,
-          500.millis
-        ).map(_ / 2)
+        freqs
+          .map({ f =>
+            sine(
+              f,
+              500.millis
+            )
+          })
+          .reduce({ (a, b) =>
+            a.zip(b).map({ case (x, y) => x + y })
+          })
+          .map(_ / freqs.size)
       )
 
       StdIn.readLine()
