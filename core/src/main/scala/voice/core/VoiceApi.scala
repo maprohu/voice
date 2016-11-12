@@ -9,5 +9,6 @@ import toolbox8.akka.actor.{BoopickleSerializer, Ids, Pickled}
 object VoiceApi {
 
   val HidPhysicalActorName = "hidPhysical"
+  val HidPhysicalPubSubActorName = "hidPhysicalPubSub"
 
 }

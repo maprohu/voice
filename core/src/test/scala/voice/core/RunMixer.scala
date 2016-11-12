@@ -18,7 +18,7 @@ object RunMixer {
     mixer ! Play(
       AudioTools
         .sine(
-          800,
+          880,
           1.second
         )
     )

@@ -1,6 +1,6 @@
 package voice.rpi.home
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{Actor, ActorSystem, Props}
 import akka.stream.scaladsl.Sink
 import toolbox8.jartree.akka.PluggableServiceActor.{PlugContext, Pluggable, Plugged, Previous}
 import voice.core.{HidPhysicalActor, VoiceApi, VoiceHid}
@@ -10,7 +10,7 @@ import scala.concurrent.duration._
 import akka.pattern._
 import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
-import toolbox8.akka.actor.ActorSystemTools
+import toolbox8.akka.actor.{ActorSystemTools, DumpActor, PubSubActor, PubSubPublisherActor}
 import voice.core.events.Picklers
 
 /**
@@ -23,12 +23,39 @@ class VoiceHomePluggable extends Pluggable with LazyLogging {
     logger.info(s"plugging")
     implicit val actorSystem = context.actorSystem
 
+    val pubSub = actorSystem.actorOf(
+      Props(
+        classOf[PubSubActor]
+      ),
+      VoiceApi.HidPhysicalPubSubActorName
+    )
+
+    val pubSubInput = actorSystem.actorOf(
+      Props(
+        classOf[PubSubPublisherActor],
+        PubSubPublisherActor.Config(
+          target = pubSub
+        )
+      )
+    )
+
+    val feedback = actorSystem.actorOf(
+      Props(
+        classOf[DumpActor]
+      )
+    )
+
     val hidPhysicalActor = actorSystem.actorOf(
       Props(
-        classOf[HidPhysicalActor]
+        classOf[HidPhysicalActor],
+        HidPhysicalActor.Config(
+          output = pubSubInput,
+          feedback = feedback
+        )
       ),
       VoiceApi.HidPhysicalActorName
     )
+
 
     Future.successful(
       new Plugged {

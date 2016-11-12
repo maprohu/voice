@@ -1,8 +1,8 @@
 package voice.core
 
-import akka.actor.{Actor, Props}
+import akka.actor.{Actor, ActorRef, Props}
 import akka.actor.Actor.Receive
-import toolbox8.akka.actor.PubSubActor
+import toolbox8.akka.actor.{DumpActor, GetComponents, PubSubActor}
 import voice.core.events.Picky
 
 /**
@@ -11,9 +11,37 @@ import voice.core.events.Picky
 class VoiceAppActor extends Actor {
   import VoiceAppActor._
 
+  val feedback = context.actorOf(
+    Props(
+      classOf[FeedbackActor],
+      FeedbackActor.Config()
+    )
+  )
+
+  val controller = context.actorOf(
+    Props(
+      classOf[VoiceControllerActor],
+      VoiceControllerActor.Config()
+    )
+  )
+
+  val logical = context.actorOf(
+    Props(
+      classOf[HidLogicalActor],
+      HidLogicalActor.Config(
+        output = controller,
+        feedback = feedback
+      )
+    )
+  )
+
   val physical = context.actorOf(
     Props(
-      classOf[HidPhysicalActor]
+      classOf[HidPhysicalActor],
+      HidPhysicalActor.Config(
+        output = logical,
+        feedback = feedback
+      )
     )
   )
 
@@ -24,13 +52,24 @@ class VoiceAppActor extends Actor {
   )
 
 
-  override def receive: Receive = ???
+  override def receive: Receive = {
+    case GetComponents =>
+      sender ! Components(
+        feedback = feedback,
+        controller = controller,
+        logical = logical,
+        physical = physical
+      )
+  }
 }
 
 object VoiceAppActor {
 
   case class Components(
-
-  ) extends Picky
+    feedback: ActorRef,
+    controller: ActorRef,
+    logical: ActorRef,
+    physical: ActorRef
+  )
 
 }

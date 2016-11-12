@@ -1,22 +1,23 @@
 package voice.core
 
 import events._
-import akka.actor.Actor
+import akka.actor.{Actor, ActorRef}
 import toolbox8.akka.actor.Target
 import voice.core.FeedbackActor.InvalidPhysicalInput
+import voice.core.HidLogicalActor.Config
 
 import scala.concurrent.Promise
 
 /**
   * Created by maprohu on 04-11-2016.
   */
-class HidLogicalActor extends Actor {
+class HidLogicalActor(
+  config: Config
+) extends Actor {
+  import config._
   import HidLogicalActor._
   import VoiceParser._
   import context.dispatcher
-
-  val out = Target()
-  val feedback = Target()
 
   var state : State = Normal
 
@@ -33,19 +34,22 @@ class HidLogicalActor extends Actor {
   }
 
   def releaseJoystick() = {
-    out.send(Released)
+    output ! Released
     state = Normal
   }
 
   override def receive: Receive = {
-    case PhysicalEvent(event : ControllerEvent) =>
+    case p : PhysicalEvent => import p._
       (state, event) match {
-        case (Normal, b : ButtonEvent) =>
+        case _ if state.latest == event =>
+          // ignore repetition
+
+        case (Normal, b : ButtonEvent with ControllerEvent) =>
           val promise = Promise[LogicalEvent]()
 
           promise
             .future
-            .foreach(out.send)
+            .foreach(e => output ! e)
 
           context
             .system
@@ -66,25 +70,24 @@ class HidLogicalActor extends Actor {
         case (s: Button, Released) =>
           shortClick(s)
 
-        case (Normal, j : JoystickActiveEvent) =>
-          out.send(j)
-          state = Joystick
+        case (Normal, j : JoystickActiveEvent with ControllerEvent) =>
+          output ! j
+          state = Joystick(j)
 
-        case (Joystick, Released) =>
+        case (_ : Joystick, Released) =>
           releaseJoystick()
 
         case _ =>
-          feedback.send(
+          feedback !
             InvalidPhysicalInput(
               state,
               event
             )
-          )
 
           state match {
             case s : Button =>
               shortClick(s)
-            case Joystick =>
+            case _ : Joystick =>
               releaseJoystick()
             case Normal =>
           }
@@ -94,17 +97,29 @@ class HidLogicalActor extends Actor {
 }
 
 object HidLogicalActor {
+  case class Config(
+    output: ActorRef,
+    feedback: ActorRef
+  )
   import VoiceParser._
 
-  sealed trait State
+  sealed trait State {
+    val latest: ControllerEvent
+  }
 
-  case object Normal extends State
+  case object Normal extends State {
+    val latest = Released
+  }
 
-  case object Joystick extends State
+  case class Joystick(
+    latest: ControllerEvent with JoystickEvent
+  ) extends State
 
   case class Button(
-    button: ButtonEvent,
+    button: ButtonEvent with ControllerEvent,
     promise: Promise[LogicalEvent]
-  ) extends State
+  ) extends State {
+    val latest = button
+  }
 
 }
