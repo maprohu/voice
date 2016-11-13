@@ -9,7 +9,7 @@ import org.jtransforms.fft.FloatFFT_1D
   */
 object RunTestFFT {
 
-  val SampleSize = 6
+  val SampleSize = 7
 
   val fft = new FloatFFT_1D(SampleSize)
 //  val Buffer = Array.ofDim[Float](SampleSize)
@@ -55,7 +55,7 @@ object RunTestFFT {
   def main(args: Array[String]): Unit = {
     import math._
     process(x => {
-      cos(x)
+      cos(3*x)
     }.toFloat)
 
 
