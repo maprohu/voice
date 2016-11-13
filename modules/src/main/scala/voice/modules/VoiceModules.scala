@@ -25,7 +25,8 @@ object VoiceModules {
     Toolbox8Modules.Leveldb,
     Akka8Modules.Actor,
     Audio,
-    Toolbox8Modules.Common
+    Toolbox8Modules.Common,
+    mvn.`com.github.wendykierp:JTransforms:jar:3.1`
   )
 
   object Tools extends ScalaModule(
@@ -50,7 +51,6 @@ object VoiceModules {
     mvn.`io.monix:monix_2.11:jar:2.0.2`,
     mvn.`com.badlogicgames.gdx:gdx-backend-lwjgl:jar:1.9.4`,
     mvn.`com.badlogicgames.gdx:gdx-platform:jar:natives-desktop:1.9.4`,
-    mvn.`com.github.wendykierp:JTransforms:jar:3.1`,
     mvn.`com.github.yannrichet:JMathPlot:jar:1.0.1`
   )
 

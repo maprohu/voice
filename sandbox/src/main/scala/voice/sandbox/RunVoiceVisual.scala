@@ -59,7 +59,7 @@ class AudioLogic(
   val MixerInfo =
     AudioSystem
       .getMixerInfo
-      .find(_.getName.toLowerCase.contains("microphone"))
+      .find(_.getName.toLowerCase.contains("default"))
       .get
 
   val line = AudioSystem.getTargetDataLine(Format, MixerInfo)
