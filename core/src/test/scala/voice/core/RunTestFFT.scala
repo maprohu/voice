@@ -9,7 +9,7 @@ import org.jtransforms.fft.FloatFFT_1D
   */
 object RunTestFFT {
 
-  val SampleSize = 7
+  val SampleSize = 6
 
   val fft = new FloatFFT_1D(SampleSize)
 //  val Buffer = Array.ofDim[Float](SampleSize)
