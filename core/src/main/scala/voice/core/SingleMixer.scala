@@ -13,6 +13,8 @@ import scala.concurrent.{Future, Promise}
   */
 object SingleMixer {
 
+  lazy val Global = SingleMixer()
+
   case class SoundForm(
     seconds: Float,
     form: Float => Float
@@ -115,8 +117,8 @@ class SingleMixer(
           }
         }
 
-        println(s"written: ${framesWritten}")
-        println(s"pos: ${sdl.getLongFramePosition}")
+//        println(s"written: ${framesWritten}")
+//        println(s"pos: ${sdl.getLongFramePosition}")
 
         while (sdl.getLongFramePosition < framesWritten - framesWriteAhead) {
           Thread.sleep(writeAheadSleepMillis)

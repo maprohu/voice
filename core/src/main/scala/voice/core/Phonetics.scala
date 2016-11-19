@@ -29,6 +29,15 @@ object Phones extends Enumeration {
 
   lazy val toSet = values.asInstanceOf[collection.immutable.SortedSet[Phone]]
 
+  lazy val Vowels =
+    toSet
+      .filter(_.vocalTract == Vowel())
+
+  lazy val Consonants =
+    toSet
+      .filter(_.vocalTract == Consonant())
+
+
 
   val A = Phone(
     "alfa",
