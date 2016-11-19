@@ -40,7 +40,7 @@ object VoiceModules {
     Toolbox6Modules.Macros,
     Akka8Modules.Stream,
     mvn.`io.monix:monix_2.11:jar:2.0.6`,
-    mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.7.8`
+    mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`
   )
 
   object Sandbox extends ScalaModule(
