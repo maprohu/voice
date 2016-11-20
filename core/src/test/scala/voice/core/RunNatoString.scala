@@ -13,8 +13,8 @@ object RunNatoString {
   def main(args: Array[String]): Unit = {
 //    NatoAlphabet.readString(text)
 
-    val vs = Phones.Vowels.toIndexedSeq
-    val cs = Phones.Consonants.toIndexedSeq
+    val vs = Vowels.values.toIndexedSeq
+    val cs = Consonants.values.toIndexedSeq
 
     while (true) {
       val c = cs(Random.nextInt(cs.length))

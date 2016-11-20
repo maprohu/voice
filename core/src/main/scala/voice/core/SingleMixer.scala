@@ -1,6 +1,7 @@
 package voice.core
 
 import java.util
+import javax.sound.sampled.AudioFormat.Encoding
 import javax.sound.sampled.{AudioFormat, AudioSystem, LineEvent, LineListener}
 
 import voice.core.SingleMixer.Config
@@ -42,6 +43,42 @@ object SingleMixer {
       )
 
     }
+
+    def sampledChunk(
+      chunk: Array[Byte],
+      f: AudioFormat
+    ) = {
+      require(f.getEncoding == Encoding.PCM_SIGNED)
+      require(f.getSampleSizeInBits % 8 == 0)
+      require(!f.isBigEndian)
+      val channels = f.getChannels
+      val bytesPerSample = f.getSampleSizeInBits / 8
+      val frameSize = channels * bytesPerSample
+      require(f.getFrameSize == frameSize)
+      val maxSampleValue = ( 1 << (f.getSampleSizeInBits - 1) ).toFloat
+      require(f.getSampleRate == f.getFrameRate)
+
+      chunk
+        .toSeq
+        .grouped(frameSize)
+        .map({ frame =>
+          val fs =
+            frame
+              .grouped(bytesPerSample)
+              .map({ sample =>
+                sample
+                  .reverse
+                  .map(_.toInt)
+                  .reduceLeft({ (a, b) =>
+                    (a << 8) | (b & 0xFF)
+                  })
+              })
+              .toIndexedSeq
+
+          fs.sum / maxSampleValue / channels
+        })
+
+    }
   }
 
   trait PlayableSound {
@@ -59,7 +96,7 @@ object SingleMixer {
 }
 
 class SingleMixer(
-  config: Config = Config()
+  val config: Config = Config()
 ) {
   import config._
   import SingleMixer._
@@ -90,7 +127,7 @@ class SingleMixer(
       override def update(lineEvent: LineEvent): Unit = println(lineEvent)
     }
   )
-  sdl.open()
+  sdl.open(audioFormat, bytesPerChunk * 4)
   sdl.start()
 //  sdl.write(Array.ofDim[Byte](bytesPerSample), 0, bytesPerSample)
 

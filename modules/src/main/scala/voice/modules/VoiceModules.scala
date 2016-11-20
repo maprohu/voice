@@ -26,7 +26,8 @@ object VoiceModules {
     Akka8Modules.Actor,
     Audio,
     Toolbox8Modules.Common,
-    mvn.`com.github.wendykierp:JTransforms:jar:3.1`
+    mvn.`com.github.wendykierp:JTransforms:jar:3.1`,
+    mvn.`com.typesafe.akka:akka-persistence_2.11:jar:2.4.12`
   )
 
   object Tools extends ScalaModule(

@@ -1,7 +1,6 @@
 package voice.core
 
 import toolbox8.leveldb.Keys
-import voice.core.Phones.{Phone, PhoneID}
 
 import scala.collection.immutable._
 
@@ -20,10 +19,10 @@ object VoiceDB {
   ) extends RecordingKey
 
   sealed trait RecordingsValue
-  case class RecordingsValue0(
-    nextId: Int,
-    items: Seq[(RecordingKey, Seq[PhoneID])]
-  ) extends RecordingsValue
+//  case class RecordingsValue0(
+//    nextId: Int,
+//    items: Seq[(RecordingKey, Seq[PhoneID])]
+//  ) extends RecordingsValue
 
   sealed trait RecordingValue
   case class RecordingValue0(
