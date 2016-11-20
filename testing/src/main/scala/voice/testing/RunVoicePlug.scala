@@ -15,6 +15,7 @@ import toolbox8.modules.JarTree8Modules
 import toolbox8.rpi.installer.Rpis
 import voice.modules.VoiceRpiModules
 import voice.rpi.home.VoiceHomePluggable
+import voice.rpi.mobile.VoiceMobilePluggable
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -25,10 +26,14 @@ import scala.concurrent.duration._
 object RunVoicePlug {
 
 //  val Target = Rpis.Localhost
-  val Target = Rpis.Home
+//  val Target = Rpis.Home
 
-  val PluggableModule = VoiceRpiModules.Home
-  val PluggableClassName = classOf[VoiceHomePluggable].getName
+//  val PluggableModule = VoiceRpiModules.Home
+//  val PluggableClassName = classOf[VoiceHomePluggable].getName
+
+  val Target = Rpis.MobileCable
+  val PluggableModule = VoiceRpiModules.Mobile
+  val PluggableClassName = classOf[VoiceMobilePluggable].getName
 
 
 

@@ -29,9 +29,7 @@ object VoiceRpiModules {
   object Mobile extends ScalaModule(
     "mobile",
     Core,
-    JarTree8Modules.Util,
-    Toolbox6Modules.Logging,
-    JarTreeModules.Util
+    JarTree8Modules.Akka
   )
 
   object Exec extends ScalaModule(

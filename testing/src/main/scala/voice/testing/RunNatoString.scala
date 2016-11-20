@@ -1,7 +1,10 @@
-package voice.core
-import scala.concurrent.ExecutionContext.Implicits.global
+package voice.testing
+
+import voice.core.{Consonants, NatoAlphabet, Vowels}
+
 import scala.io.StdIn
 import scala.util.Random
+import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
   * Created by maprohu on 19-11-2016.
@@ -22,6 +25,8 @@ object RunNatoString {
 
       val str =
         s"${c.toString().toLowerCase}${v.toString().toLowerCase}"
+
+      println(str)
 
       NatoAlphabet.readString(str)
 

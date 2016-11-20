@@ -27,7 +27,7 @@ object RunNato {
                 cache
                   .get(c)
                   .getOrElse({
-                    val p = mixer.render(NatoAlphabet.load(c))
+                    val p = mixer.sampled(NatoAlphabet.load(c))
                     cache = cache.updated(c, p)
                     p
                   })

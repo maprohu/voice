@@ -2,8 +2,9 @@ package voice.core
 
 import java.util
 import javax.sound.sampled.AudioFormat.Encoding
-import javax.sound.sampled.{AudioFormat, AudioSystem, LineEvent, LineListener}
+import javax.sound.sampled._
 
+import voice.audio.AudioTools.Samples
 import voice.core.SingleMixer.Config
 
 import scala.collection.mutable
@@ -87,7 +88,8 @@ object SingleMixer {
 
   case class Config(
     bytesPerSample : Int = 2,
-    samplesPerSecond : Float = 44100
+    samplesPerSecond : Float = 44100,
+    sourceLineFinder: AudioFormat => SourceDataLine = f => AudioSystem.getSourceDataLine(f)
   )
 
   def apply(
@@ -121,12 +123,12 @@ class SingleMixer(
     false // true = big-endian, false = little-endian
   )
 
-  val sdl = AudioSystem.getSourceDataLine(audioFormat)
-  sdl.addLineListener(
-    new LineListener {
-      override def update(lineEvent: LineEvent): Unit = println(lineEvent)
-    }
-  )
+  val sdl = sourceLineFinder(audioFormat)
+//  sdl.addLineListener(
+//    new LineListener {
+//      override def update(lineEvent: LineEvent): Unit = println(lineEvent)
+//    }
+//  )
   sdl.open(audioFormat, bytesPerChunk * 4)
   sdl.start()
 //  sdl.write(Array.ofDim[Byte](bytesPerSample), 0, bytesPerSample)
@@ -140,6 +142,8 @@ class SingleMixer(
 
   }
 
+  @volatile var stopped = false
+
   val thread = new Thread() {
     override def run(): Unit = {
       val chunkFloats = Array.ofDim[Float](samplesPerChunk)
@@ -147,13 +151,14 @@ class SingleMixer(
 
       var framesWritten : Long = 0
 
-      while (true) {
+      while (!stopped) {
         buffer.synchronized {
-          while (buffer.playing.isEmpty) {
+          while (!stopped && buffer.playing.isEmpty) {
             buffer.wait()
           }
         }
 
+        if (stopped) return
 //        println(s"written: ${framesWritten}")
 //        println(s"pos: ${sdl.getLongFramePosition}")
 
@@ -213,6 +218,15 @@ class SingleMixer(
           sound.form(t)
         })
 
+    sampled(samples)
+
+  }
+
+  def sampled(
+    samples: IndexedSeq[Float]
+  ) = {
+    val sampleCount = samples.length
+
     new PlayableSound {
       override def play: Future[Unit] = {
         val promise = Promise[Unit]()
@@ -245,5 +259,12 @@ class SingleMixer(
         promise.future
       }
     }
+  }
+
+  def stop() = {
+    stopped = true
+    sdl.stop()
+    sdl.close()
+    thread.interrupt()
   }
 }

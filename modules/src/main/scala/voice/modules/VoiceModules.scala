@@ -75,6 +75,7 @@ object VoiceModules {
     JarTree8Modules.App,
     Modules,
     VoiceRpiModules.Home,
+    VoiceRpiModules.Mobile,
     Tools,
     RpiModules.DBus,
     Audio,

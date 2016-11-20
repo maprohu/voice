@@ -126,6 +126,11 @@
         </dependency>
         <dependency>
             <groupId>voice</groupId>
+            <artifactId>voice-rpi-mobile</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>voice</groupId>
             <artifactId>voice-tools</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>

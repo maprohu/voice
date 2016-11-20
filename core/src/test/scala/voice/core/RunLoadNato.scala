@@ -9,7 +9,7 @@ object RunLoadNato {
     val a = NatoAlphabet.load('c')
 
     val mixer = SingleMixer()
-    mixer.render(a).play
+    mixer.sampled(a).play
   }
 
 }

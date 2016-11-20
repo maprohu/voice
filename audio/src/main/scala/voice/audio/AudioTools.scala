@@ -311,6 +311,48 @@ object AudioTools {
 
   }
 
+  def dumpInfo : String = {
+    val mixers = AudioSystem.getMixerInfo
+
+    val mixersList =
+      mixers
+        .map({ mi =>
+          val m = AudioSystem.getMixer(mi)
+          val s = m.getSourceLineInfo
+          val t = m.getTargetLineInfo
+
+          val sourceWithFormats = s
+            .map({ l =>
+              val formats = l
+                .asInstanceOf[DataLine.Info]
+                .getFormats
+                .map(f => s"      ${f}")
+                .mkString("\n")
+
+              s"""
+                 |    ${l}
+                 |${formats}
+               """.stripMargin
+            })
+
+          s"""
+             |${mi.toString} - ${mi.getName} - ${mi.getDescription}
+             |  Source:
+             |${sourceWithFormats.mkString("\n")}
+             |  Target:
+             |${t.map(o => s"    ${o}").mkString("\n")}
+             |
+           """.stripMargin
+        })
+
+    s"""
+       |Mixers:
+       |${mixers.map(m => s"  ${m}").mkString("\n")}
+       |
+       |${mixersList.mkString("\n")}
+     """.stripMargin
+  }
+
 }
 
 object ArrayTools {
