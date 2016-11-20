@@ -36,7 +36,13 @@ object WaveFile extends LazyLogging {
     val data = Array.ofDim[Byte](
       frameCount * bytesPerFrame
     )
-    ais.read(data)
+    var ridx = 0
+
+    do {
+      ridx += ais.read(data, ridx, data.length-ridx)
+    } while (ridx < data.length)
+    ais.close()
+
     val dis = ByteBuffer.wrap(data)
     dis.order(ByteOrder.LITTLE_ENDIAN)
 
