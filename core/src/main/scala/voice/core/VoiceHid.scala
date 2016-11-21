@@ -137,71 +137,6 @@ class VoiceHid(implicit
       .run()
 
 
-//    def connectToHid(): Unit = {
-//      def connectToExisting() : Unit = {
-//        StreamConverters
-//          .fromInputStream(
-//            () => new FileInputStream(HidFilePath.toFile)
-//          )
-//          .mergeMat(
-//            Source.maybe,
-//            eagerComplete = true
-//          )(Keep.right)
-//          .mapAsync(1)({ e =>
-//            queue.offer(e)
-//          })
-//          .watchTermination()({ (promise, done) =>
-//            val c = Cancelable({ () =>
-//              logger.info("stopping hid")
-//              promise.trySuccess(None)
-//            })
-//            cancel += c
-//            done.onComplete({ o =>
-//              logger.info("hid reading complete: {}", o)
-//              cancel -= c
-//            })
-//            done.onFailure({
-//              case ex =>
-//                logger.warn("hid failed", ex)
-//                connectToHid()
-//            })
-//          })
-//          .to(Sink.ignore)
-//          .run()
-//      }
-//
-//      logger.info("creating dev watcher")
-//      val watcher = DevPath.getFileSystem().newWatchService()
-//      logger.info("registering dev watcher")
-//      DevPath.register(
-//        watcher,
-//        StandardWatchEventKinds.ENTRY_CREATE
-//      )
-//      logger.info("watcher registered")
-//      if (HidFilePath.toFile.exists()) {
-//        logger.info(s"${HidFilePath} exists, start reading")
-//        watcher.close()
-//        connectToExisting()
-//      } else {
-//        logger.info(s"${HidFilePath} does not exists, start watching")
-//        new Thread() {
-//          override def run(): Unit = {
-//            while (!HidFilePath.toFile.exists()) {
-//              logger.info("polling hid file")
-//              watcher.poll(3, TimeUnit.SECONDS)
-//            }
-//
-//            logger.info("hid file created")
-//            watcher.close()
-//
-//            connectToExisting()
-//          }
-//        }.start()
-//      }
-//    }
-//
-//    connectToHid()
-//  }
 
   private val (queue, publisher) =
     Source
@@ -232,7 +167,7 @@ object VoiceParser extends StrictLogging {
   val LongClickDuration = 500.millis
 
   val PacketSize = 3
-  val FirstByteConstantValue = 4
+  val FirstByteConstantValue : Byte = 4
 
   val AxisCenter = 1
   val AxisNegative = 2
@@ -265,8 +200,15 @@ object VoiceParser extends StrictLogging {
 
   def decodePhysical(
     bs3: ByteString
-  ) :ControllerEvent = {
-    val bits = ((bs3(2) & 0xFF) << 8) | (bs3(1) & 0xFF)
+  ) : ControllerEvent = {
+    decodePhysical(bs3(1), bs3(2))
+  }
+
+  def decodePhysical(
+    b1: Byte,
+    b2: Byte
+  ) : ControllerEvent = {
+    val bits = (b2 << 8) | (b1 & 0xFF)
 
     bits match {
       case 0x0005 => Released
