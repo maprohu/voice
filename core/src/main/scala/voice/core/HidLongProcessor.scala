@@ -53,9 +53,8 @@ class HidLongProcessor(
 
       longRunnable.synchronized {
         processor.onDown(e)
+        latest = e
       }
-
-      latest = e
 
       longRunning = scheduler.schedule(
         longRunnable,
