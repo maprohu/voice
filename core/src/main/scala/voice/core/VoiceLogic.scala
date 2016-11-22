@@ -133,9 +133,9 @@ class VoiceLogic(
   val mixer = SingleMixer()
   val recorder = SingleRecorder()
   val nato = NatoAlphabet.cache(mixer)
-  val ignored = mixer.render(SoundForm.sine(0.1f, 220f, 0.5f))
-  val startRecording = mixer.render(SoundForm.sine(0.5f, 880f, 1f))
-  val cancelRecording = mixer.render(SoundForm.sine(0.3f, 220f, 1f))
+  val ignored = mixer.render(SoundForm.sine(0.1f, 500f, 0.5f))
+  val startRecording = mixer.render(SoundForm.sine(0.3f, 880f, 0.1f))
+  val cancelRecording = mixer.render(SoundForm.sine(0.3f, 440f, 0.1f))
   val scheduler = Executors.newSingleThreadScheduledExecutor()
 
   def shutdown() = {
@@ -329,6 +329,7 @@ class VoiceLogic(
         new Playing
       case CancelButton =>
         logger.info("not saved")
+        cancelRecording.play
         Start
       case _ =>
         ignore(c)

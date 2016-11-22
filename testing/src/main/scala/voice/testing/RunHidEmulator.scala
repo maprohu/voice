@@ -6,6 +6,7 @@ import java.io.{File, PipedInputStream, PipedOutputStream}
 import javax.swing.JFrame
 
 import toolbox8.jartree.logging.LoggingSetup
+import voice.core.HidParser.KeyCodes
 import voice.core.SingleMixer.PlayableSound
 import voice.core.{HidParser, NatoAlphabet, SingleMixer, VoiceLogic}
 
@@ -52,42 +53,47 @@ object RunHidEmulator {
       .addKeyEventDispatcher(
         new KeyEventDispatcher {
           override def dispatchKeyEvent(e: KeyEvent): Boolean = {
-//            println(e)
-            e.getID match {
-              case KeyEvent.KEY_PRESSED =>
-                import voice.core.HidParser.KeyCodes._
-                e.getKeyCode match {
-                  case KeyEvent.VK_UP =>
-                    write(buttonC)
-                  case KeyEvent.VK_DOWN =>
-                    write(buttonD)
-                  case KeyEvent.VK_LEFT =>
-                    write(buttonB)
-                  case KeyEvent.VK_RIGHT =>
-                    write(buttonA)
-                  case KeyEvent.VK_8 =>
-                    write(joystickUp)
-                  case KeyEvent.VK_2 =>
-                    write(joystickDown)
-                  case KeyEvent.VK_4 =>
-                    write(joystickLeft)
-                  case KeyEvent.VK_6 =>
-                    write(joystickRight)
-                  case KeyEvent.VK_7 =>
-                    write(joystickUpLeft)
-                  case KeyEvent.VK_9 =>
-                    write(joystickUpRight)
-                  case KeyEvent.VK_3 =>
-                    write(joystickDownRight)
-                  case KeyEvent.VK_1 =>
-                    write(joystickDownLeft)
-                  case KeyEvent.VK_MINUS =>
-                    write(buttonHigh)
-                  case KeyEvent.VK_PLUS =>
-                    write(buttonLow)
-                }
-              case KeyEvent.KEY_RELEASED =>
-                write(HidParser.KeyCodes.released)
+            println(e)
+            import voice.core.HidParser.KeyCodes._
+            def handleKey(v: Int) = {
+              e.getID match {
+                case KeyEvent.KEY_PRESSED =>
+                  write(v)
+                case KeyEvent.KEY_RELEASED =>
+                  write(released)
+                case _ =>
+              }
+            }
+
+            e.getKeyCode match {
+              case KeyEvent.VK_UP =>
+                handleKey(buttonC)
+              case KeyEvent.VK_DOWN =>
+                handleKey(buttonD)
+              case KeyEvent.VK_LEFT =>
+                handleKey(buttonB)
+              case KeyEvent.VK_RIGHT =>
+                handleKey(buttonA)
+              case KeyEvent.VK_NUMPAD8 =>
+                handleKey(joystickUp)
+              case KeyEvent.VK_NUMPAD2 =>
+                handleKey(joystickDown)
+              case KeyEvent.VK_NUMPAD4 =>
+                handleKey(joystickLeft)
+              case KeyEvent.VK_NUMPAD6 =>
+                handleKey(joystickRight)
+              case KeyEvent.VK_NUMPAD7 =>
+                handleKey(joystickUpLeft)
+              case KeyEvent.VK_NUMPAD9 =>
+                handleKey(joystickUpRight)
+              case KeyEvent.VK_NUMPAD3 =>
+                handleKey(joystickDownRight)
+              case KeyEvent.VK_NUMPAD1 =>
+                handleKey(joystickDownLeft)
+              case KeyEvent.VK_SUBTRACT =>
+                handleKey(buttonHigh)
+              case KeyEvent.VK_ADD =>
+                handleKey(buttonLow)
               case _ =>
             }
 
