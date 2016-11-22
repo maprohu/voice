@@ -7,9 +7,8 @@ import toolbox8.akka.actor.GetComponents
 import toolbox8.akka.actor.PubSubActor.{Subscribe, Unsubscribe}
 import toolbox8.jartree.testing.AkkaJartreeClientTools
 import toolbox8.rpi.installer.Rpis
-import voice.core.VoiceAppActor.Components
-import voice.core.{VoiceApi, VoiceAppActor}
-import voice.core.events.Picklers
+import voice.akka.{Picklers, VoiceAppActor}
+import voice.core.VoiceApi
 
 import scala.io.StdIn
 

@@ -1,17 +1,15 @@
-package voice.core
+package voice.akka
 
 import akka.actor.{Actor, Props}
 import akka.event.Logging
-import toolbox8.akka.actor.{DumpActor, DumpLogActor, PubSubActor, PubSubPublisherActor}
-import voice.core.VoiceMobileActor.Config
+import toolbox8.akka.actor.DumpLogActor
 
 /**
   * Created by maprohu on 20-11-2016.
   */
 class VoiceMobileActor(
-  config: Config
+  config: VoiceMobileActor.Config
 ) extends Actor {
-  import config._
   val log = Logging(context.system, this)
 
 

@@ -5,7 +5,6 @@ import java.nio.{ByteBuffer, ByteOrder}
 import javax.sound.sampled.AudioFormat.Encoding
 import javax.sound.sampled.AudioInputStream
 
-import akka.util.ByteIterator.ByteArrayIterator
 import com.typesafe.scalalogging.LazyLogging
 import voice.core.SingleMixer.SoundForm
 

@@ -1,8 +1,5 @@
 package voice.core.events
 
-import akka.stream.scaladsl.Source
-import boopickle.DefaultBasic.PicklerGenerator
-import toolbox8.akka.actor.{BoopickleSerializer, Ids, Pickled}
 
 
 sealed trait LogicalEvent
@@ -35,32 +32,4 @@ case object JoystickDownRight extends JoystickActiveEvent with ControllerEvent
 case object Released extends ControllerEvent with JoystickEvent
 case object Unknown extends ControllerEvent
 
-case class PhysicalEvent(
-  event: ControllerEvent
-) extends Picky
 
-trait Picky extends Pickled {
-  override def booId: Int = Ids.VoiceCore
-}
-
-object Picklers {
-
-//  implicit val picklerPhysicalEvent = {
-//    import boopickle.Default._
-//    PicklerGenerator.generatePickler[PhysicalEvent]
-//  }
-
-  def createPickler = {
-    import boopickle.Default._
-
-    compositePickler[Pickled]
-      .addConcreteType[PhysicalEvent]
-  }
-
-  def register = {
-    BoopickleSerializer.register(
-      Ids.VoiceCore,
-      createPickler
-    )
-  }
-}

@@ -1,8 +1,10 @@
-package voice.core
+package voice.testing
 
 import akka.actor.Props
+import voice.akka.MixerActor
+import voice.akka.MixerActor.Play
 import voice.audio.AudioTools
-import voice.core.MixerActor.Play
+
 import scala.concurrent.duration._
 
 /**

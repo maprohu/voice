@@ -1,20 +1,16 @@
-package voice.core
+package voice.akka
 
 import javax.sound.sampled.{AudioSystem, LineEvent, LineListener}
 
 import akka.actor.{Actor, ActorRef}
-import akka.actor.Actor.Receive
-import akka.stream.{ActorMaterializer, OverflowStrategy}
+import akka.pattern._
 import akka.stream.scaladsl.{Keep, Sink, SinkQueueWithCancel, Source}
-import akka.util.ByteString
-import toolbox8.akka.actor.Target
-import toolbox8.akka.stream.Chunker
+import akka.stream.{ActorMaterializer, OverflowStrategy}
 import voice.audio.AudioTools
 
 import scala.collection.immutable._
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import akka.pattern._
 
 /**
   * Created by maprohu on 05-11-2016.
@@ -22,8 +18,8 @@ import akka.pattern._
 class MixerActor(
   config: MixerActor.Config
 ) extends Actor {
-  import config._
   import MixerActor._
+  import config._
   import context.dispatcher
   implicit val materializer = ActorMaterializer()
 

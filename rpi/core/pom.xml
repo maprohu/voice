@@ -4,6 +4,9 @@
     <artifactId>voice-rpi-core</artifactId>
     <version>2-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <organization>
+        <name>voice</name>
+    </organization>
     <build>
         <finalName>product</finalName>
         <plugins>
@@ -107,6 +110,11 @@
         <dependency>
             <groupId>voice</groupId>
             <artifactId>voice-core</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>voice</groupId>
+            <artifactId>voice-akka</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>

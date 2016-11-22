@@ -1,4 +1,4 @@
-package voice.core
+package voice.akka
 
 import java.io.File
 import java.nio.ByteBuffer

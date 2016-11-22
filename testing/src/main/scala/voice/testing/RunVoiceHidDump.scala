@@ -6,10 +6,10 @@ import akka.stream.scaladsl.{Sink, Source}
 import toolbox8.jartree.testing.AkkaJartreeClientTools
 import toolbox8.rpi.installer.Rpis
 import voice.core.VoiceApi
-import voice.core.events.Picklers
 
 import scala.io.StdIn
 import toolbox8.akka.actor.PubSubActor.{Subscribe, Unsubscribe}
+import voice.akka.Picklers
 
 /**
   * Created by maprohu on 05-11-2016.

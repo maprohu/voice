@@ -1,9 +1,7 @@
-package voice.core
+package voice.akka
 
 import akka.actor.{Actor, ActorRef, Props}
-import akka.actor.Actor.Receive
-import toolbox8.akka.actor.{DumpActor, GetComponents, PubSubActor}
-import voice.core.events.Picky
+import toolbox8.akka.actor.{GetComponents, PubSubActor}
 
 /**
   * Created by maprohu on 11-11-2016.

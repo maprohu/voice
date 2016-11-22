@@ -1,4 +1,4 @@
-package voice.core
+package voice.akka
 
 import akka.actor.{ActorSystem, Props}
 import toolbox8.akka.actor.PubSubActor

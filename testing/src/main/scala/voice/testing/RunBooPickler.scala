@@ -1,6 +1,7 @@
 package voice.testing
 
 import toolbox8.akka.actor.Pickled
+import voice.akka.{PhysicalEvent, Picklers}
 import voice.core.events._
 
 /**

@@ -3,7 +3,7 @@ package voice.rpi.home
 import akka.actor.{Actor, ActorSystem, Props}
 import akka.stream.scaladsl.Sink
 import toolbox8.jartree.akka.PluggableServiceActor.{PlugContext, Pluggable, Plugged, Previous}
-import voice.core.{HidPhysicalActor, VoiceApi, VoiceHid}
+import voice.core.VoiceApi
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
@@ -11,7 +11,7 @@ import akka.pattern._
 import akka.util.Timeout
 import com.typesafe.scalalogging.LazyLogging
 import toolbox8.akka.actor.{ActorSystemTools, DumpActor, PubSubActor, PubSubPublisherActor}
-import voice.core.events.Picklers
+import voice.akka.{HidPhysicalActor, Picklers}
 
 /**
   * Created by maprohu on 06-11-2016.

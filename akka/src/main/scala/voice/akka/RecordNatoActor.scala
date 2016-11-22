@@ -1,15 +1,12 @@
-package voice.core
+package voice.akka
 
 import javax.sound.sampled.{AudioSystem, SourceDataLine}
 
 import akka.actor.Actor
-import akka.actor.Actor.Receive
 import akka.event.Logging
-import akka.persistence.PersistentActor
-import voice.audio.AudioTools
-import voice.core.RecordNatoActor.Config
 import voice.core.SingleMixer.SoundForm
 import voice.core.events.{ButtonB, ButtonHigh, LogicalClick}
+import voice.core.{Consonants, NatoAlphabet, SingleMixer, Vowels}
 
 import scala.util.Random
 
@@ -17,10 +14,9 @@ import scala.util.Random
   * Created by maprohu on 20-11-2016.
   */
 class RecordNatoActor(
-  config: Config
+  config: RecordNatoActor.Config
 ) extends Actor {
   val log = Logging(context.system, this)
-  import config._
   import context.dispatcher
 
 //  log.info(

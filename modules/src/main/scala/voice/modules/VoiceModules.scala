@@ -22,12 +22,20 @@ object VoiceModules {
     "core",
     Toolbox6Modules.Macros,
     Toolbox6Modules.Pickling.R3,
-    Toolbox8Modules.Leveldb,
-    Akka8Modules.Actor,
-    Audio,
     Toolbox8Modules.Common,
     mvn.`com.github.wendykierp:JTransforms:jar:3.1`,
+    mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`
+  )
+
+  object Akka extends ScalaModule(
+    "akka",
+    Core,
+    Audio,
+    Akka8Modules.Actor,
+    Toolbox8Modules.Leveldb,
     mvn.`com.typesafe.akka:akka-persistence_2.11:jar:2.4.12`
+
+
   )
 
   object Tools extends ScalaModule(
@@ -71,6 +79,7 @@ object VoiceModules {
 
   object Testing extends ScalaModule(
     "testing",
+    Akka,
     JarTree8Modules.Testing,
     JarTree8Modules.App,
     Modules,

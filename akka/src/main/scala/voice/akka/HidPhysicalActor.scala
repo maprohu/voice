@@ -1,19 +1,18 @@
-package voice.core
+package voice.akka
 
-import events._
 import akka.actor.Status.Failure
-import akka.actor.{Actor, ActorRef, PoisonPill}
+import akka.actor.{Actor, ActorRef}
 import akka.event.Logging
 import akka.stream.ThrottleMode.Shaping
-import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy}
 import akka.stream.scaladsl.{Keep, Sink, Source}
+import akka.stream.{ActorMaterializer, KillSwitches}
 import akka.util.ByteString
 import com.typesafe.scalalogging.LazyLogging
 import monix.execution.Cancelable
-import monix.execution.cancelables.{AssignableCancelable, BooleanCancelable, CompositeCancelable}
+import monix.execution.cancelables.CompositeCancelable
 import toolbox6.logging.LogTools
-import voice.core.FeedbackActor.InvalidInput
-import voice.core.HidPhysicalActor.Config
+import FeedbackActor.InvalidInput
+import voice.core.events.Unknown
 
 import scala.concurrent.duration._
 
@@ -21,10 +20,11 @@ import scala.concurrent.duration._
   * Created by maprohu on 02-11-2016.
   */
 class HidPhysicalActor(
-  config: Config
+  config: HidPhysicalActor.Config
 ) extends Actor with LazyLogging with LogTools {
-  import HidPhysicalActor._
   import config._
+  import HidPhysicalActor._
+  import context.dispatcher
   val log = Logging(context.system, this)
 //  import context.dispatcher
   implicit val materializer = ActorMaterializer.create(context.system)
@@ -78,6 +78,7 @@ class HidPhysicalActor(
     bs: ByteString
   ) : Unit = {
     import VoiceParser._
+    import voice.core.HidParser._
     val (drop, keep) = bs.span(_ != FirstByteConstantValue)
 
     if (!drop.isEmpty) {
@@ -87,7 +88,7 @@ class HidPhysicalActor(
     if (keep.length >= 3) {
       val (head, tail) = keep.splitAt(3)
 
-      val ce = decodePhysical(head)
+      val ce = VoiceParser.decodePhysical(head)
 
       if (ce == Unknown) {
         feedback ! InvalidInput(head)

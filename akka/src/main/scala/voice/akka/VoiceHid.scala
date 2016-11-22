@@ -1,4 +1,4 @@
-package voice.core
+package voice.akka
 
 import java.io.{File, FileInputStream}
 import java.nio.file._
@@ -9,13 +9,14 @@ import akka.stream.ThrottleMode.Shaping
 import akka.stream._
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, StreamConverters}
 import akka.util.ByteString
-import boopickle.DefaultBasic.PicklerGenerator
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
 import monix.execution.atomic.Atomic
 import monix.execution.cancelables.{CompositeCancelable, MultiAssignmentCancelable}
 import toolbox8.akka.stream.{Flows, Sources}
 import toolbox8.common.FilesTools
 import voice.audio.Talker
+import voice.core.HidParser
+import voice.core.events._
 
 import scala.collection.immutable._
 import scala.concurrent.duration._
@@ -26,9 +27,7 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
   */
 object VoiceHid extends LazyLogging {
 
-  val HidFileName = "bt4ok"
-  val DevPath = Paths.get("/dev")
-  val HidFilePath = DevPath.resolve(HidFileName)
+  import HidParser._
 
   val hidSource = {
     StreamConverters
@@ -94,6 +93,8 @@ class VoiceHid(implicit
   materializer: Materializer
 ) extends StrictLogging {
   import VoiceHid._
+  import HidParser._
+
   import materializer.executionContext
 
   private val cancelSource = CompositeCancelable()
@@ -162,12 +163,10 @@ class VoiceHid(implicit
 }
 
 object VoiceParser extends StrictLogging {
-  import events._
 
   val LongClickDuration = 500.millis
 
   val PacketSize = 3
-  val FirstByteConstantValue : Byte = 4
 
   val AxisCenter = 1
   val AxisNegative = 2
@@ -201,34 +200,9 @@ object VoiceParser extends StrictLogging {
   def decodePhysical(
     bs3: ByteString
   ) : ControllerEvent = {
-    decodePhysical(bs3(1), bs3(2))
+    HidParser.decodePhysical(bs3(1), bs3(2))
   }
 
-  def decodePhysical(
-    b1: Byte,
-    b2: Byte
-  ) : ControllerEvent = {
-    val bits = (b2 << 8) | (b1 & 0xFF)
-
-    bits match {
-      case 0x0005 => Released
-      case 0x0105 => ButtonA
-      case 0x0015 => ButtonB
-      case 0x0085 => ButtonC
-      case 0x0025 => ButtonD
-      case 0x0405 => ButtonLow
-      case 0x0805 => ButtonHigh
-      case 0x0009 => JoystickLeft
-      case 0x0001 => JoystickRight
-      case 0x0006 => JoystickDown
-      case 0x0004 => JoystickUp
-      case 0x000a => JoystickDownLeft
-      case 0x0002 => JoystickDownRight
-      case 0x0008 => JoystickUpLeft
-      case 0x0000 => JoystickUpRight
-      case _ => Unknown
-    }
-  }
 
 
 }
@@ -240,7 +214,6 @@ class VoiceParser(
   executionContext: ExecutionContext,
   sch: monix.execution.Scheduler
 ) {
-  import events._
   import VoiceParser._
 
   val voiceController = new VoiceController(
@@ -349,7 +322,7 @@ class VoiceParser(
       })
       .log("hid_bytes3").withAttributes(Attributes.logLevels(onElement = Logging.DebugLevel))
       .map({ bs3 =>
-        if (bs3(0) != FirstByteConstantValue) {
+        if (bs3(0) != HidParser.FirstByteConstantValue) {
           invalidModeTalker
             .transform({ f =>
               if (f.isCompleted) {

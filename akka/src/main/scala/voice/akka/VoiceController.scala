@@ -1,8 +1,7 @@
-package voice.core
+package voice.akka
 
-import events._
 import voice.audio.Talker
-import voice.core.VoiceParser._
+import voice.core.events._
 
 /**
   * Created by maprohu on 30-10-2016.

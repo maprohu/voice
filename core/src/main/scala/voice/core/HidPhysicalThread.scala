@@ -2,12 +2,10 @@ package voice.core
 
 import java.io.InputStream
 
-import akka.stream.actor.ActorPublisherMessage.Cancel
 import com.typesafe.scalalogging.LazyLogging
 import monix.execution.Cancelable
 import voice.core.events.ControllerEvent
 
-import scala.util.control.NonFatal
 
 
 /**
@@ -29,10 +27,13 @@ object HidPhysicalThread extends LazyLogging {
 
     val thread = new Thread() {
       override def run(): Unit = {
+        logger.info("hid physical thread started")
 
         val buffer = Array.ofDim[Byte](3)
 
         while (running) {
+          logger.info("connecting to device")
+
           val (is, processor) = input()
 
           try {
@@ -48,12 +49,12 @@ object HidPhysicalThread extends LazyLogging {
                 val b1 = buffer(1)
                 val b2 = buffer(2)
 
-                if (b0 != VoiceParser.FirstByteConstantValue) {
+                if (b0 != HidParser.FirstByteConstantValue) {
                   throw new InvalidPhysicalHidInputException(buffer)
                 }
 
                 processor.onNext(
-                  VoiceParser.decodePhysical(b1, b2)
+                  HidParser.decodePhysical(b1, b2)
                 )
               }
 
@@ -68,10 +69,12 @@ object HidPhysicalThread extends LazyLogging {
           }
         }
 
+        logger.info("hid physical thread exiting")
       }
     }
 
     val cancel = Cancelable({ () =>
+      logger.info("stopping hid physical reading")
       running = false
       thread.interrupt()
     })

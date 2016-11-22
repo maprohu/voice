@@ -5,7 +5,6 @@ import akka.pattern._
 import akka.util.Timeout
 import mvnmod.builder.ModulePath
 import toolbox8.akka.actor.{ActorSystemTools, ActorTools}
-import toolbox8.jartree.akka.JarCacheActor.JarKey
 import toolbox8.jartree.akka.PluggableServiceActor.PlugRequest
 import toolbox8.jartree.akka._
 import toolbox8.jartree.app.JarTreeMain
@@ -15,7 +14,6 @@ import toolbox8.modules.JarTree8Modules
 import toolbox8.rpi.installer.Rpis
 import voice.modules.VoiceRpiModules
 import voice.rpi.home.VoiceHomePluggable
-import voice.rpi.mobile.VoiceMobilePluggable
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
@@ -30,20 +28,20 @@ object RunVoicePlug {
 
 //  val PluggableModule = VoiceRpiModules.Home
 //  val PluggableClassName = classOf[VoiceHomePluggable].getName
-
-  val Target = Rpis.MobileCable
-  val PluggableModule = VoiceRpiModules.Mobile
-  val PluggableClassName = classOf[VoiceMobilePluggable].getName
-
-
-
-  def main(args: Array[String]): Unit = {
-    AkkaJartreeClientTools.plug(
-      pluggableModule = PluggableModule,
-      pluggableClassName = PluggableClassName,
-      rpiTarget = Target
-    )
-  }
+//
+//  val Target = Rpis.MobileCable
+//  val PluggableModule = VoiceRpiModules.Mobile
+//  val PluggableClassName = classOf[VoiceMobilePluggable].getName
+//
+//
+//
+//  def main(args: Array[String]): Unit = {
+//    AkkaJartreeClientTools.plug(
+//      pluggableModule = PluggableModule,
+//      pluggableClassName = PluggableClassName,
+//      rpiTarget = Target
+//    )
+//  }
 
 
 }

@@ -6,7 +6,8 @@ import akka.stream.scaladsl.{Flow, Sink, StreamConverters}
 import akka.util.ByteString
 import toolbox8.jartree.client.JarTreeStandaloneClient
 import toolbox8.rpi.installer.Rpis
-import voice.core.VoiceHid
+import voice.akka.VoiceHid
+
 
 
 ///**

@@ -14,6 +14,7 @@ object VoiceRpiModules {
   object Core extends ScalaModule(
     "core",
     VoiceModules.Core,
+    VoiceModules.Akka,
     JarTree8Modules.Util,
     VoiceModules.Audio,
     Toolbox8Modules.Common,
@@ -28,8 +29,8 @@ object VoiceRpiModules {
 
   object Mobile extends ScalaModule(
     "mobile",
-    Core,
-    JarTree8Modules.Akka
+    VoiceModules.Core,
+    JarTree8Modules.StreamApp
   )
 
   object Exec extends ScalaModule(

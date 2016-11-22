@@ -1,10 +1,8 @@
-package voice.core
+package voice.akka
 
-import events._
 import akka.actor.{Actor, ActorRef}
-import toolbox8.akka.actor.Target
-import voice.core.FeedbackActor.InvalidPhysicalInput
-import voice.core.HidLogicalActor.Config
+import FeedbackActor.InvalidPhysicalInput
+import voice.core.events._
 
 import scala.concurrent.Promise
 
@@ -12,7 +10,7 @@ import scala.concurrent.Promise
   * Created by maprohu on 04-11-2016.
   */
 class HidLogicalActor(
-  config: Config
+  config: HidLogicalActor.Config
 ) extends Actor {
   import config._
   import HidLogicalActor._
@@ -101,7 +99,6 @@ object HidLogicalActor {
     output: ActorRef,
     feedback: ActorRef
   )
-  import VoiceParser._
 
   sealed trait State {
     val latest: ControllerEvent

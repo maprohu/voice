@@ -1,10 +1,9 @@
-package voice.core
+package voice.akka
 
-import events._
 import akka.actor.Actor
 import akka.event.Logging
 import akka.util.ByteString
-import voice.core.FeedbackActor.Config
+import voice.core.events.ControllerEvent
 
 import scala.collection.immutable._
 
@@ -12,7 +11,7 @@ import scala.collection.immutable._
   * Created by maprohu on 04-11-2016.
   */
 class FeedbackActor(
-  config: Config
+  config: FeedbackActor.Config
 ) extends Actor {
   val log = Logging(context.system, this)
   import FeedbackActor._

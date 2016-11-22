@@ -12,7 +12,7 @@ import voice.audio.AudioTools
 
 import scala.concurrent.duration._
 import AudioTools.Implicits._
-import voice.core.VoiceParser
+import voice.akka.VoiceParser
 
 /**
   * Created by martonpapp on 16/10/16.
