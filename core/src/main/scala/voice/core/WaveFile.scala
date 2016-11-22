@@ -31,9 +31,9 @@ object WaveFile extends LazyLogging {
     require(f.getFrameSize == bytesPerFrame)
     require(f.getSampleRate == f.getFrameRate)
 
-    logger.info(s"rate: ${ais.getFormat.getSampleRate}")
+    logger.debug(s"rate: ${ais.getFormat.getSampleRate}")
     val frameCount = ais.getFrameLength.toInt
-    logger.info(s"frames: ${frameCount}")
+    logger.debug(s"frames: ${frameCount}")
     val data = Array.ofDim[Byte](
       frameCount * bytesPerFrame
     )
@@ -88,13 +88,13 @@ object WaveFile extends LazyLogging {
     }
 
     if (clip) {
-      logger.info(s"zeros: ${firstNonNull} - ${lastNonNull}")
+      logger.debug(s"zeros: ${firstNonNull} - ${lastNonNull}")
 
       val clipped = floats
         .slice(firstNonNull, lastNonNull+1)
         .toIndexedSeq
 
-      logger.info(s"clipped: ${clipped.length}")
+      logger.debug(s"clipped: ${clipped.length}")
 
       clipped
     } else {

@@ -1,13 +1,14 @@
 package voice.core
 
-import java.io.{ByteArrayOutputStream, FileInputStream, InputStream}
+import java.io._
 import java.util.concurrent.{Executors, TimeUnit}
 
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
 import monix.execution.Cancelable
 import monix.execution.cancelables.AssignableCancelable
 import toolbox6.logging.LogTools
-import voice.core.ShortLongProcessor._
+import toolbox8.leveldb.{IntSize, LevelDB}
+import voice.core.ShortLongProcessor.{Click, Down, Wrap, Wrapped}
 import voice.core.SingleMixer.SoundForm
 import voice.core.SingleRecorder.RecorderProcessor
 import voice.core.Syllables.Syllable
@@ -20,7 +21,7 @@ import scala.util.Random
 /**
   * Created by pappmar on 22/11/2016.
   */
-object VoiceLogic extends StrictLogging {
+object VoiceLogic extends StrictLogging with LogTools {
 
   def connectToDevice = {
     val deviceFile =
@@ -37,17 +38,20 @@ object VoiceLogic extends StrictLogging {
   }
 
   def run(
+    dbDir : File,
     deviceConnection: () => InputStream = () => connectToDevice
   )(implicit
     executionContext: ExecutionContext
   ): Cancelable = {
 
-    HidPhysicalThread.run({ () =>
+    val db = LevelDB(dbDir)
+
+    val hidCancelable = HidPhysicalThread.run({ () =>
       logger.info("starting hid reading")
 
       val is = deviceConnection()
 
-      val logic = new VoiceLogic
+      val logic = new VoiceLogic(db)
 
       val p =
         new HidSingleProcessor(
@@ -61,14 +65,64 @@ object VoiceLogic extends StrictLogging {
       (is, p)
     })
 
+    Cancelable({ () =>
+      quietly { hidCancelable.cancel() }
+      quietly { db.cancelable.cancel() }
+    })
+
   }
 
 
 }
 
-class VoiceLogic(implicit
+object Tables extends Enumeration {
+  val
+
+    Recordings
+
+  = Value
+}
+
+case class Recordings(
+  lookup : Map[Vector[Syllable], Vector[Long]] = Map.empty
+)
+
+class VoiceLogic(
+  db: LevelDB
+)(implicit
   executionContext: ExecutionContext
 ) extends StrictLogging with LogTools {
+
+  val blobs = db.longTable()
+
+  def read[T](id: Tables.Value) : Option[T] = {
+    Option(
+      db.db.get(
+        IntSize.toArray(id.id)
+      )
+    ).map({ b =>
+      val is = new ObjectInputStream(
+        new ByteArrayInputStream(
+          b
+        )
+      )
+
+      is
+        .readObject()
+        .asInstanceOf[T]
+    })
+  }
+
+  def write[T](id: Tables.Value, value: T) : Unit = {
+    val os = new ByteArrayOutputStream()
+    val oos = new ObjectOutputStream(os)
+    oos.writeObject(value)
+    oos.close()
+    db.db.put(
+      IntSize.toArray(id.id),
+      os.toByteArray
+    )
+  }
 
   val OkButton = Down(ButtonB)
   val CancelButton = Down(ButtonA)
@@ -85,12 +139,14 @@ class VoiceLogic(implicit
   val scheduler = Executors.newSingleThreadScheduledExecutor()
 
   def shutdown() = {
-    quietly { mixer.stop() }
-    quietly { recorder.stop() }
     quietly {
+      logger.info("shutting down scheduler")
       scheduler.shutdown()
       scheduler.awaitTermination(5, TimeUnit.SECONDS)
+      logger.info("scheduler shut down")
     }
+    quietly { mixer.stop() }
+    quietly { recorder.stop() }
   }
 
   abstract class Base extends Wrapped {
@@ -212,11 +268,17 @@ class VoiceLogic(implicit
               data.toByteArray
             )
 
+          case _ =>
+            ignore(c)
+            this
+
         }
 
       }
     }
   }
+
+  var recordings = read[Recordings](Tables.Recordings).getOrElse(Recordings())
 
   class Replaying(
     syllable: Syllable,
@@ -234,6 +296,30 @@ class VoiceLogic(implicit
     override def click(c: Click): Wrapped = c match {
       case RepeatButton =>
         recorded.play
+        this
+      case OkButton =>
+        val word = Vector(syllable)
+
+        logger.info(
+          s"saving: {}, ${data.length} bytes, ${data.length / recorder.config.bytesPerSample / recorder.config.samplesPerSecond} seconds",
+          word
+        )
+
+        val key = blobs.insert(data)
+        recordings = recordings.copy(
+          lookup = recordings.lookup.updated(
+            word,
+            recordings.lookup.getOrElse(word, Vector.empty[Long]) :+ key
+          )
+        )
+        write(Tables.Recordings, recordings)
+        logger.info("saved with id: {}", key)
+        new Playing
+      case CancelButton =>
+        logger.info("not saved")
+        Start
+      case _ =>
+        ignore(c)
         this
 
     }

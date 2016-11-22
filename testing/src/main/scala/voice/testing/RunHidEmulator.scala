@@ -2,7 +2,7 @@ package voice.testing
 
 import java.awt.event.KeyEvent
 import java.awt.{KeyEventDispatcher, KeyboardFocusManager}
-import java.io.{PipedInputStream, PipedOutputStream}
+import java.io.{File, PipedInputStream, PipedOutputStream}
 import javax.swing.JFrame
 
 import toolbox8.jartree.logging.LoggingSetup
@@ -31,7 +31,10 @@ object RunHidEmulator {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    VoiceLogic.run({ () => connect })
+    VoiceLogic.run(
+      new File("../voice/target/hidemudb"),
+      { () => connect }
+    )
 
     val buffer = Array.ofDim[Byte](3)
     buffer(0) = HidParser.FirstByteConstantValue

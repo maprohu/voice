@@ -12,8 +12,9 @@ class StatefulRunner[E](
   var state = processor
 
   def process(event: E) = {
-    state = processor.process(event)
-    logger.info("new state: {}", state)
+    logger.info("state before: {}", state)
+    state = state.process(event)
+    logger.info("state after: {}", state)
   }
 
 }

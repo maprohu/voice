@@ -12,7 +12,7 @@ import scala.concurrent.{Await, Promise}
   * Created by maprohu on 20-11-2016.
   */
 class SingleRecorder(
-  config: SingleRecorder.Config = SingleRecorder.Config()
+  val config: SingleRecorder.Config = SingleRecorder.Config()
 ) extends StrictLogging {
   import SingleRecorder._
   import config._

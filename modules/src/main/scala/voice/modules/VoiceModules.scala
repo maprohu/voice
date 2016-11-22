@@ -23,6 +23,7 @@ object VoiceModules {
     Toolbox6Modules.Macros,
     Toolbox6Modules.Pickling.R3,
     Toolbox8Modules.Common,
+    Toolbox8Modules.Leveldb,
     mvn.`com.github.wendykierp:JTransforms:jar:3.1`,
     mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`
   )
