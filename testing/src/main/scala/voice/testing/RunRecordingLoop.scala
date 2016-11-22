@@ -39,7 +39,7 @@ object RunRecordingLoop {
 
       StdIn.readLine("press to stop recroding and play\n")
 
-      stopper()
+      stopper.cancel()
 
       val playing = mixer
         .render(

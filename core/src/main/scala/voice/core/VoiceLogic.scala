@@ -128,14 +128,14 @@ class VoiceLogic(
   val CancelButton = Down(ButtonA)
   val RepeatButton = Down(ButtonC)
 
-  val RecordingTimeoutDuration = 2.seconds
+  val RecordingTimeoutDuration = 5.seconds
 
   val mixer = SingleMixer()
   val recorder = SingleRecorder()
   val nato = NatoAlphabet.cache(mixer)
   val ignored = mixer.render(SoundForm.sine(0.1f, 220f, 0.5f))
   val startRecording = mixer.render(SoundForm.sine(0.5f, 880f, 1f))
-  val cancelRecording = mixer.render(SoundForm.sine(0.3f, 110f, 1f))
+  val cancelRecording = mixer.render(SoundForm.sine(0.3f, 220f, 1f))
   val scheduler = Executors.newSingleThreadScheduledExecutor()
 
   def shutdown() = {
@@ -231,9 +231,12 @@ class VoiceLogic(
       for {
         _ <- startRecording.play
       } yield {
-        scheduler.schedule(
+        val timeoutFuture = scheduler.schedule(
           new Runnable {
             override def run(): Unit = {
+              logger.info(s"recording timeout after ${RecordingTimeoutDuration}")
+
+              cancelRecording.play
               recording.cancel()
               timeout = true
             }
@@ -242,13 +245,17 @@ class VoiceLogic(
           RecordingTimeoutDuration.unit
         )
 
-        recording := Cancelable(
+        val stopRecording =
           recorder.record(
             new RecorderProcessor {
               override def process(chunk: Array[Byte]): Unit = data.write(chunk)
             }
           )
-        )
+
+        recording := Cancelable({ () =>
+          timeoutFuture.cancel(false)
+          stopRecording.cancel()
+        })
       }
 
     override def click(c: Click): Wrapped = {
@@ -263,10 +270,14 @@ class VoiceLogic(
 
           case OkButton if startFuture.isCompleted =>
             recording.cancel()
-            new Replaying(
-              syllable,
-              data.toByteArray
-            )
+            if (timeout) {
+              Start
+            } else {
+              new Replaying(
+                syllable,
+                data.toByteArray
+              )
+            }
 
           case _ =>
             ignore(c)
@@ -279,6 +290,7 @@ class VoiceLogic(
   }
 
   var recordings = read[Recordings](Tables.Recordings).getOrElse(Recordings())
+  logger.info(s"recording db has ${recordings.lookup.size} entries with ${recordings.lookup.values.map(_.length).sum} recordings")
 
   class Replaying(
     syllable: Syllable,

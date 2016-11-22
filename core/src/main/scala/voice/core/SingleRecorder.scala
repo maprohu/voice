@@ -3,6 +3,7 @@ package voice.core
 import javax.sound.sampled.{AudioFormat, AudioSystem}
 
 import com.typesafe.scalalogging.StrictLogging
+import monix.execution.Cancelable
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Promise}
@@ -96,7 +97,7 @@ class SingleRecorder(
   }
   thread.start()
 
-  def record(processor: RecorderProcessor) : () => Unit = {
+  def record(processor: RecorderProcessor) : Cancelable = {
     val startPos = tdl.getLongFramePosition
     @volatile var endPos = Long.MaxValue
 
@@ -133,7 +134,7 @@ class SingleRecorder(
       sinks.notify()
     }
 
-    { () =>
+    Cancelable { () =>
       endPos = tdl.getLongFramePosition //  + bytesPerChunk * 10
 
       Await.result(
