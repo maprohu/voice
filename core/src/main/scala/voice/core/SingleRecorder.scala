@@ -2,6 +2,8 @@ package voice.core
 
 import javax.sound.sampled.{AudioFormat, AudioSystem}
 
+import com.typesafe.scalalogging.StrictLogging
+
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Promise}
 
@@ -11,7 +13,7 @@ import scala.concurrent.{Await, Promise}
   */
 class SingleRecorder(
   config: SingleRecorder.Config = SingleRecorder.Config()
-) {
+) extends StrictLogging {
   import SingleRecorder._
   import config._
 
@@ -42,12 +44,13 @@ class SingleRecorder(
 
   }
 
+  @volatile var stopped = false
 
   val thread = new Thread() {
     override def run(): Unit = {
       val bytesChunk = Array.ofDim[Byte](bytesPerChunk)
       var started = true
-      while (true) {
+      while (!stopped) {
         sinks.synchronized {
           if (sinks.items.isEmpty) {
             if (started) {
@@ -59,33 +62,34 @@ class SingleRecorder(
             }
             do {
               sinks.wait()
-            } while (sinks.items.isEmpty)
+            } while (sinks.items.isEmpty && !stopped)
           }
         }
 
-        if (!started) {
-          tdl.start()
-          started = true
-        }
+        if (!stopped) {
 
-        val readCount = tdl.read(bytesChunk, 0, bytesChunk.length)
-        require(readCount == bytesChunk.length)
-
-        sinks.synchronized {
-          val it = sinks.items.iterator()
-
-          while (it.hasNext) {
-            val p = it.next()
-            val wantsMore = p.process(bytesChunk)
-            if (!wantsMore) it.remove()
+          if (!started) {
+            tdl.start()
+            started = true
           }
+
+          val readCount = tdl.read(bytesChunk, 0, bytesChunk.length)
+          require(readCount == bytesChunk.length)
+
+          sinks.synchronized {
+            val it = sinks.items.iterator()
+
+            while (it.hasNext) {
+              val p = it.next()
+              val wantsMore = p.process(bytesChunk)
+              if (!wantsMore) it.remove()
+            }
+          }
+
+          chunkStartPos = chunkEndPos
+          chunkEndPos += samplesPerChunk
         }
 
-        chunkStartPos = chunkEndPos
-        chunkEndPos += samplesPerChunk
-
-//        println(s"pos: ${tdl.getLongFramePosition}")
-//        println(s"chu: ${chunkStartPos}")
       }
 
     }
@@ -139,7 +143,16 @@ class SingleRecorder(
     }
   }
 
-
+  def stop() = {
+    logger.info("stoppig recorder")
+    stopped = true
+    tdl.stop()
+    tdl.close()
+    thread.interrupt()
+    logger.info("waiting for recorder thread to stop")
+    thread.join()
+    logger.info("recorder stopped")
+  }
 
 }
 

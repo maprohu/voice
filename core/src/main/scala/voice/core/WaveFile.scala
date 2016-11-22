@@ -13,20 +13,22 @@ import voice.core.SingleMixer.SoundForm
   */
 object WaveFile extends LazyLogging {
 
+  val FixedSampleSizeInBytes = 2
+  val FixedSampleSizeInBits = FixedSampleSizeInBytes * 8
+  val maxSampleValue = (1 << (FixedSampleSizeInBits - 1)).toFloat
+
   def samples(
     ais: AudioInputStream,
     clip : Boolean = true
   ) = {
     val f = ais.getFormat
     require(f.getEncoding == Encoding.PCM_SIGNED)
-    require(f.getSampleSizeInBits % 8 == 0)
-    require(f.getSampleSizeInBits == 16)
+    require(f.getSampleSizeInBits == FixedSampleSizeInBits)
     require(!f.isBigEndian)
     val channels = f.getChannels
     val bytesPerSample = f.getSampleSizeInBits / 8
     val bytesPerFrame = channels * bytesPerSample
     require(f.getFrameSize == bytesPerFrame)
-    val maxSampleValue = (1 << (f.getSampleSizeInBits - 1)).toFloat
     require(f.getSampleRate == f.getFrameRate)
 
     logger.info(s"rate: ${ais.getFormat.getSampleRate}")
@@ -35,12 +37,27 @@ object WaveFile extends LazyLogging {
     val data = Array.ofDim[Byte](
       frameCount * bytesPerFrame
     )
+
     var ridx = 0
 
     do {
       ridx += ais.read(data, ridx, data.length-ridx)
     } while (ridx < data.length)
     ais.close()
+
+    samples(
+      data,
+      channels,
+      clip
+    )
+  }
+
+  def samples(
+    data: Array[Byte],
+    channels : Int,
+    clip: Boolean
+  ) = {
+    val frameCount = data.length / FixedSampleSizeInBytes / channels
 
     val dis = ByteBuffer.wrap(data)
     dis.order(ByteOrder.LITTLE_ENDIAN)
@@ -71,15 +88,6 @@ object WaveFile extends LazyLogging {
     }
 
     if (clip) {
-//      var from = 0
-//      while (from < frameCount && floats(from) == 0) {
-//        from += 1
-//      }
-//      var until = frameCount
-//      while (until > 0 && floats(until-1) == 0) {
-//        until -= 1
-//      }
-
       logger.info(s"zeros: ${firstNonNull} - ${lastNonNull}")
 
       val clipped = floats

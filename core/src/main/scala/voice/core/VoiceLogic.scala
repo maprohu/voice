@@ -1,13 +1,17 @@
 package voice.core
 
-import java.io.{FileInputStream, InputStream}
+import java.io.{ByteArrayOutputStream, FileInputStream, InputStream}
+import java.util.concurrent.{Executors, TimeUnit}
 
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
 import monix.execution.Cancelable
+import monix.execution.cancelables.AssignableCancelable
 import toolbox6.logging.LogTools
 import voice.core.ShortLongProcessor._
 import voice.core.SingleMixer.SoundForm
-import voice.core.events.{ButtonA, ButtonB, ControllerEvent}
+import voice.core.SingleRecorder.RecorderProcessor
+import voice.core.Syllables.Syllable
+import voice.core.events.{ButtonA, ButtonB, ButtonC, ControllerEvent}
 
 import scala.util.Random
 
@@ -60,12 +64,25 @@ object VoiceLogic extends StrictLogging {
 
 class VoiceLogic extends StrictLogging with LogTools {
 
+  val OkButton = Down(ButtonB)
+  val CancelButton = Down(ButtonA)
+  val RepeatButton = Down(ButtonC)
+
   val mixer = SingleMixer()
+  val recorder = SingleRecorder()
   val nato = NatoAlphabet.cache(mixer)
   val ignored = mixer.render(SoundForm.sine(0.1f, 220f, 0.5f))
+  val startRecording = mixer.render(SoundForm.sine(0.5f, 880f, 1f))
+  val cancelRecording = mixer.render(SoundForm.sine(0.3f, 110f, 1f))
+  val scheduler = Executors.newSingleThreadScheduledExecutor()
 
   def shutdown() = {
     quietly { mixer.stop() }
+    quietly { recorder.stop() }
+    quietly {
+      scheduler.shutdown()
+      scheduler.awaitTermination(5, TimeUnit.SECONDS)
+    }
   }
 
   abstract class Base extends Wrapped {
@@ -74,12 +91,15 @@ class VoiceLogic extends StrictLogging with LogTools {
         case c: Click =>
           click(c)
         case _ =>
+          stop()
           shutdown()
           Stopped
       }
     }
 
     def click(c: Click): Wrapped
+
+    def stop() : Unit = ()
   }
 
   def ignore(w: Wrap) = {
@@ -119,11 +139,10 @@ class VoiceLogic extends StrictLogging with LogTools {
     override def click(c: Click): Wrapped = {
       if (readStatus.isCompleted) {
         c match {
-          case Down(ButtonA) =>
+          case CancelButton =>
             new Playing
-          case Down(ButtonB) =>
-            // do recording
-            this
+          case OkButton =>
+            new Recording(syllable)
           case _ =>
             ignore(c)
             this
@@ -132,6 +151,63 @@ class VoiceLogic extends StrictLogging with LogTools {
         ignore(c)
         this
       }
+    }
+  }
+
+  class Recording(
+    syllable: Syllable
+  ) extends Base {
+    val recording = AssignableCancelable.single()
+
+    val data = new ByteArrayOutputStream()
+
+    val startFuture =
+      for {
+        _ <- startRecording.play
+      } yield {
+        recording := Cancelable(
+          recorder.record(
+            new RecorderProcessor {
+              override def process(chunk: Array[Byte]): Unit = data.write(chunk)
+            }
+          )
+        )
+      }
+
+    override def click(c: Click): Wrapped = c match {
+      case CancelButton =>
+        recording.cancel()
+        cancelRecording.play
+        Start
+
+      case OkButton if startFuture.isCompleted =>
+        recording.cancel()
+        new Replaying(
+          syllable,
+          data.toByteArray
+        )
+
+    }
+  }
+
+  class Replaying(
+    syllable: Syllable,
+    data: Array[Byte]
+  ) extends Base {
+    val recorded = mixer.sampled(
+      WaveFile.samples(
+        data,
+        1,
+        false
+      )
+    )
+    recorded.play
+
+    override def click(c: Click): Wrapped = c match {
+      case RepeatButton =>
+        recorded.play
+        this
+
     }
   }
 
