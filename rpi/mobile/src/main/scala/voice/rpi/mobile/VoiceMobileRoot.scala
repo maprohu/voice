@@ -14,47 +14,7 @@ class VoiceMobileRoot extends Root with StrictLogging {
   override def plug(params: PlugParams): Plugged = {
     logger.info("plugging voice mobile root")
 
-    val deviceFile =
-      HidParser.HidFilePath.toFile
-
-    val cancel =
-      HidPhysicalThread.run({ () =>
-        logger.info("starting hid reading")
-
-        while (!deviceFile.exists()) {
-          logger.info("device file not present, waiting...")
-          Thread.sleep(1000)
-        }
-
-        val is = new FileInputStream(
-          deviceFile
-        )
-
-        val p =
-          new HidSingleProcessor(
-            new HidLongProcessor(
-              new ShortLongProcessor {
-                override def onError(ex: Throwable): Unit = ()
-
-                override def onComplete(): Unit = ()
-
-                override def onLong(e: ControllerEvent): Unit = ()
-
-                override def onShort(e: ControllerEvent): Unit = ()
-
-                override def onDown(e: ControllerEvent): Unit = {
-                  logger.info(s"down: ${e}")
-                }
-              }
-
-            )
-
-          )
-
-        (is, p)
-      })
-
-
+    val cancel = VoiceLogic.run()
 
     new Plugged {
       override def preUnplug: Any = {

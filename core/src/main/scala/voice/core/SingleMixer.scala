@@ -4,6 +4,8 @@ import java.util
 import javax.sound.sampled.AudioFormat.Encoding
 import javax.sound.sampled._
 
+import com.typesafe.scalalogging.StrictLogging
+import toolbox6.logging.LogTools
 import voice.core.SingleMixer.Config
 
 import scala.collection.mutable
@@ -22,6 +24,19 @@ object SingleMixer {
   )
 
   object SoundForm {
+    def sine(
+      seconds: Float,
+      frequency: Float,
+      amplitude: Float
+    ) = {
+      SoundForm(
+        seconds = seconds,
+        form = { t =>
+          math.sin(frequency * math.Pi * 2 * t).toFloat * amplitude
+        }
+      )
+    }
+
     def sampled(
       samplesPerSecond: Float,
       samples: IndexedSeq[Float]
@@ -98,7 +113,7 @@ object SingleMixer {
 
 class SingleMixer(
   val config: Config = Config()
-) {
+) extends StrictLogging with LogTools {
   import config._
   import SingleMixer._
 
@@ -261,9 +276,13 @@ class SingleMixer(
   }
 
   def stop() = {
+    logger.info("stoppig mixer")
     stopped = true
     sdl.stop()
     sdl.close()
     thread.interrupt()
+    logger.info("waiting for mixer thread to stop")
+    thread.join()
+    logger.info("mixer stopped")
   }
 }

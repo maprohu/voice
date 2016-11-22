@@ -11,10 +11,11 @@ case class LogicalLongClick(
 ) extends LogicalEvent
 
 
+sealed trait DownEvent
 sealed trait ControllerEvent
-sealed trait ButtonEvent
+sealed trait ButtonEvent extends DownEvent
 sealed trait JoystickEvent extends LogicalEvent
-sealed trait JoystickActiveEvent extends JoystickEvent
+sealed trait JoystickActiveEvent extends JoystickEvent with DownEvent
 case object ButtonA extends ButtonEvent with ControllerEvent
 case object ButtonB extends ButtonEvent with ControllerEvent
 case object ButtonC extends ButtonEvent with ControllerEvent
