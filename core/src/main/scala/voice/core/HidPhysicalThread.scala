@@ -4,6 +4,7 @@ import java.io.InputStream
 
 import com.typesafe.scalalogging.LazyLogging
 import monix.execution.Cancelable
+import toolbox6.logging.LogTools
 import voice.core.events.ControllerEvent
 
 
@@ -11,7 +12,7 @@ import voice.core.events.ControllerEvent
 /**
   * Created by pappmar on 21/11/2016.
   */
-object HidPhysicalThread extends LazyLogging {
+object HidPhysicalThread extends LazyLogging with LogTools {
 
   trait Processor {
     def onNext(e: ControllerEvent) : Unit
@@ -23,10 +24,12 @@ object HidPhysicalThread extends LazyLogging {
   def run(
     input: () => (InputStream, Processor)
   ) = {
+    logger.info("starting hid physical thread")
     @volatile var running = true
 
     val thread = new Thread() {
-      override def run(): Unit = {
+      override def run(): Unit = quietly {
+
         logger.info("hid physical thread started")
 
         val buffer = Array.ofDim[Byte](3)
@@ -72,6 +75,8 @@ object HidPhysicalThread extends LazyLogging {
         logger.info("hid physical thread exiting")
       }
     }
+
+    thread.start()
 
     val cancel = Cancelable({ () =>
       logger.info("stopping hid physical reading")

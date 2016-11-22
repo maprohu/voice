@@ -15,7 +15,7 @@ class VoiceMobileRoot extends Root with StrictLogging {
     logger.info("plugging voice mobile root")
 
     val deviceFile =
-      HidParser.DevPath.toFile
+      HidParser.HidFilePath.toFile
 
     val cancel =
       HidPhysicalThread.run({ () =>
