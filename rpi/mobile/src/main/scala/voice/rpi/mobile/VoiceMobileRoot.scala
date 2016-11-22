@@ -14,6 +14,7 @@ class VoiceMobileRoot extends Root with StrictLogging {
   override def plug(params: PlugParams): Plugged = {
     logger.info("plugging voice mobile root")
 
+    import scala.concurrent.ExecutionContext.Implicits.global
     val cancel = VoiceLogic.run()
 
     new Plugged {

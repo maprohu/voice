@@ -13,6 +13,8 @@ import voice.core.SingleRecorder.RecorderProcessor
 import voice.core.Syllables.Syllable
 import voice.core.events.{ButtonA, ButtonB, ButtonC, ControllerEvent}
 
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration._
 import scala.util.Random
 
 /**
@@ -36,6 +38,8 @@ object VoiceLogic extends StrictLogging {
 
   def run(
     deviceConnection: () => InputStream = () => connectToDevice
+  )(implicit
+    executionContext: ExecutionContext
   ): Cancelable = {
 
     HidPhysicalThread.run({ () =>
@@ -62,11 +66,15 @@ object VoiceLogic extends StrictLogging {
 
 }
 
-class VoiceLogic extends StrictLogging with LogTools {
+class VoiceLogic(implicit
+  executionContext: ExecutionContext
+) extends StrictLogging with LogTools {
 
   val OkButton = Down(ButtonB)
   val CancelButton = Down(ButtonA)
   val RepeatButton = Down(ButtonC)
+
+  val RecordingTimeoutDuration = 2.seconds
 
   val mixer = SingleMixer()
   val recorder = SingleRecorder()
@@ -130,6 +138,7 @@ class VoiceLogic extends StrictLogging with LogTools {
 
   class Playing extends Base {
     val syllable = Syllables.Items(Random.nextInt(Syllables.Items.length))
+    logger.info("playing: {}", syllable)
 
     val readStatus = NatoAlphabet.readString(
       syllable.string,
@@ -158,6 +167,7 @@ class VoiceLogic extends StrictLogging with LogTools {
     syllable: Syllable
   ) extends Base {
     val recording = AssignableCancelable.single()
+    @volatile var timeout = false
 
     val data = new ByteArrayOutputStream()
 
@@ -165,6 +175,17 @@ class VoiceLogic extends StrictLogging with LogTools {
       for {
         _ <- startRecording.play
       } yield {
+        scheduler.schedule(
+          new Runnable {
+            override def run(): Unit = {
+              recording.cancel()
+              timeout = true
+            }
+          },
+          RecordingTimeoutDuration.length,
+          RecordingTimeoutDuration.unit
+        )
+
         recording := Cancelable(
           recorder.record(
             new RecorderProcessor {
@@ -174,19 +195,26 @@ class VoiceLogic extends StrictLogging with LogTools {
         )
       }
 
-    override def click(c: Click): Wrapped = c match {
-      case CancelButton =>
-        recording.cancel()
-        cancelRecording.play
-        Start
+    override def click(c: Click): Wrapped = {
+      if (timeout) {
+        Start.process(c)
+      } else {
+        c match {
+          case CancelButton =>
+            recording.cancel()
+            cancelRecording.play
+            Start
 
-      case OkButton if startFuture.isCompleted =>
-        recording.cancel()
-        new Replaying(
-          syllable,
-          data.toByteArray
-        )
+          case OkButton if startFuture.isCompleted =>
+            recording.cancel()
+            new Replaying(
+              syllable,
+              data.toByteArray
+            )
 
+        }
+
+      }
     }
   }
 

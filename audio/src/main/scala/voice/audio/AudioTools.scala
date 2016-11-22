@@ -322,17 +322,24 @@ object AudioTools {
           val t = m.getTargetLineInfo
 
           val sourceWithFormats = s
-            .map({ l =>
-              val formats = l
-                .asInstanceOf[DataLine.Info]
-                .getFormats
-                .map(f => s"      ${f}")
-                .mkString("\n")
+            .map({
+              case dl : DataLine.Info =>
+                val formats =
+                  dl
+                    .getFormats
+                    .map(f => s"      ${f}")
+                    .mkString("\n")
 
-              s"""
-                 |    ${l}
-                 |${formats}
-               """.stripMargin
+                s"""
+                   |    ${dl}
+                   |${formats}
+                 """.stripMargin
+
+              case dl : Port.Info =>
+                s"""
+                   |    ${dl}
+                 """.stripMargin
+
             })
 
           s"""

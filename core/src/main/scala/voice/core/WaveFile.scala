@@ -20,7 +20,7 @@ object WaveFile extends LazyLogging {
   def samples(
     ais: AudioInputStream,
     clip : Boolean = true
-  ) = {
+  ) : IndexedSeq[Float] = {
     val f = ais.getFormat
     require(f.getEncoding == Encoding.PCM_SIGNED)
     require(f.getSampleSizeInBits == FixedSampleSizeInBits)
@@ -56,7 +56,7 @@ object WaveFile extends LazyLogging {
     data: Array[Byte],
     channels : Int,
     clip: Boolean
-  ) = {
+  ) : IndexedSeq[Float] = {
     val frameCount = data.length / FixedSampleSizeInBytes / channels
 
     val dis = ByteBuffer.wrap(data)
