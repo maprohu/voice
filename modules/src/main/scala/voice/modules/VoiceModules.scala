@@ -87,15 +87,15 @@ object VoiceModules {
     VoiceRpiModules.Home,
     VoiceRpiModules.Mobile,
     Tools,
-    RpiModules.DBus,
+//    RpiModules.DBus,
     Audio,
     JarTree8Modules.Client,
     RpiModules.Installer,
     Core,
     VoiceRpiModules.Core,
     Extra8Modules.Hello,
-    mvn.`com.jsyn:jsyn:jar:16.7.6`,
-    Toolbox6Modules.Logback
+    Toolbox6Modules.Logback,
+    mvn.`de.dfki.mary:voice-cmu-slt-hsmm:jar:5.2`
   )
 
 

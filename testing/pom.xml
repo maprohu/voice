@@ -143,11 +143,6 @@
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-rpi-dbus</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>voice</groupId>
             <artifactId>voice-audio</artifactId>
             <version>2-SNAPSHOT</version>
@@ -178,14 +173,14 @@
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.jsyn</groupId>
-            <artifactId>jsyn</artifactId>
-            <version>16.7.6</version>
-        </dependency>
-        <dependency>
             <groupId>toolbox6</groupId>
             <artifactId>toolbox6-logback</artifactId>
             <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>de.dfki.mary</groupId>
+            <artifactId>voice-cmu-slt-hsmm</artifactId>
+            <version>5.2</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -193,5 +188,10 @@
             <version>2.11.8</version>
         </dependency>
     </dependencies>
-    <repositories> </repositories>
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
 </project>
