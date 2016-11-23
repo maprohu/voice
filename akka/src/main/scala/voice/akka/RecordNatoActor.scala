@@ -1,5 +1,6 @@
 package voice.akka
 
+import java.util.concurrent.{Executors, TimeUnit}
 import javax.sound.sampled.{AudioSystem, SourceDataLine}
 
 import akka.actor.Actor
@@ -18,6 +19,8 @@ class RecordNatoActor(
 ) extends Actor {
   val log = Logging(context.system, this)
   import context.dispatcher
+
+  implicit val scheduler = Executors.newSingleThreadScheduledExecutor()
 
 //  log.info(
 //    AudioTools.dumpInfo
@@ -87,8 +90,9 @@ class RecordNatoActor(
 
   @scala.throws[Exception](classOf[Exception])
   override def postStop(): Unit = {
+    scheduler.shutdown()
+    scheduler.awaitTermination(10, TimeUnit.SECONDS)
     mixer.stop()
-
     super.postStop()
   }
 }

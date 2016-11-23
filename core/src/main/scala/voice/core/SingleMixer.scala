@@ -1,6 +1,7 @@
 package voice.core
 
 import java.util
+import java.util.concurrent.{Executors, TimeUnit}
 import javax.sound.sampled.AudioFormat.Encoding
 import javax.sound.sampled._
 
@@ -9,6 +10,7 @@ import toolbox6.logging.LogTools
 import voice.core.SingleMixer.Config
 
 import scala.collection.mutable
+import scala.concurrent.duration._
 import scala.concurrent.{Future, Promise}
 
 /**
@@ -97,7 +99,9 @@ object SingleMixer {
   }
 
   trait PlayableSound {
-    def play : Future[Unit]
+    def frames: Long
+    def millisPerFrame: Float
+    def play : Future[Long]
   }
 
   case class Config(
@@ -122,9 +126,11 @@ object SingleMixer {
 
 class SingleMixer(
   val config: Config = Config()
-) extends StrictLogging with LogTools {
+) extends StrictLogging with LogTools { mixer =>
   import config._
   import SingleMixer._
+
+  val scheduler = Executors.newSingleThreadScheduledExecutor()
 
   val secondsPerSample = 1 / samplesPerSecond
   val millisPerFrame = secondsPerSample * 1000
@@ -147,12 +153,16 @@ class SingleMixer(
   sdl.start()
 //  sdl.write(Array.ofDim[Byte](bytesPerSample), 0, bytesPerSample)
 
+  trait Waiting {
+    def start(framesDelay: Long) : Playing
+  }
+
   trait Playing {
     def addTo(data: Array[Float]) : Boolean
   }
 
   val buffer = new Object {
-    val playing = new util.ArrayList[Playing]()
+    val waiting = collection.mutable.Buffer[Waiting]()
 
   }
 
@@ -162,60 +172,79 @@ class SingleMixer(
     override def run(): Unit = {
       val chunkFloats = Array.ofDim[Float](samplesPerChunk)
       val chunkBytes = Array.ofDim[Byte](bytesPerChunk)
+      val playing = new util.ArrayList[Playing]()
 
       var framesWritten : Long = 0
 
+
+      def processWaiting() = {
+        buffer
+          .waiting
+          .foreach({ w =>
+            playing add w.start(
+              framesWritten - sdl.getLongFramePosition
+            )
+          })
+
+        buffer.waiting.clear()
+      }
+
+
       while (!stopped) {
         buffer.synchronized {
-          while (!stopped && buffer.playing.isEmpty) {
-            buffer.wait()
+          if (!buffer.waiting.isEmpty) {
+            processWaiting()
+          }
+          if (playing.isEmpty) {
+            while (!stopped && buffer.waiting.isEmpty) {
+              buffer.wait()
+            }
+            processWaiting()
           }
         }
 
-        if (stopped) return
-//        println(s"written: ${framesWritten}")
-//        println(s"pos: ${sdl.getLongFramePosition}")
+        if (!stopped) {
+          while (sdl.getLongFramePosition < framesWritten - framesWriteAhead) {
+            Thread.sleep(writeAheadSleepMillis)
+          }
 
-        while (sdl.getLongFramePosition < framesWritten - framesWriteAhead) {
-          Thread.sleep(writeAheadSleepMillis)
-        }
-
-        buffer.synchronized {
           util.Arrays.fill(chunkFloats, 0)
-          val it = buffer.playing.iterator
+          val it = playing.iterator
 
           while (it.hasNext) {
             val p = it.next()
             val hasMore = p.addTo(chunkFloats)
             if (!hasMore) it.remove()
           }
+
+          var floatIdx = 0
+          var byteIdx = 0
+
+          do {
+            var v = (chunkFloats(floatIdx) * sampleScaleFactor).toInt
+            if (v < minSampleValue) {
+              v = minSampleValue
+            } else if (v > maxSampleValue) {
+              v = maxSampleValue
+            }
+
+            var i = 0
+            do {
+              chunkBytes.update(byteIdx, (v & 0xFF).toByte)
+              v >>= 8
+
+              i += 1
+              byteIdx += 1
+            } while (i < bytesPerSample)
+
+            floatIdx += 1
+          } while (floatIdx < samplesPerChunk)
+
+          sdl.write(chunkBytes, 0, chunkBytes.length)
+          framesWritten += framesPerChunk
         }
 
-        var floatIdx = 0
-        var byteIdx = 0
 
-        do {
-          var v = (chunkFloats(floatIdx) * sampleScaleFactor).toInt
-          if (v < minSampleValue) {
-            v = minSampleValue
-          } else if (v > maxSampleValue) {
-            v = maxSampleValue
-          }
-
-          var i = 0
-          do {
-            chunkBytes.update(byteIdx, (v & 0xFF).toByte)
-            v >>= 8
-
-            i += 1
-            byteIdx += 1
-          } while (i < bytesPerSample)
-
-          floatIdx += 1
-        } while (floatIdx < samplesPerChunk)
-
-        sdl.write(chunkBytes, 0, chunkBytes.length)
-        framesWritten += framesPerChunk
 
       }
     }
@@ -232,52 +261,76 @@ class SingleMixer(
           sound.form(t)
         })
 
-    sampled(samples)
+    sampled(samples, samples.length)
 
   }
 
   def sampled(
-    samples: IndexedSeq[Float]
-  ) = {
-    val sampleCount = samples.length
+    samples: Seq[Float]
+  ) : PlayableSound = {
+    sampled(
+      samples,
+      samples.length
+    )
+  }
+
+  def sampled(
+    samples: Iterable[Float],
+    sampleCount: Long
+  ) : PlayableSound = {
 
     new PlayableSound {
-      override def play: Future[Unit] = {
-        val promise = Promise[Unit]()
+      override val frames: Long = sampleCount
+      override def play: Future[Long] = {
+        val promise = Promise[Long]()
         buffer.synchronized {
-          buffer.playing.add(
-            new Playing {
-              var idx = 0
-              override def addTo(data: Array[Float]): Boolean = {
-                val limit = math.min(sampleCount, idx + data.length)
-                var target = 0
+          buffer.waiting += (
+            new Waiting {
+              override def start(framesDelay: Long): Playing = {
+                promise.success(framesDelay)
 
-                while (idx < limit) {
-                  data.update(target, data(target) + samples(idx))
-                  idx += 1
-                  target += 1
+
+                new Playing {
+                  val it = samples.iterator
+//                  var idx = 0
+                  override def addTo(data: Array[Float]): Boolean = {
+//                    val limit = math.min(sampleCount, idx + data.length)
+                    val limit = data.length
+                    var target = 0
+
+                    while (target < limit && it.hasNext) {
+                      data.update(target, data(target) + it.next())
+//                      idx += 1
+                      target += 1
+                    }
+
+//                    val hasMore = (idx < sampleCount)
+
+//                    hasMore
+
+                    it.hasNext
+                  }
                 }
 
-                val hasMore = (idx < sampleCount)
-
-                if (!hasMore) {
-                  promise.success()
-                }
-
-                hasMore
               }
             }
+
           )
           buffer.notify()
         }
         promise.future
       }
+
+      override val millisPerFrame: Float = mixer.millisPerFrame
     }
   }
 
   def stop() = {
     logger.info("stoppig mixer")
     stopped = true
+    logger.info("stopping scheduler")
+    scheduler.shutdown()
+    scheduler.awaitTermination(5, TimeUnit.SECONDS)
     sdl.stop()
     sdl.close()
     thread.interrupt()

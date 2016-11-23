@@ -138,5 +138,10 @@
             <version>2.11.8</version>
         </dependency>
     </dependencies>
-    <repositories> </repositories>
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
 </project>

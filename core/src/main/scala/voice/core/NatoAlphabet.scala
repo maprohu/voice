@@ -1,11 +1,12 @@
 package voice.core
 
+import java.util.concurrent.{ScheduledExecutorService, TimeUnit}
 import javax.sound.sampled.AudioSystem
 
 import com.typesafe.scalalogging.LazyLogging
 import voice.core.SingleMixer.PlayableSound
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.{ExecutionContext, Future, Promise}
 
 /**
   * Created by maprohu on 19-11-2016.
@@ -26,7 +27,9 @@ object NatoAlphabet extends LazyLogging {
     val map = ('a' to 'z')
       .map({ c =>
         logger.info(s"loading nato: ${c}")
-        c -> mixer.sampled(load(c))
+        c -> mixer.sampled(
+          load(c)
+        )
       })
       .toMap
 
@@ -40,13 +43,30 @@ object NatoAlphabet extends LazyLogging {
     text: String,
     fn: Char => PlayableSound = Cache
   )(implicit
+    scheduler: ScheduledExecutorService,
     executionContext: ExecutionContext
   ) : Future[Unit] = {
     if (text.isEmpty) Future.successful()
     else {
-      fn(text.head)
+      val promise = Promise[Unit]()
+      val p = fn(text.head)
+      p
         .play
-        .flatMap(_ => readString(text.tail, fn))
+        .foreach({ frameDelay =>
+          scheduler.schedule(
+            new Runnable {
+              override def run(): Unit = {
+
+                promise.completeWith(
+                  readString(text.tail, fn)
+                )
+              }
+            },
+            ((frameDelay + p.frames) * p.millisPerFrame).toLong,
+            TimeUnit.MILLISECONDS
+          )
+        })
+      promise.future
     }
 
   }

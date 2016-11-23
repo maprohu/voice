@@ -1,5 +1,7 @@
 package voice.testing
 
+import java.util.concurrent.Executors
+
 import voice.core.{Consonants, NatoAlphabet, Vowels}
 
 import scala.io.StdIn
@@ -18,6 +20,7 @@ object RunNatoString {
 
     val vs = Vowels.values.toIndexedSeq
     val cs = Consonants.values.toIndexedSeq
+    implicit val scheduler = Executors.newSingleThreadScheduledExecutor()
 
     while (true) {
       val c = cs(Random.nextInt(cs.length))

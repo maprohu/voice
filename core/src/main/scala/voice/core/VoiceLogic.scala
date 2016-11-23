@@ -1,9 +1,11 @@
 package voice.core
 
 import java.io._
+import java.nio.ByteBuffer
 import java.util.concurrent.{Executors, TimeUnit}
 
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
+import marytts.LocalMaryInterface
 import monix.execution.Cancelable
 import monix.execution.cancelables.AssignableCancelable
 import toolbox6.logging.LogTools
@@ -76,12 +78,13 @@ object VoiceLogic extends StrictLogging with LogTools {
 }
 
 object Tables extends Enumeration {
-  val
+  val Blobs = Table()
+  val Recordings = Table()
+  val TTS = Table()
 
-    Recordings,
-    TTS
-
-  = Value
+  case class Table() extends Val {
+    val prefix = LevelDB.intPrefix(id)
+  }
 }
 
 case class Recordings(
@@ -94,12 +97,14 @@ class VoiceLogic(
   executionContext: ExecutionContext
 ) extends StrictLogging with LogTools {
 
-  val blobs = db.longTable()
+  val blobs = db.longTable(
+    Tables.Blobs.prefix
+  )
 
-  def read[T](id: Tables.Value) : Option[T] = {
+  def read[T](id: Tables.Table) : Option[T] = {
     Option(
       db.db.get(
-        IntSize.toArray(id.id)
+        id.prefix
       )
     ).map({ b =>
       val is = new ObjectInputStream(
@@ -137,7 +142,7 @@ class VoiceLogic(
   val ignored = mixer.render(SoundForm.sine(0.1f, 500f, 0.5f))
   val startRecording = mixer.render(SoundForm.sine(0.3f, 880f, 0.1f))
   val cancelRecording = mixer.render(SoundForm.sine(0.3f, 440f, 0.1f))
-  val scheduler = Executors.newSingleThreadScheduledExecutor()
+  implicit val scheduler = Executors.newSingleThreadScheduledExecutor()
 
   def shutdown() = {
     quietly {
@@ -223,39 +228,53 @@ class VoiceLogic(
   class Recording(
     syllable: Syllable
   ) extends Base {
-    val recording = AssignableCancelable.single()
+    val recording = AssignableCancelable.multi()
     @volatile var timeout = false
 
     val data = new ByteArrayOutputStream()
 
     val startFuture =
       for {
-        _ <- startRecording.play
+        frameDelay <- startRecording.play
       } yield {
-        val timeoutFuture = scheduler.schedule(
+        val startFuture = scheduler.schedule(
           new Runnable {
             override def run(): Unit = {
-              logger.info(s"recording timeout after ${RecordingTimeoutDuration}")
 
-              cancelRecording.play
-              recording.cancel()
-              timeout = true
+              val timeoutFuture = scheduler.schedule(
+                new Runnable {
+                  override def run(): Unit = {
+                    logger.info(s"recording timeout after ${RecordingTimeoutDuration}")
+
+                    cancelRecording.play
+                    recording.cancel()
+                    timeout = true
+                  }
+                },
+                RecordingTimeoutDuration.length,
+                RecordingTimeoutDuration.unit
+              )
+
+              val stopRecording =
+                recorder.record(
+                  new RecorderProcessor {
+                    override def process(chunk: Array[Byte]): Unit = data.write(chunk)
+                  }
+                )
+
+              recording := Cancelable({ () =>
+                timeoutFuture.cancel(false)
+                stopRecording.cancel()
+              })
+
             }
           },
-          RecordingTimeoutDuration.length,
-          RecordingTimeoutDuration.unit
+          ((frameDelay + startRecording.frames) * mixer.millisPerFrame).toLong,
+          TimeUnit.MILLISECONDS
         )
 
-        val stopRecording =
-          recorder.record(
-            new RecorderProcessor {
-              override def process(chunk: Array[Byte]): Unit = data.write(chunk)
-            }
-          )
-
         recording := Cancelable({ () =>
-          timeoutFuture.cancel(false)
-          stopRecording.cancel()
+          startFuture.cancel(false)
         })
       }
 
@@ -340,5 +359,38 @@ class VoiceLogic(
   }
 
 
+}
+
+object TextGenerator {
+  val mary = new LocalMaryInterface
+  def create(targetRate: Int) : String => Array[Byte] = {
+
+
+  }
+}
+
+class TextReader(
+  db: LevelDB,
+  generator: String => Array[Byte]
+) {
+  val prefix = Tables.TTS.prefix
+  val table = db.sub(prefix)
+
+  def createKey(str: String) : Array[Byte] = {
+    val strBytes = str.getBytes
+    table.createKey(strBytes)
+  }
+
+  def audioData(str: String) : Array[Byte] = {
+    val key = createKey(str)
+    val data = table.db.get(key)
+    if (data == null) {
+      val g = generator(str)
+      table.db.put(key, g)
+      g
+    } else {
+      data
+    }
+  }
 }
 
