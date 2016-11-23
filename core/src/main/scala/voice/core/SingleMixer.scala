@@ -104,7 +104,16 @@ object SingleMixer {
     bytesPerSample : Int = 2,
     samplesPerSecond : Float = 44100,
     sourceLineFinder: AudioFormat => SourceDataLine = f => AudioSystem.getSourceDataLine(f)
-  )
+  ) {
+    val bitsPerSample = bytesPerSample * 8
+    val audioFormat = new AudioFormat(
+      samplesPerSecond,
+      bitsPerSample,
+      1,
+      true, // signed
+      false // true = big-endian, false = little-endian
+    )
+  }
 
   def apply(
     config: Config = Config()
@@ -117,7 +126,6 @@ class SingleMixer(
   import config._
   import SingleMixer._
 
-  val bitsPerSample = bytesPerSample * 8
   val secondsPerSample = 1 / samplesPerSecond
   val millisPerFrame = secondsPerSample * 1000
   val samplesPerChunk = 1024 * 4
@@ -128,14 +136,6 @@ class SingleMixer(
   val sampleScaleFactor = (1 << (bitsPerSample - 1))
   val maxSampleValue = sampleScaleFactor - 1
   val minSampleValue = -sampleScaleFactor
-
-  val audioFormat = new AudioFormat(
-    samplesPerSecond,
-    bitsPerSample,
-    1,
-    true, // signed
-    false // true = big-endian, false = little-endian
-  )
 
   val sdl = sourceLineFinder(audioFormat)
 //  sdl.addLineListener(

@@ -78,7 +78,8 @@ object VoiceLogic extends StrictLogging with LogTools {
 object Tables extends Enumeration {
   val
 
-    Recordings
+    Recordings,
+    TTS
 
   = Value
 }
