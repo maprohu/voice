@@ -1,7 +1,7 @@
 package voice.core
 
 import java.util
-import java.util.concurrent.{Executors, TimeUnit}
+import java.util.concurrent.{Executors, ScheduledExecutorService, TimeUnit}
 import javax.sound.sampled.AudioFormat.Encoding
 import javax.sound.sampled._
 
@@ -11,7 +11,7 @@ import voice.core.SingleMixer.Config
 
 import scala.collection.mutable
 import scala.concurrent.duration._
-import scala.concurrent.{Future, Promise}
+import scala.concurrent.{ExecutionContext, Future, Promise}
 
 /**
   * Created by maprohu on 19-11-2016.
@@ -102,11 +102,37 @@ object SingleMixer {
     def frames: Long
     def millisPerFrame: Float
     def play : Future[Long]
+    def playComplete(implicit
+      executionContext: ExecutionContext
+    ) : Future[Unit]
+  }
+
+  def playComplete(
+    playableSound: PlayableSound
+  )(implicit
+    executionContext: ExecutionContext,
+    scheduler: ScheduledExecutorService
+  ) = {
+    val promise = Promise[Unit]()
+    playableSound
+      .play
+      .foreach({ delay =>
+        scheduler.schedule(
+          new Runnable {
+            override def run(): Unit = {
+              promise.success()
+            }
+          },
+          ((delay + playableSound.frames) * playableSound.millisPerFrame).toLong,
+          TimeUnit.MILLISECONDS
+        )
+      })
+    promise.future
   }
 
   case class Config(
     bytesPerSample : Int = 2,
-    samplesPerSecond : Float = 44100,
+    samplesPerSecond : Float = 48000,
     sourceLineFinder: AudioFormat => SourceDataLine = f => AudioSystem.getSourceDataLine(f)
   ) {
     val bitsPerSample = bytesPerSample * 8
@@ -130,7 +156,7 @@ class SingleMixer(
   import config._
   import SingleMixer._
 
-  val scheduler = Executors.newSingleThreadScheduledExecutor()
+  implicit val scheduler = Executors.newSingleThreadScheduledExecutor()
 
   val secondsPerSample = 1 / samplesPerSecond
   val millisPerFrame = secondsPerSample * 1000
@@ -322,6 +348,14 @@ class SingleMixer(
       }
 
       override val millisPerFrame: Float = mixer.millisPerFrame
+
+      override def playComplete(implicit
+        executionContext: ExecutionContext
+      ): Future[Unit] = {
+        SingleMixer.playComplete(
+          this
+        )
+      }
     }
   }
 

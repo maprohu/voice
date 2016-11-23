@@ -3,7 +3,7 @@ package voice.rpi.home
 import akka.actor.{Actor, ActorSystem, Props}
 import akka.stream.scaladsl.Sink
 import toolbox8.jartree.akka.PluggableServiceActor.{PlugContext, Pluggable, Plugged, Previous}
-import voice.core.VoiceApi
+import voice.core.{VoiceApi, VoiceLogic}
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._

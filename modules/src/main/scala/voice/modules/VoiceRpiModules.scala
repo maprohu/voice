@@ -30,7 +30,8 @@ object VoiceRpiModules {
   object Mobile extends ScalaModule(
     "mobile",
     VoiceModules.Core,
-    JarTree8Modules.StreamApp
+    JarTree8Modules.StreamApp,
+    mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`
   )
 
   object Exec extends ScalaModule(

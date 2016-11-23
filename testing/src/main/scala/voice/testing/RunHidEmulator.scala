@@ -15,6 +15,10 @@ import voice.core.{HidParser, NatoAlphabet, SingleMixer, VoiceLogic}
   */
 object RunHidEmulator {
 
+  VoiceLogic.shutdownAction = { () =>
+    System.exit(0)
+  }
+
   @volatile var os = new PipedOutputStream()
 
   def connect = synchronized {
@@ -53,7 +57,7 @@ object RunHidEmulator {
       .addKeyEventDispatcher(
         new KeyEventDispatcher {
           override def dispatchKeyEvent(e: KeyEvent): Boolean = {
-            println(e)
+//            println(e)
             import voice.core.HidParser.KeyCodes._
             def handleKey(v: Int) = {
               e.getID match {

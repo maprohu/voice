@@ -18,6 +18,7 @@ object NatoAlphabet extends LazyLogging {
       getClass.getResource(s"/nato/${c}.wav")
     )
 
+
     WaveFile.samples(ais, true)
   }
 

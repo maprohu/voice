@@ -17,10 +17,10 @@ object WaveFile extends LazyLogging {
   val FixedSampleSizeInBits = FixedSampleSizeInBytes * 8
   val maxSampleValue = (1 << (FixedSampleSizeInBits - 1)).toFloat
 
-  def samples(
+  def samplesBytes(
     ais: AudioInputStream,
     clip : Boolean = true
-  ) : IndexedSeq[Float] = {
+  ) : Array[Byte] = {
     val f = ais.getFormat
     require(f.getEncoding == Encoding.PCM_SIGNED)
     require(f.getSampleSizeInBits == FixedSampleSizeInBits)
@@ -41,13 +41,22 @@ object WaveFile extends LazyLogging {
     var ridx = 0
 
     do {
-      ridx += ais.read(data, ridx, data.length-ridx)
+      ridx += ais.read(data, ridx, data.length - ridx)
     } while (ridx < data.length)
     ais.close()
 
+    data
+  }
+
+  def samples(
+    ais: AudioInputStream,
+    clip : Boolean = true
+  ) : IndexedSeq[Float] = {
+    val data =samplesBytes(ais, clip)
+
     samples(
       data,
-      channels,
+      ais.getFormat.getChannels,
       clip
     )
   }

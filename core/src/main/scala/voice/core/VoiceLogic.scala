@@ -6,6 +6,7 @@ import java.util.concurrent.{Executors, TimeUnit}
 
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
 import marytts.LocalMaryInterface
+import marytts.util.data.audio.{AudioConverterUtils, MaryAudioUtils}
 import monix.execution.Cancelable
 import monix.execution.cancelables.AssignableCancelable
 import toolbox6.logging.LogTools
@@ -14,9 +15,9 @@ import voice.core.ShortLongProcessor.{Click, Down, Wrap, Wrapped}
 import voice.core.SingleMixer.SoundForm
 import voice.core.SingleRecorder.RecorderProcessor
 import voice.core.Syllables.Syllable
-import voice.core.events.{ButtonA, ButtonB, ButtonC, ControllerEvent}
+import voice.core.events._
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
 import scala.util.Random
 
@@ -24,6 +25,11 @@ import scala.util.Random
   * Created by pappmar on 22/11/2016.
   */
 object VoiceLogic extends StrictLogging with LogTools {
+
+  var shutdownAction: () => Unit = { () =>
+    import ammonite.ops._
+    %%("sudo poweroff")(pwd)
+  }
 
   def connectToDevice = {
     val deviceFile =
@@ -97,6 +103,7 @@ class VoiceLogic(
   executionContext: ExecutionContext
 ) extends StrictLogging with LogTools {
 
+
   val blobs = db.longTable(
     Tables.Blobs.prefix
   )
@@ -137,6 +144,7 @@ class VoiceLogic(
   val RecordingTimeoutDuration = 5.seconds
 
   val mixer = SingleMixer()
+  val reader = new TextReader(db, mixer)
   val recorder = SingleRecorder()
   val nato = NatoAlphabet.cache(mixer)
   val ignored = mixer.render(SoundForm.sine(0.1f, 500f, 0.5f))
@@ -144,7 +152,11 @@ class VoiceLogic(
   val cancelRecording = mixer.render(SoundForm.sine(0.3f, 440f, 0.1f))
   implicit val scheduler = Executors.newSingleThreadScheduledExecutor()
 
+  reader.read("starting voicer.")
+
   def shutdown() = {
+    reader.readWait("stopping voicer.")
+
     quietly {
       logger.info("shutting down scheduler")
       scheduler.shutdown()
@@ -158,6 +170,14 @@ class VoiceLogic(
   abstract class Base extends Wrapped {
     final override def process(event: Wrap): StatefulProcessor[Wrap] = {
       event match {
+        case Down(ButtonHigh) =>
+          this
+        case ShortLongProcessor.Long(ButtonHigh) =>
+          reader.readWait("initiating system shutdown.")
+          logger.info("shut down requested")
+          VoiceLogic.shutdownAction()
+          this
+
         case c: Click =>
           click(c)
         case _ =>
@@ -361,20 +381,35 @@ class VoiceLogic(
 
 }
 
-object TextGenerator {
+object TextGenerator extends StrictLogging {
   val mary = new LocalMaryInterface
-  def create(targetRate: Int) : String => Array[Byte] = {
+
+  def create(targetRate: Int) : String => Array[Byte] = { str =>
+    val audio = mary.generateAudio(str)
+    val resampled = if (audio.getFormat.getSampleRate.toInt == targetRate) {
+      audio
+    } else {
+      AudioConverterUtils.downSampling(audio, targetRate)
+    }
+
+    require(resampled.getFormat.getChannels == 1)
 
 
+    val bytes = WaveFile
+      .samplesBytes(resampled, false)
+    logger.info(s"tts audio generated for: ${str} - size: ${bytes.length}")
+
+    bytes
   }
 }
 
 class TextReader(
   db: LevelDB,
-  generator: String => Array[Byte]
-) {
+  mixer: SingleMixer
+) extends StrictLogging {
   val prefix = Tables.TTS.prefix
   val table = db.sub(prefix)
+  val generator = TextGenerator.create(mixer.config.audioFormat.getSampleRate.toInt)
 
   def createKey(str: String) : Array[Byte] = {
     val strBytes = str.getBytes
@@ -391,6 +426,33 @@ class TextReader(
     } else {
       data
     }
+  }
+
+  def samples(str: String) : IndexedSeq[Float] = {
+    WaveFile.samples(
+      audioData(str),
+      1,
+      false
+    )
+  }
+
+  def read(str: String)(implicit
+    executionContext: ExecutionContext
+  ) : Future[Unit] = {
+    mixer
+      .sampled(
+        samples(str)
+      )
+      .playComplete
+  }
+
+  def readWait(str: String)(implicit
+    executionContext: ExecutionContext
+  ) : Unit = {
+    Await.result(
+      read(str),
+      Duration.Inf
+    )
   }
 }
 
