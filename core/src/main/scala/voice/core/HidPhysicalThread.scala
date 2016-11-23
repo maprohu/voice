@@ -1,6 +1,8 @@
 package voice.core
 
 import java.io.InputStream
+import java.nio.ByteBuffer
+import java.nio.channels.{ClosedByInterruptException, FileChannel, ReadableByteChannel}
 
 import com.typesafe.scalalogging.LazyLogging
 import monix.execution.Cancelable
@@ -22,7 +24,7 @@ object HidPhysicalThread extends LazyLogging with LogTools {
 
 
   def run(
-    input: () => (InputStream, Processor)
+    input: () => (ReadableByteChannel, Processor)
   ) = {
     logger.info("starting hid physical thread")
     @volatile var running = true
@@ -33,6 +35,7 @@ object HidPhysicalThread extends LazyLogging with LogTools {
         logger.info("hid physical thread started")
 
         val buffer = Array.ofDim[Byte](3)
+        val byteBuffer = ByteBuffer.wrap(buffer)
 
         while (running) {
           logger.info("connecting to device")
@@ -42,26 +45,44 @@ object HidPhysicalThread extends LazyLogging with LogTools {
           try {
             try {
               while (running) {
-                val readCount = is.read(buffer)
+                try {
+                  val readCount = is.read(byteBuffer)
+                  byteBuffer.flip()
 
-                if (readCount != 3) {
-                  throw new InvalidPhysicalHidInputException(buffer.take(readCount))
+                  if (readCount != 3) {
+                    throw new InvalidPhysicalHidInputException(buffer.take(readCount))
+                  }
+
+                  val b0 = buffer(0)
+                  val b1 = buffer(1)
+                  val b2 = buffer(2)
+
+                  if (b0 != HidParser.FirstByteConstantValue) {
+                    throw new InvalidPhysicalHidInputException(buffer)
+                  }
+
+                  processor.onNext(
+                    HidParser.decodePhysical(b1, b2)
+                  )
+                } catch {
+                  case ex : ClosedByInterruptException =>
+                    if (running) {
+                      throw ex
+                    } else {
+                      Thread.interrupted()
+                    }
                 }
-
-                val b0 = buffer(0)
-                val b1 = buffer(1)
-                val b2 = buffer(2)
-
-                if (b0 != HidParser.FirstByteConstantValue) {
-                  throw new InvalidPhysicalHidInputException(buffer)
-                }
-
-                processor.onNext(
-                  HidParser.decodePhysical(b1, b2)
-                )
               }
 
-              processor.onComplete()
+              val ct = new Thread {
+                override def run(): Unit = {
+                  logger.info("completing processor")
+                  processor.onComplete()
+                }
+              }
+              ct.start()
+              ct.join(600000)
+              logger.info("completer thread terminated")
             } catch {
               case ex : Throwable =>
                 logger.error(ex.getMessage, ex)
@@ -82,6 +103,8 @@ object HidPhysicalThread extends LazyLogging with LogTools {
       logger.info("stopping hid physical reading")
       running = false
       thread.interrupt()
+      logger.info("waiting for hid thread to stop")
+      thread.join(60000)
     })
 
     cancel

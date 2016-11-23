@@ -2,13 +2,17 @@ package voice.core
 
 import java.io._
 import java.nio.ByteBuffer
+import java.nio.channels.FileChannel
 import java.util.concurrent.{Executors, TimeUnit}
 
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
 import marytts.LocalMaryInterface
+import marytts.server.Mary
 import marytts.util.data.audio.{AudioConverterUtils, MaryAudioUtils}
 import monix.execution.Cancelable
 import monix.execution.cancelables.AssignableCancelable
+import org.mapdb.serializer.SerializerArrayTuple
+import org.mapdb.{DB, DBMaker, Serializer}
 import toolbox6.logging.LogTools
 import toolbox8.leveldb.{IntSize, LevelDB}
 import voice.core.ShortLongProcessor.{Click, Down, Wrap, Wrapped}
@@ -27,8 +31,7 @@ import scala.util.Random
 object VoiceLogic extends StrictLogging with LogTools {
 
   var shutdownAction: () => Unit = { () =>
-    import ammonite.ops._
-    %%("sudo poweroff")(pwd)
+    Runtime.getRuntime.exec("sudo poweroff")
   }
 
   def connectToDevice = {
@@ -42,17 +45,23 @@ object VoiceLogic extends StrictLogging with LogTools {
 
     new FileInputStream(
       deviceFile
-    )
+    ).getChannel
   }
 
   def run(
     dbDir : File,
-    deviceConnection: () => InputStream = () => connectToDevice
+    deviceConnection: () => FileChannel = () => connectToDevice
   )(implicit
     executionContext: ExecutionContext
   ): Cancelable = {
 
-    val db = LevelDB(dbDir)
+//    val db = LevelDB(dbDir)
+
+    val db =
+      DBMaker
+        .fileDB(new File(dbDir, "mapdb"))
+        .fileMmapEnableIfSupported()
+        .make()
 
     val hidCancelable = HidPhysicalThread.run({ () =>
       logger.info("starting hid reading")
@@ -74,8 +83,13 @@ object VoiceLogic extends StrictLogging with LogTools {
     })
 
     Cancelable({ () =>
+      logger.info("stopping hid")
       quietly { hidCancelable.cancel() }
+      logger.info("stopping db")
       quietly { db.cancelable.cancel() }
+      logger.info("stopping mary")
+      quietly { Mary.shutdown() }
+      logger.info("voice run completed")
     })
 
   }
@@ -98,44 +112,51 @@ case class Recordings(
 )
 
 class VoiceLogic(
-  db: LevelDB
+//  db: LevelDB
+  db: DB
 )(implicit
   executionContext: ExecutionContext
 ) extends StrictLogging with LogTools {
 
+  val blobs =
+    db
+      .treeMap(Tables.Blobs.toString())
+      .keySerializer(Serializer.LONG)
+      .valueSerializer(Serializer.BYTE_ARRAY)
+      .createOrOpen()
 
-  val blobs = db.longTable(
-    Tables.Blobs.prefix
-  )
+//  val blobs = db.longTable(
+//    Tables.Blobs.prefix
+//  )
 
-  def read[T](id: Tables.Table) : Option[T] = {
-    Option(
-      db.db.get(
-        id.prefix
-      )
-    ).map({ b =>
-      val is = new ObjectInputStream(
-        new ByteArrayInputStream(
-          b
-        )
-      )
-
-      is
-        .readObject()
-        .asInstanceOf[T]
-    })
-  }
-
-  def write[T](id: Tables.Value, value: T) : Unit = {
-    val os = new ByteArrayOutputStream()
-    val oos = new ObjectOutputStream(os)
-    oos.writeObject(value)
-    oos.close()
-    db.db.put(
-      IntSize.toArray(id.id),
-      os.toByteArray
-    )
-  }
+//  def read[T](id: Tables.Table) : Option[T] = {
+//    Option(
+//      db.db.get(
+//        id.prefix
+//      )
+//    ).map({ b =>
+//      val is = new ObjectInputStream(
+//        new ByteArrayInputStream(
+//          b
+//        )
+//      )
+//
+//      is
+//        .readObject()
+//        .asInstanceOf[T]
+//    })
+//  }
+//
+//  def write[T](id: Tables.Value, value: T) : Unit = {
+//    val os = new ByteArrayOutputStream()
+//    val oos = new ObjectOutputStream(os)
+//    oos.writeObject(value)
+//    oos.close()
+//    db.db.put(
+//      IntSize.toArray(id.id),
+//      os.toByteArray
+//    )
+//  }
 
   val OkButton = Down(ButtonB)
   val CancelButton = Down(ButtonA)
@@ -329,8 +350,20 @@ class VoiceLogic(
     }
   }
 
-  var recordings = read[Recordings](Tables.Recordings).getOrElse(Recordings())
-  logger.info(s"recording db has ${recordings.lookup.size} entries with ${recordings.lookup.values.map(_.length).sum} recordings")
+//  var recordings = read[Recordings](Tables.Recordings).getOrElse(Recordings())
+//  logger.info(s"recording db has ${recordings.lookup.size} entries with ${recordings.lookup.values.map(_.length).sum} recordings")
+
+  val recordings =
+    db
+      .treeSet(Tables.Recordings.toString())
+      .serializer(
+        new SerializerArrayTuple(
+          Serializer.SHORT_ARRAY,
+          Serializer.BYTE_ARRAY
+        )
+      )
+      .createOrOpen()
+
 
   class Replaying(
     syllable: Syllable,
@@ -357,14 +390,22 @@ class VoiceLogic(
           word
         )
 
-        val key = blobs.insert(data)
-        recordings = recordings.copy(
-          lookup = recordings.lookup.updated(
-            word,
-            recordings.lookup.getOrElse(word, Vector.empty[Long]) :+ key
+        recordings
+          .add(
+            Array(
+              word.map(_.code).toArray,
+              data
+            )
           )
-        )
-        write(Tables.Recordings, recordings)
+
+//        val key = blobs.insert(data)
+//        recordings = recordings.copy(
+//          lookup = recordings.lookup.updated(
+//            word,
+//            recordings.lookup.getOrElse(word, Vector.empty[Long]) :+ key
+//          )
+//        )
+//        write(Tables.Recordings, recordings)
         logger.info("saved with id: {}", key)
         new Playing
       case CancelButton =>
@@ -385,6 +426,7 @@ object TextGenerator extends StrictLogging {
   val mary = new LocalMaryInterface
 
   def create(targetRate: Int) : String => Array[Byte] = { str =>
+    logger.info(s"starting tts audio generation for: ${str}")
     val audio = mary.generateAudio(str)
     val resampled = if (audio.getFormat.getSampleRate.toInt == targetRate) {
       audio

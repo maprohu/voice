@@ -38,7 +38,8 @@ object RunHidEmulator {
 
     VoiceLogic.run(
       new File("../voice/target/hidemudb"),
-      { () => connect }
+      ???
+//      { () => connect }
     )
 
     val buffer = Array.ofDim[Byte](3)

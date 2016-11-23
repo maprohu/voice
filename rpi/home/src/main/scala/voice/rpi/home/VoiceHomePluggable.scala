@@ -18,6 +18,7 @@ import voice.akka.{HidPhysicalActor, Picklers}
   */
 class VoiceHomePluggable extends Pluggable with LazyLogging {
   override def plug(context: PlugContext): Future[Plugged] = {
+
     val registration = Picklers.register
 
     logger.info(s"plugging")

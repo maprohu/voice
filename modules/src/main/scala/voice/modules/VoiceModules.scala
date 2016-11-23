@@ -26,7 +26,8 @@ object VoiceModules {
     Toolbox8Modules.Leveldb,
     mvn.`com.github.wendykierp:JTransforms:jar:3.1`,
     mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`,
-    mvn.`de.dfki.mary:voice-cmu-slt-hsmm:jar:5.2`
+    mvn.`de.dfki.mary:voice-cmu-slt-hsmm:jar:5.2`,
+    mvn.`org.mapdb:mapdb:jar:3.0.2`
   )
 
   object Akka extends ScalaModule(
@@ -97,7 +98,8 @@ object VoiceModules {
     Extra8Modules.Hello,
     Toolbox6Modules.Logback,
     mvn.`de.dfki.mary:voice-cmu-slt-hsmm:jar:5.2`,
-    mvn.`com.jssrc:jssrc:jar:1.0.1`
+    mvn.`com.jssrc:jssrc:jar:1.0.1`,
+    mvn.`org.mapdb:mapdb:jar:3.0.2`
   )
 
 
