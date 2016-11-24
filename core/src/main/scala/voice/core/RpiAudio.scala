@@ -9,6 +9,8 @@ import com.typesafe.scalalogging.StrictLogging
   */
 object RpiAudio extends StrictLogging {
 
+  val DefaultRate = 44100
+
   val MixerName = "Audio [plughw:1,0]"
 
   val sourceLineFinder : AudioFormat => SourceDataLine = { format =>

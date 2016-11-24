@@ -168,7 +168,7 @@ class SingleRecorder(
 object SingleRecorder {
   case class Config(
     bytesPerSample : Int = 2,
-    samplesPerSecond : Float = 44100
+    samplesPerSecond : Float = RpiAudio.DefaultRate
   )
 
   trait RecordingSink {

@@ -132,7 +132,7 @@ object SingleMixer {
 
   case class Config(
     bytesPerSample : Int = 2,
-    samplesPerSecond : Float = 44100,
+    samplesPerSecond : Float = RpiAudio.DefaultRate,
     sourceLineFinder: AudioFormat => SourceDataLine = RpiAudio.sourceLineFinder
   ) {
     val bitsPerSample = bytesPerSample * 8

@@ -503,12 +503,11 @@ object TextGenerator extends StrictLogging {
     val resampled = if (audio.getFormat.getSampleRate.toInt == targetRate) {
       audio
     } else {
+      logger.info(s"resampling from ${audio.getFormat.getSampleRate} to ${targetRate}")
       AudioConverterUtils.downSampling(audio, targetRate)
     }
-
     require(resampled.getFormat.getChannels == 1)
-
-
+    logger.info("converting to float samples")
     val bytes = WaveFile
       .samplesBytes(resampled, false)
     logger.info(s"tts audio generated for: ${str} - size: ${bytes.length}")

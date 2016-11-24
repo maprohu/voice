@@ -27,7 +27,10 @@ object VoiceModules {
     Toolbox8Modules.Leveldb,
     mvn.`com.github.wendykierp:JTransforms:jar:3.1`,
     mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`,
-    mvn.`de.dfki.mary:voice-cmu-slt-hsmm:jar:5.2`.exclude(mvn.`org.slf4j:slf4j-log4j12:jar:1.7.21`),
+    mvn.`de.dfki.mary:voice-cmu-slt-hsmm:jar:5.2`.exclude(
+      mvn.`org.slf4j:slf4j-log4j12:jar:1.7.21`,
+      mvn.`log4j:log4j:jar:1.2.17`
+    ),
     mvn.`org.mapdb:mapdb:jar:3.0.2`
   )
 
@@ -97,6 +100,7 @@ object VoiceModules {
     Core,
     VoiceRpiModules.Core,
     Extra8Modules.Hello,
+    Toolbox6Modules.Logging,
     Toolbox6Modules.Logback,
     mvn.`com.jssrc:jssrc:jar:1.0.1`
   )
