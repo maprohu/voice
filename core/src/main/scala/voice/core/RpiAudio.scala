@@ -1,6 +1,6 @@
 package voice.core
 
-import javax.sound.sampled.{AudioFormat, AudioSystem, SourceDataLine}
+import javax.sound.sampled._
 
 import com.typesafe.scalalogging.StrictLogging
 
@@ -38,5 +38,55 @@ object RpiAudio extends StrictLogging {
         AudioSystem.getSourceDataLine(format)
       })
   }
+
+  def dumpInfo : String = {
+    val mixers = AudioSystem.getMixerInfo
+
+    val mixersList =
+      mixers
+        .map({ mi =>
+          val m = AudioSystem.getMixer(mi)
+          val s = m.getSourceLineInfo
+          val t = m.getTargetLineInfo
+
+          val sourceWithFormats = s
+            .map({
+              case dl : DataLine.Info =>
+                val formats =
+                  dl
+                    .getFormats
+                    .map(f => s"      ${f}")
+                    .mkString("\n")
+
+                s"""
+                   |    ${dl}
+                   |${formats}
+                 """.stripMargin
+
+              case dl : Port.Info =>
+                s"""
+                   |    ${dl}
+                 """.stripMargin
+
+            })
+
+          s"""
+             |${mi.toString} - ${mi.getName} - ${mi.getDescription}
+             |  Source:
+             |${sourceWithFormats.mkString("\n")}
+             |  Target:
+             |${t.map(o => s"    ${o}").mkString("\n")}
+             |
+           """.stripMargin
+        })
+
+    s"""
+       |Mixers:
+       |${mixers.map(m => s"  ${m}").mkString("\n")}
+       |
+       |${mixersList.mkString("\n")}
+     """.stripMargin
+  }
+
 
 }

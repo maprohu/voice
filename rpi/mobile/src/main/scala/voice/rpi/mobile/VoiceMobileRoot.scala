@@ -13,6 +13,7 @@ import voice.core.events.ControllerEvent
 class VoiceMobileRoot extends Root with StrictLogging {
   override def plug(params: PlugParams): Plugged = {
     logger.info("plugging voice mobile root")
+    logger.info(RpiAudio.dumpInfo)
     Thread.currentThread().setContextClassLoader(getClass.getClassLoader)
 
     val dbDir = new File(params.dir, "db")
