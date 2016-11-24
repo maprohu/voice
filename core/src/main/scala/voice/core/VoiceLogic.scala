@@ -258,7 +258,7 @@ class VoiceLogic(
       case _ : Down =>
         logger.info("ignored: {}", w)
 //        reader.readWait("ignored.")
-        ignored.play
+        ignored.play()
       case _ =>
     }
   }
@@ -284,16 +284,27 @@ class VoiceLogic(
     val syllable = Syllables.Items(Random.nextInt(Syllables.Items.length))
     logger.info("playing: {}", syllable)
 
-    val readStatus = NatoAlphabet.readString(
-      syllable.string,
-      nato
-    )
+
+    var readStatus : Future[Unit] = null
+
+    def doRead() = {
+      readStatus = NatoAlphabet.readString(
+        syllable.string,
+        nato
+      )
+    }
+
+    doRead()
 
     override def click(c: Click): Wrapped = {
       if (readStatus.isCompleted) {
         c match {
           case CancelButton =>
             new Playing
+          case RepeatButton =>
+            doRead()
+            this
+
           case OkButton =>
             new Recording(syllable)
           case _ =>
@@ -310,56 +321,64 @@ class VoiceLogic(
   class Recording(
     syllable: Syllable
   ) extends Base {
-    val recording = AssignableCancelable.multi()
     @volatile var timeout = false
 
     val data = new ByteArrayOutputStream()
+    val dataTarget = new RecorderProcessor {
+      override def process(chunk: Array[Byte]): Unit = data.write(chunk)
+    }
 
-    val startFuture =
-      for {
-        frameDelay <- startRecording.play
-      } yield {
-        val startFuture = scheduler.schedule(
-          new Runnable {
-            override def run(): Unit = {
+    @volatile var target = SingleRecorder.NullProcessor
 
-              val timeoutFuture = scheduler.schedule(
-                new Runnable {
-                  override def run(): Unit = {
-                    logger.info(s"recording timeout after ${RecordingTimeoutDuration}")
+    val stopRecording =
+      recorder.record(
+        new RecorderProcessor {
+          override def process(chunk: Array[Byte]): Unit = target.process(chunk)
+        }
+      )
 
-//                    cancelRecording.play
-                    recording.cancel()
-                    timeout = true
-                    reader.read("time out.")
-                  }
-                },
-                RecordingTimeoutDuration.length,
-                RecordingTimeoutDuration.unit
-              )
+    val recording = AssignableCancelable.multi(
+      stopRecording
+    )
 
-              val stopRecording =
-                recorder.record(
-                  new RecorderProcessor {
-                    override def process(chunk: Array[Byte]): Unit = data.write(chunk)
-                  }
-                )
+    val recordingRunnable =
+      new Runnable {
+        override def run(): Unit = {
+          target = dataTarget
 
-              recording := Cancelable({ () =>
-                timeoutFuture.cancel(false)
-                stopRecording.cancel()
-              })
+          val timeoutFuture = scheduler.schedule(
+            new Runnable {
+              override def run(): Unit = {
+                logger.info(s"recording timeout after ${RecordingTimeoutDuration}")
+                recording.cancel()
+                timeout = true
+                reader.read("time out.")
+              }
+            },
+            RecordingTimeoutDuration.length,
+            RecordingTimeoutDuration.unit
+          )
 
-            }
-          },
-          ((frameDelay + startRecording.frames) * mixer.millisPerFrame).toLong,
-          TimeUnit.MILLISECONDS
-        )
+          recording := Cancelable({ () =>
+            timeoutFuture.cancel(false)
+            stopRecording.cancel()
+          })
 
-        recording := Cancelable({ () =>
-          startFuture.cancel(false)
-        })
+        }
       }
+
+    startRecording.play({ frameDelay =>
+      val startFuture = scheduler.schedule(
+        recordingRunnable,
+//        ((frameDelay + startRecording.frames) * mixer.millisPerFrame).toLong,
+        (frameDelay * mixer.millisPerFrame).toLong,
+        TimeUnit.MILLISECONDS
+      )
+
+      recording := Cancelable({ () =>
+        startFuture.cancel(false)
+      })
+    })
 
     override def click(c: Click): Wrapped = {
       if (timeout) {
@@ -372,7 +391,7 @@ class VoiceLogic(
             reader.read("canceled.")
             Start
 
-          case OkButton if startFuture.isCompleted =>
+          case OkButton =>
             recording.cancel()
             if (timeout) {
               Start
@@ -420,11 +439,11 @@ class VoiceLogic(
         false
       )
     )
-    recorded.play
+    recorded.play()
 
     override def click(c: Click): Wrapped = c match {
       case RepeatButton =>
-        recorded.play
+        recorded.play()
         this
       case OkButton =>
         val word = Vector(syllable)
@@ -448,6 +467,7 @@ class VoiceLogic(
               key
             )
           )
+        db.commit()
 
 //        val key = blobs.insert(data)
 //        recordings = recordings.copy(
@@ -461,7 +481,8 @@ class VoiceLogic(
         new Playing
       case CancelButton =>
         logger.info("not saved")
-        cancelRecording.play
+//        cancelRecording.play
+        reader.read("discarded.")
         Start
       case _ =>
         ignore(c)
@@ -527,6 +548,7 @@ class TextReader(
     if (data == null) {
       val g = generator(str)
       table.put(str, g)
+      db.commit()
       g
     } else {
       data

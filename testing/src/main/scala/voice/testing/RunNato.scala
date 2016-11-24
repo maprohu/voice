@@ -31,7 +31,7 @@ object RunNato {
                     cache = cache.updated(c, p)
                     p
                   })
-                  .play
+                  .play()
 
                 println(c)
               case _ =>

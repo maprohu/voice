@@ -71,7 +71,7 @@ class RecordNatoActor(
 
   override def receive: Receive = {
     case LogicalClick(ButtonHigh) =>
-      beep.play
+      beep.play()
     case LogicalClick(ButtonB) =>
       val c = cs(Random.nextInt(cs.length))
       val v = vs(Random.nextInt(vs.length))

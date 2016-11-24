@@ -99,9 +99,9 @@ object SingleMixer {
   }
 
   trait PlayableSound {
-    def frames: Long
+//    def frames: Long
     def millisPerFrame: Float
-    def play : Future[Long]
+    def play(endDelay: Long => Unit = _ => ()) : Unit
     def playComplete(implicit
       executionContext: ExecutionContext
     ) : Future[Unit]
@@ -115,15 +115,15 @@ object SingleMixer {
   ) = {
     val promise = Promise[Unit]()
     playableSound
-      .play
-      .foreach({ delay =>
+      .play({ delay =>
         scheduler.schedule(
           new Runnable {
             override def run(): Unit = {
               promise.success()
             }
           },
-          ((delay + playableSound.frames) * playableSound.millisPerFrame).toLong,
+//          ((delay + playableSound.frames) * playableSound.millisPerFrame).toLong,
+          (delay * playableSound.millisPerFrame).toLong,
           TimeUnit.MILLISECONDS
         )
       })
@@ -179,20 +179,29 @@ class SingleMixer(
   sdl.start()
 //  sdl.write(Array.ofDim[Byte](bytesPerSample), 0, bytesPerSample)
 
-  trait Waiting {
-    def start(framesDelay: Long) : Playing
-  }
+//  trait Waiting {
+//    def start(framesDelay: Long) : Playing
+//  }
 
   trait Playing {
     def addTo(data: Array[Float]) : Boolean
   }
 
   val buffer = new Object {
-    val waiting = collection.mutable.Buffer[Waiting]()
+//    val waiting = collection.mutable.Buffer[Waiting]()
+    val waiting = collection.mutable.Buffer[Playing]()
 
   }
 
   @volatile var stopped = false
+
+//  val WarmUp = new Playing {
+//    override def addTo(data: Array[Float]): Boolean = {
+//      false
+//    }
+//  }
+
+  var framesWritten : Long = 0
 
   val thread = new Thread() {
     override def run(): Unit = {
@@ -201,16 +210,16 @@ class SingleMixer(
         val chunkBytes = Array.ofDim[Byte](bytesPerChunk)
         val playing = new util.ArrayList[Playing]()
 
-        var framesWritten : Long = 0
 
 
         def processWaiting() = {
           buffer
             .waiting
             .foreach({ w =>
-              playing add w.start(
-                framesWritten - sdl.getLongFramePosition
-              )
+              playing add w
+//              playing add w.start(
+//                framesWritten - sdl.getLongFramePosition
+//              )
             })
 
           buffer.waiting.clear()
@@ -226,6 +235,7 @@ class SingleMixer(
               while (!stopped && buffer.waiting.isEmpty) {
                 buffer.wait()
               }
+//              playing add WarmUp
               processWaiting()
             }
           }
@@ -314,45 +324,36 @@ class SingleMixer(
   ) : PlayableSound = {
 
     new PlayableSound {
-      override val frames: Long = sampleCount
-      override def play: Future[Long] = {
-        val promise = Promise[Long]()
+//      override val frames: Long = sampleCount
+
+      override def play(endDelay: (Long) => Unit): Unit = {
         buffer.synchronized {
           buffer.waiting += (
-            new Waiting {
-              override def start(framesDelay: Long): Playing = {
-                promise.success(framesDelay)
+            new Playing {
+              val it = samples.iterator
+              override def addTo(data: Array[Float]): Boolean = {
+                val limit = data.length
+                var target = 0
 
+                var c = 0
+                while (target < limit && it.hasNext) {
+                  data.update(target, data(target) + it.next())
+                  c += 1
+                  target += 1
+                }
 
-                new Playing {
-                  val it = samples.iterator
-//                  var idx = 0
-                  override def addTo(data: Array[Float]): Boolean = {
-//                    val limit = math.min(sampleCount, idx + data.length)
-                    val limit = data.length
-                    var target = 0
-
-                    while (target < limit && it.hasNext) {
-                      data.update(target, data(target) + it.next())
-//                      idx += 1
-                      target += 1
-                    }
-
-//                    val hasMore = (idx < sampleCount)
-
-//                    hasMore
-
-                    it.hasNext
-                  }
+                if (it.hasNext) {
+                  true
+                } else {
+                  endDelay(framesWritten + c - sdl.getLongFramePosition)
+                  false
                 }
 
               }
             }
-
           )
           buffer.notify()
         }
-        promise.future
       }
 
       override val millisPerFrame: Float = mixer.millisPerFrame

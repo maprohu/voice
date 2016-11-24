@@ -179,6 +179,10 @@ object SingleRecorder {
     def process(chunk: Array[Byte]) : Unit
   }
 
+  val NullProcessor = new RecorderProcessor {
+    override def process(chunk: Array[Byte]): Unit = ()
+  }
+
   def apply(
     config: Config = SingleRecorder.Config()
   ): SingleRecorder = new SingleRecorder(config)

@@ -24,47 +24,47 @@ object RunRecordingLoop {
 //      }
 //    )
 
-    while (true) {
-      StdIn.readLine("press to start recording")
-
-      val data = collection.mutable.Buffer[Array[Byte]]()
-
-      val stopper = recorder.record(
-        new RecorderProcessor {
-          override def process(chunk: Array[Byte]): Unit = {
-            data += chunk.clone()
-          }
-        }
-      )
-
-      StdIn.readLine("press to stop recroding and play\n")
-
-      stopper.cancel()
-
-      val playing = mixer
-        .render(
-          SoundForm.sampled(
-            recorder.audioFormat.getSampleRate,
-            data
-              .flatMap({ chunk =>
-                SoundForm.sampledChunk(
-                  chunk,
-                  recorder.audioFormat
-                )
-              })
-              .toIndexedSeq
-          )
-        )
-        .play
-
-      Await.result(
-        playing,
-        Duration.Inf
-      )
-
-
-
-    }
+//    while (true) {
+//      StdIn.readLine("press to start recording")
+//
+//      val data = collection.mutable.Buffer[Array[Byte]]()
+//
+//      val stopper = recorder.record(
+//        new RecorderProcessor {
+//          override def process(chunk: Array[Byte]): Unit = {
+//            data += chunk.clone()
+//          }
+//        }
+//      )
+//
+//      StdIn.readLine("press to stop recroding and play\n")
+//
+//      stopper.cancel()
+//
+//      mixer
+//        .render(
+//          SoundForm.sampled(
+//            recorder.audioFormat.getSampleRate,
+//            data
+//              .flatMap({ chunk =>
+//                SoundForm.sampledChunk(
+//                  chunk,
+//                  recorder.audioFormat
+//                )
+//              })
+//              .toIndexedSeq
+//          )
+//        )
+//        .play()
+//
+//      Await.result(
+//        playing,
+//        Duration.Inf
+//      )
+//
+//
+//
+//    }
 
 
   }

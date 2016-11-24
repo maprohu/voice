@@ -52,8 +52,7 @@ object NatoAlphabet extends LazyLogging {
       val promise = Promise[Unit]()
       val p = fn(text.head)
       p
-        .play
-        .foreach({ frameDelay =>
+        .play({ frameDelay =>
           scheduler.schedule(
             new Runnable {
               override def run(): Unit = {
@@ -63,7 +62,8 @@ object NatoAlphabet extends LazyLogging {
                 )
               }
             },
-            ((frameDelay + p.frames) * p.millisPerFrame).toLong,
+//            ((frameDelay + p.frames) * p.millisPerFrame).toLong,
+            (frameDelay * p.millisPerFrame).toLong,
             TimeUnit.MILLISECONDS
           )
         })

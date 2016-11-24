@@ -20,7 +20,7 @@ object RunPlaySine {
           }
         )
       )
-      .play
+      .play()
   }
 
 }
