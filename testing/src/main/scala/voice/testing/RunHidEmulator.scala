@@ -9,8 +9,6 @@ import javax.swing.JFrame
 
 import com.typesafe.scalalogging.StrictLogging
 import toolbox8.jartree.logging.LoggingSetup
-import voice.core.HidParser.KeyCodes
-import voice.core.SingleMixer.PlayableSound
 import voice.core.{HidParser, NatoAlphabet, SingleMixer, VoiceLogic}
 
 /**
