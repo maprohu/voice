@@ -368,7 +368,8 @@ class VoiceLogic(
         c match {
           case CancelButton =>
             recording.cancel()
-            cancelRecording.play
+//            cancelRecording.play
+            reader.read("canceled.")
             Start
 
           case OkButton if startFuture.isCompleted =>
