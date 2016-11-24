@@ -232,6 +232,7 @@ class VoiceLogic(
     w match {
       case _ : Down =>
         logger.info("ignored: {}", w)
+//        reader.readWait("ignored.")
         ignored.play
       case _ =>
     }
@@ -302,9 +303,10 @@ class VoiceLogic(
                   override def run(): Unit = {
                     logger.info(s"recording timeout after ${RecordingTimeoutDuration}")
 
-                    cancelRecording.play
+//                    cancelRecording.play
                     recording.cancel()
                     timeout = true
+                    reader.read("time out.")
                   }
                 },
                 RecordingTimeoutDuration.length,
