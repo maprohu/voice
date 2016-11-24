@@ -97,6 +97,7 @@ class HidLongProcessor(
         )
 
         isPressed = true
+      case _ => ???
     }
   }
 

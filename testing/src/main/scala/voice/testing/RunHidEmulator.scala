@@ -3,8 +3,11 @@ package voice.testing
 import java.awt.event.KeyEvent
 import java.awt.{KeyEventDispatcher, KeyboardFocusManager}
 import java.io.{File, PipedInputStream, PipedOutputStream}
+import java.nio.ByteBuffer
+import java.nio.channels.Pipe
 import javax.swing.JFrame
 
+import com.typesafe.scalalogging.StrictLogging
 import toolbox8.jartree.logging.LoggingSetup
 import voice.core.HidParser.KeyCodes
 import voice.core.SingleMixer.PlayableSound
@@ -13,22 +16,23 @@ import voice.core.{HidParser, NatoAlphabet, SingleMixer, VoiceLogic}
 /**
   * Created by maprohu on 17-11-2016.
   */
-object RunHidEmulator {
+object RunHidEmulator extends StrictLogging {
 
-  VoiceLogic.shutdownAction = { () =>
-    System.exit(0)
-  }
 
-  @volatile var os = new PipedOutputStream()
+//  @volatile var os = new PipedOutputStream()
+  @volatile var os : Pipe.SinkChannel = null
 
   def connect = synchronized {
-    val os = new PipedOutputStream()
-    val is = new PipedInputStream()
-    is.connect(os)
+    val pipe = Pipe.open()
+//    val os = new PipedOutputStream()
+//    val is = new PipedInputStream()
+//    is.connect(os)
 
-    RunHidEmulator.os = os
 
-    is
+
+    RunHidEmulator.os = pipe.sink()
+
+    pipe.source()
   }
 
   def main(args: Array[String]): Unit = {
@@ -36,20 +40,28 @@ object RunHidEmulator {
 
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    VoiceLogic.run(
+    val running = VoiceLogic.run(
       new File("../voice/target/hidemudb"),
-      ???
-//      { () => connect }
+      { () => connect }
     )
 
+    VoiceLogic.shutdownAction = { () =>
+      running.cancel()
+      logger.info("exiting emu vm")
+      System.exit(0)
+    }
+
     val buffer = Array.ofDim[Byte](3)
+    val byteBuffer = ByteBuffer.wrap(buffer)
     buffer(0) = HidParser.FirstByteConstantValue
+
 
     def write(v: Int) = {
 //      println(v)
       buffer(1) = (v & 0xFF).toByte
       buffer(2) = ((v >> 8) & 0xFF).toByte
-      os.write(buffer)
+      os.write(byteBuffer)
+      byteBuffer.flip()
     }
 
 

@@ -2,7 +2,7 @@ package voice.core
 
 import java.io._
 import java.nio.ByteBuffer
-import java.nio.channels.FileChannel
+import java.nio.channels.{FileChannel, ReadableByteChannel}
 import java.util.concurrent.{Executors, TimeUnit}
 
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
@@ -10,6 +10,7 @@ import marytts.LocalMaryInterface
 import marytts.server.Mary
 import marytts.util.data.audio.{AudioConverterUtils, MaryAudioUtils}
 import monix.execution.Cancelable
+import monix.execution.atomic.Atomic
 import monix.execution.cancelables.AssignableCancelable
 import org.mapdb.serializer.SerializerArrayTuple
 import org.mapdb.{DB, DBMaker, Serializer}
@@ -21,7 +22,7 @@ import voice.core.SingleRecorder.RecorderProcessor
 import voice.core.Syllables.Syllable
 import voice.core.events._
 
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{Await, ExecutionContext, Future, Promise}
 import scala.concurrent.duration._
 import scala.util.Random
 
@@ -50,13 +51,14 @@ object VoiceLogic extends StrictLogging with LogTools {
 
   def run(
     dbDir : File,
-    deviceConnection: () => FileChannel = () => connectToDevice
+    deviceConnection: () => ReadableByteChannel = () => connectToDevice
   )(implicit
     executionContext: ExecutionContext
   ): Cancelable = {
 
 //    val db = LevelDB(dbDir)
 
+    dbDir.mkdirs()
     val db =
       DBMaker
         .fileDB(new File(dbDir, "mapdb"))
@@ -86,9 +88,16 @@ object VoiceLogic extends StrictLogging with LogTools {
       logger.info("stopping hid")
       quietly { hidCancelable.cancel() }
       logger.info("stopping db")
-      quietly { db.cancelable.cancel() }
-      logger.info("stopping mary")
-      quietly { Mary.shutdown() }
+//      quietly { db.cancelable.cancel() }
+      quietly { db.close() }
+      quietly {
+        if (Mary.currentState() == Mary.STATE_RUNNING) {
+          logger.info("stopping mary")
+          Mary.shutdown()
+        } else {
+          logger.info("mary not running")
+        }
+      }
       logger.info("voice run completed")
     })
 
@@ -117,6 +126,12 @@ class VoiceLogic(
 )(implicit
   executionContext: ExecutionContext
 ) extends StrictLogging with LogTools {
+
+
+  val blobsId =
+    db
+      .atomicLong(s"${Tables.Blobs.toString()}_id")
+      .createOrOpen()
 
   val blobs =
     db
@@ -353,13 +368,14 @@ class VoiceLogic(
 //  var recordings = read[Recordings](Tables.Recordings).getOrElse(Recordings())
 //  logger.info(s"recording db has ${recordings.lookup.size} entries with ${recordings.lookup.values.map(_.length).sum} recordings")
 
+
   val recordings =
     db
       .treeSet(Tables.Recordings.toString())
       .serializer(
         new SerializerArrayTuple(
           Serializer.SHORT_ARRAY,
-          Serializer.BYTE_ARRAY
+          Serializer.LONG
         )
       )
       .createOrOpen()
@@ -390,11 +406,18 @@ class VoiceLogic(
           word
         )
 
+        val key = Long.box(blobsId.incrementAndGet())
+        blobs
+          .put(
+            key,
+            data
+          )
+
         recordings
           .add(
             Array(
               word.map(_.code).toArray,
-              data
+              key
             )
           )
 
@@ -423,7 +446,7 @@ class VoiceLogic(
 }
 
 object TextGenerator extends StrictLogging {
-  val mary = new LocalMaryInterface
+  lazy val mary = new LocalMaryInterface
 
   def create(targetRate: Int) : String => Array[Byte] = { str =>
     logger.info(s"starting tts audio generation for: ${str}")
@@ -446,28 +469,51 @@ object TextGenerator extends StrictLogging {
 }
 
 class TextReader(
-  db: LevelDB,
+//  db: LevelDB,
+  db: DB,
   mixer: SingleMixer
 ) extends StrictLogging {
-  val prefix = Tables.TTS.prefix
-  val table = db.sub(prefix)
+//  val prefix = Tables.TTS.prefix
+//  val table = db.sub(prefix)
+
+  type AudioData = Array[Byte]
+
+  val table =
+    db
+      .hashMap(Tables.TTS.toString())
+      .keySerializer(Serializer.STRING)
+      .valueSerializer(Serializer.BYTE_ARRAY)
+      .createOrOpen()
+
   val generator = TextGenerator.create(mixer.config.audioFormat.getSampleRate.toInt)
 
-  def createKey(str: String) : Array[Byte] = {
-    val strBytes = str.getBytes
-    table.createKey(strBytes)
-  }
+//  def createKey(str: String) : Array[Byte] = {
+//    val strBytes = str.getBytes
+//    table.createKey(strBytes)
+//  }
 
-  def audioData(str: String) : Array[Byte] = {
-    val key = createKey(str)
-    val data = table.db.get(key)
+
+  def audioData(str: String) : AudioData = {
+
+    val data = table.get(str)
     if (data == null) {
       val g = generator(str)
-      table.db.put(key, g)
+      table.put(str, g)
       g
     } else {
       data
     }
+
+
+//    val key = createKey(str)
+//    val data = table.db.get(key)
+//    if (data == null) {
+//      val g = generator(str)
+//      table.db.put(key, g)
+//      g
+//    } else {
+//      data
+//    }
   }
 
   def samples(str: String) : IndexedSeq[Float] = {

@@ -196,82 +196,90 @@ class SingleMixer(
 
   val thread = new Thread() {
     override def run(): Unit = {
-      val chunkFloats = Array.ofDim[Float](samplesPerChunk)
-      val chunkBytes = Array.ofDim[Byte](bytesPerChunk)
-      val playing = new util.ArrayList[Playing]()
+      try {
+        val chunkFloats = Array.ofDim[Float](samplesPerChunk)
+        val chunkBytes = Array.ofDim[Byte](bytesPerChunk)
+        val playing = new util.ArrayList[Playing]()
 
-      var framesWritten : Long = 0
-
-
-      def processWaiting() = {
-        buffer
-          .waiting
-          .foreach({ w =>
-            playing add w.start(
-              framesWritten - sdl.getLongFramePosition
-            )
-          })
-
-        buffer.waiting.clear()
-      }
+        var framesWritten : Long = 0
 
 
-      while (!stopped) {
-        buffer.synchronized {
-          if (!buffer.waiting.isEmpty) {
-            processWaiting()
-          }
-          if (playing.isEmpty) {
-            while (!stopped && buffer.waiting.isEmpty) {
-              buffer.wait()
-            }
-            processWaiting()
-          }
+        def processWaiting() = {
+          buffer
+            .waiting
+            .foreach({ w =>
+              playing add w.start(
+                framesWritten - sdl.getLongFramePosition
+              )
+            })
+
+          buffer.waiting.clear()
         }
 
-        if (!stopped) {
-          while (sdl.getLongFramePosition < framesWritten - framesWriteAhead) {
-            Thread.sleep(writeAheadSleepMillis)
+
+        while (!stopped) {
+          buffer.synchronized {
+            if (!buffer.waiting.isEmpty) {
+              processWaiting()
+            }
+            if (playing.isEmpty) {
+              while (!stopped && buffer.waiting.isEmpty) {
+                buffer.wait()
+              }
+              processWaiting()
+            }
           }
 
-          util.Arrays.fill(chunkFloats, 0)
-          val it = playing.iterator
-
-          while (it.hasNext) {
-            val p = it.next()
-            val hasMore = p.addTo(chunkFloats)
-            if (!hasMore) it.remove()
-          }
-
-          var floatIdx = 0
-          var byteIdx = 0
-
-          do {
-            var v = (chunkFloats(floatIdx) * sampleScaleFactor).toInt
-            if (v < minSampleValue) {
-              v = minSampleValue
-            } else if (v > maxSampleValue) {
-              v = maxSampleValue
+          if (!stopped) {
+            while (sdl.getLongFramePosition < framesWritten - framesWriteAhead) {
+              Thread.sleep(writeAheadSleepMillis)
             }
 
-            var i = 0
+            util.Arrays.fill(chunkFloats, 0)
+            val it = playing.iterator
+
+            while (it.hasNext) {
+              val p = it.next()
+              val hasMore = p.addTo(chunkFloats)
+              if (!hasMore) it.remove()
+            }
+
+            var floatIdx = 0
+            var byteIdx = 0
+
             do {
-              chunkBytes.update(byteIdx, (v & 0xFF).toByte)
-              v >>= 8
+              var v = (chunkFloats(floatIdx) * sampleScaleFactor).toInt
+              if (v < minSampleValue) {
+                v = minSampleValue
+              } else if (v > maxSampleValue) {
+                v = maxSampleValue
+              }
 
-              i += 1
-              byteIdx += 1
-            } while (i < bytesPerSample)
+              var i = 0
+              do {
+                chunkBytes.update(byteIdx, (v & 0xFF).toByte)
+                v >>= 8
 
-            floatIdx += 1
-          } while (floatIdx < samplesPerChunk)
+                i += 1
+                byteIdx += 1
+              } while (i < bytesPerSample)
 
-          sdl.write(chunkBytes, 0, chunkBytes.length)
-          framesWritten += framesPerChunk
+              floatIdx += 1
+            } while (floatIdx < samplesPerChunk)
+
+            sdl.write(chunkBytes, 0, chunkBytes.length)
+            framesWritten += framesPerChunk
+          }
+
+
+
         }
-
-
-
+      } catch {
+        case ex : InterruptedException =>
+          if (!stopped) {
+            logger.error("interrupted", ex)
+            throw ex
+          }
       }
     }
   }

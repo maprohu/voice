@@ -49,50 +49,58 @@ class SingleRecorder(
 
   val thread = new Thread() {
     override def run(): Unit = {
-      val bytesChunk = Array.ofDim[Byte](bytesPerChunk)
-      var started = true
-      while (!stopped) {
-        sinks.synchronized {
-          if (sinks.items.isEmpty) {
-            if (started) {
-              tdl.stop()
-              tdl.flush()
-              chunkStartPos = tdl.getLongFramePosition
-              chunkEndPos = chunkStartPos + samplesPerChunk
-              started = false
-            }
-            do {
-              sinks.wait()
-            } while (sinks.items.isEmpty && !stopped)
-          }
-        }
-
-        if (!stopped) {
-
-          if (!started) {
-            tdl.start()
-            started = true
-          }
-
-          val readCount = tdl.read(bytesChunk, 0, bytesChunk.length)
-          require(readCount == bytesChunk.length)
-
+      try {
+        val bytesChunk = Array.ofDim[Byte](bytesPerChunk)
+        var started = true
+        while (!stopped) {
           sinks.synchronized {
-            val it = sinks.items.iterator()
-
-            while (it.hasNext) {
-              val p = it.next()
-              val wantsMore = p.process(bytesChunk)
-              if (!wantsMore) it.remove()
+            if (sinks.items.isEmpty) {
+              if (started) {
+                tdl.stop()
+                tdl.flush()
+                chunkStartPos = tdl.getLongFramePosition
+                chunkEndPos = chunkStartPos + samplesPerChunk
+                started = false
+              }
+              do {
+                sinks.wait()
+              } while (sinks.items.isEmpty && !stopped)
             }
           }
 
-          chunkStartPos = chunkEndPos
-          chunkEndPos += samplesPerChunk
+          if (!stopped) {
+
+            if (!started) {
+              tdl.start()
+              started = true
+            }
+
+            val readCount = tdl.read(bytesChunk, 0, bytesChunk.length)
+            require(readCount == bytesChunk.length)
+
+            sinks.synchronized {
+              val it = sinks.items.iterator()
+
+              while (it.hasNext) {
+                val p = it.next()
+                val wantsMore = p.process(bytesChunk)
+                if (!wantsMore) it.remove()
+              }
+            }
+
+            chunkStartPos = chunkEndPos
+            chunkEndPos += samplesPerChunk
+          }
+
         }
 
+      } catch {
+        case ex : InterruptedException =>
+          if (!stopped) {
+            logger.error("interrupted", ex)
+            throw ex
+          }
       }
-
     }
   }
   thread.start()
