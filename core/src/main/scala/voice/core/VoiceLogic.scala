@@ -3,6 +3,7 @@ package voice.core
 import java.io._
 import java.nio.ByteBuffer
 import java.nio.channels.{FileChannel, ReadableByteChannel}
+import java.util
 import java.util.concurrent.{Executors, TimeUnit}
 
 import com.typesafe.scalalogging.{LazyLogging, StrictLogging}
@@ -63,6 +64,7 @@ object VoiceLogic extends StrictLogging with LogTools {
       DBMaker
         .fileDB(new File(dbDir, "mapdb"))
         .fileMmapEnableIfSupported()
+        .transactionEnable()
         .make()
 
     val hidCancelable = HidPhysicalThread.run({ () =>
@@ -94,6 +96,29 @@ object VoiceLogic extends StrictLogging with LogTools {
         if (Mary.currentState() == Mary.STATE_RUNNING) {
           logger.info("stopping mary")
           Mary.shutdown()
+
+          logger.info("looking for mary shutdown hooks")
+          val ash = Class.forName("java.lang.ApplicationShutdownHooks")
+          val hooksField = ash.getDeclaredField("hooks")
+          hooksField.setAccessible(true)
+
+          ash.synchronized {
+            val hooks =
+              hooksField
+                .get(null)
+                .asInstanceOf[util.IdentityHashMap[Thread, Thread]]
+            import scala.collection.JavaConversions._
+            hooks
+              .keySet()
+              .toVector
+              .foreach({ th =>
+                if (th.getClass.getName.startsWith(classOf[Mary].getName)) {
+                  logger.info(s"removing mary shutdown hook: ${th.getClass} - ${th}")
+                  hooks.remove(th)
+                }
+              })
+
+          }
         } else {
           logger.info("mary not running")
         }
