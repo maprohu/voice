@@ -21,11 +21,9 @@ object VoiceRpiModules {
 //    mvn.`io.monix:monix_2.11:jar:2.0.6`
 //  )
 
-//  object Home extends ScalaModule(
-//    "home",
-//    Core,
-//    JarTree8Modules.Akka
-//  )
+  object Home extends ScalaModule(
+    "home"
+  )
 
   object Mobile extends ScalaModule(
     "mobile",

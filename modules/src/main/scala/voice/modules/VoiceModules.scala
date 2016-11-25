@@ -89,6 +89,11 @@ object VoiceModules {
     Common
   )
 
+  object Client extends ScalaModule(
+    "client",
+    Common
+  )
+
 //  object Packaging extends ScalaModule(
 //    "packaging",
 //    Toolbox6Modules.Packaging,

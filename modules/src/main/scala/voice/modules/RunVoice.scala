@@ -27,12 +27,13 @@ object RunVoice {
     VoiceModules.Common,
     VoiceModules.Environment,
     VoiceModules.Central,
+    VoiceModules.Client,
 //    VoiceModules.Packaging,
 //    VoiceModules.Android,
 //    VoiceModules.Standalone,
     VoiceModules.Testing,
 //    VoiceModules.Swing,
-//    VoiceRpiModules.Home,
+    VoiceRpiModules.Home,
     VoiceRpiModules.Mobile,
     VoiceRpiModules.Exec
 //    VoiceRpiModules.Core
