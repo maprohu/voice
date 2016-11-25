@@ -36,7 +36,8 @@ object VoiceRpiModules {
 
   object Exec extends ScalaModule(
     "exec",
-    Extra8Modules.Shared
+    JarTree8Modules.StreamApp,
+    VoiceModules.Core
   )
 
 

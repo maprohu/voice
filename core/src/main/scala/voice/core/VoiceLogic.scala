@@ -1,7 +1,6 @@
 package voice.core
 
 import java.io._
-import java.nio.ByteBuffer
 import java.nio.channels.{FileChannel, ReadableByteChannel}
 import java.util
 import java.util.concurrent.{Executors, TimeUnit}
@@ -11,7 +10,6 @@ import marytts.LocalMaryInterface
 import marytts.server.Mary
 import marytts.util.data.audio.{AudioConverterUtils, MaryAudioUtils}
 import monix.execution.Cancelable
-import monix.execution.atomic.Atomic
 import monix.execution.cancelables.AssignableCancelable
 import org.mapdb.serializer.SerializerArrayTuple
 import org.mapdb.{DB, DBMaker, Serializer}

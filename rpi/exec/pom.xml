@@ -109,7 +109,12 @@
     <dependencies>
         <dependency>
             <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-jartree-extra-shared</artifactId>
+            <artifactId>toolbox8-jartree-streamapp</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>voice</groupId>
+            <artifactId>voice-core</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -118,5 +123,10 @@
             <version>2.11.8</version>
         </dependency>
     </dependencies>
-    <repositories> </repositories>
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
 </project>

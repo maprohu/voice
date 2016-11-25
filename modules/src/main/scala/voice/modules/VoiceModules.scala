@@ -102,6 +102,7 @@ object VoiceModules {
     Extra8Modules.Hello,
     Toolbox6Modules.Logging,
     Toolbox6Modules.Logback,
+    VoiceRpiModules.Exec,
     mvn.`com.jssrc:jssrc:jar:1.0.1`
   )
 
