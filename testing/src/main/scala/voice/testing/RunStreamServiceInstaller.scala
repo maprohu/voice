@@ -10,7 +10,8 @@ import voice.environment.Rpis
 object RunStreamServiceInstaller {
 
 //  val Target = Rpis.Home
-  val Target = Rpis.MobileCable
+//  val Target = Rpis.MobileCable
+  val Target = Rpis.Central
 
   def main(args: Array[String]): Unit = {
 

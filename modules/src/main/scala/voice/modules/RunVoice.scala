@@ -20,8 +20,8 @@ object RunVoice {
   val Modules = Seq[ConfiguredModule](
     VoiceModules.Modules,
     VoiceModules.Core,
-    VoiceModules.Akka,
-    VoiceModules.Audio,
+//    VoiceModules.Akka,
+//    VoiceModules.Audio,
     VoiceModules.Sandbox,
     VoiceModules.Tools,
     VoiceModules.Common,
@@ -34,8 +34,8 @@ object RunVoice {
 //    VoiceModules.Swing,
 //    VoiceRpiModules.Home,
     VoiceRpiModules.Mobile,
-    VoiceRpiModules.Exec,
-    VoiceRpiModules.Core
+    VoiceRpiModules.Exec
+//    VoiceRpiModules.Core
   )
 
   def main(args: Array[String]): Unit = {

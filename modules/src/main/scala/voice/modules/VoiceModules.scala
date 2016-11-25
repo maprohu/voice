@@ -35,16 +35,16 @@ object VoiceModules {
     mvn.`org.mapdb:mapdb:jar:3.0.2`
   )
 
-  object Akka extends ScalaModule(
-    "akka",
-    Core,
-    Audio,
-    Akka8Modules.Actor,
-    Toolbox8Modules.Leveldb,
-    mvn.`com.typesafe.akka:akka-persistence_2.11:jar:2.4.12`
-
-
-  )
+//  object Akka extends ScalaModule(
+//    "akka",
+//    Core,
+//    Audio,
+//    Akka8Modules.Actor,
+//    Toolbox8Modules.Leveldb,
+//    mvn.`com.typesafe.akka:akka-persistence_2.11:jar:2.4.12`
+//
+//
+//  )
 
   object Tools extends ScalaModule(
     "tools",
@@ -52,13 +52,13 @@ object VoiceModules {
     Toolbox8Modules.Leveldb
   )
 
-  object Audio extends ScalaModule(
-    "audio",
-    Toolbox6Modules.Macros,
-    Akka8Modules.Stream,
-    mvn.`io.monix:monix_2.11:jar:2.0.6`,
-    mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`
-  )
+//  object Audio extends ScalaModule(
+//    "audio",
+//    Toolbox6Modules.Macros,
+////    Akka8Modules.Stream,
+//    mvn.`io.monix:monix_2.11:jar:2.0.6`,
+//    mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`
+//  )
 
   object Sandbox extends ScalaModule(
     "sandbox",
@@ -105,7 +105,7 @@ object VoiceModules {
 
   object Testing extends ScalaModule(
     "testing",
-    Akka,
+//    Akka,
     Environment,
     Central,
     JarTree8Modules.Testing,
@@ -115,11 +115,11 @@ object VoiceModules {
     VoiceRpiModules.Mobile,
     Tools,
 //    RpiModules.DBus,
-    Audio,
+//    Audio,
     JarTree8Modules.Client,
     RpiModules.Installer,
     Core,
-    VoiceRpiModules.Core,
+//    VoiceRpiModules.Core,
 //    Extra8Modules.Hello,
     Toolbox6Modules.Logging,
     Toolbox6Modules.Logback,

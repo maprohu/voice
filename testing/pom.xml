@@ -109,11 +109,6 @@
     <dependencies>
         <dependency>
             <groupId>voice</groupId>
-            <artifactId>voice-akka</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
             <artifactId>voice-environment</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
@@ -143,11 +138,6 @@
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-audio</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>toolbox8</groupId>
             <artifactId>toolbox8-jartree-client</artifactId>
             <version>2-SNAPSHOT</version>
@@ -160,11 +150,6 @@
         <dependency>
             <groupId>voice</groupId>
             <artifactId>voice-core</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-rpi-core</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>

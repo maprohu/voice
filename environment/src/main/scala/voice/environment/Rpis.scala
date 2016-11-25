@@ -32,7 +32,7 @@ object Rpis {
   implicit val MobileHomeWlan = Config(
     host = "192.168.10.215"
   )
-  implicit val Central = {
+  val Central = {
     val ssh = SshConnectionDetails.local("central")
     import ssh._
     Config(

@@ -16,6 +16,5 @@
     <modules>
         <module>mobile</module>
         <module>exec</module>
-        <module>core</module>
     </modules>
 </project>
