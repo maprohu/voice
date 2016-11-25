@@ -16,7 +16,9 @@ object Rpis {
     user: String = "pi",
     key: Path = home / ".ssh" / "id_rsa",
     bindAddress: String = "0.0.0.0"
-  ) extends SshTools.Config with JarTreeApp.Config
+  ) extends SshTools.Config with JarTreeApp.Config {
+    def tunneled = copy(host = "localhost")
+  }
 
   implicit val Localhost = Config(
     host = "localhost",

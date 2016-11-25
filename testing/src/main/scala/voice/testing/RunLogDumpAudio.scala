@@ -13,14 +13,15 @@ import voice.rpi.exec.LogDumpAudio
   */
 object RunLogDumpAudio {
 
-  val Target = Rpis.Localhost
+//  val Target = Rpis.Localhost
+  val Target = Rpis.Central.tunneled
 
   def main(args: Array[String]): Unit = {
-    MavenTools
-      .runMavenProject(
-        new File("../voice"),
-        Seq("install")
-      )
+//    MavenTools
+//      .runMavenProject(
+//        new File("../voice"),
+//        Seq("install")
+//      )
 
     StreamAppClient
       .request(
