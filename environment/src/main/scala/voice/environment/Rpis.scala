@@ -12,6 +12,7 @@ object Rpis {
   case class Config(
     host: String,
     servicePort : Int = 8767,
+    serviceUser: String = "voicer",
     sshPort: Int = 22,
     user: String = "pi",
     key: Path = home / ".ssh" / "id_rsa",

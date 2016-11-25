@@ -20,7 +20,7 @@ object RunStreamServiceInstaller {
         "voicer",
         JarTree8Modules.StreamApp,
         "toolbox8.jartree.streamapp.StreamAppMain",
-        user = Target.user,
+        user = Target.serviceUser,
         bindAddress = Target.bindAddress,
         port = Target.servicePort
       )(Target)
