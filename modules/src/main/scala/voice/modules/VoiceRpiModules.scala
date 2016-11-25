@@ -15,17 +15,17 @@ object VoiceRpiModules {
     "core",
     VoiceModules.Core,
     VoiceModules.Akka,
-    JarTree8Modules.Util,
+//    JarTree8Modules.Util,
     VoiceModules.Audio,
     Toolbox8Modules.Common,
     mvn.`io.monix:monix_2.11:jar:2.0.6`
   )
 
-  object Home extends ScalaModule(
-    "home",
-    Core,
-    JarTree8Modules.Akka
-  )
+//  object Home extends ScalaModule(
+//    "home",
+//    Core,
+//    JarTree8Modules.Akka
+//  )
 
   object Mobile extends ScalaModule(
     "mobile",

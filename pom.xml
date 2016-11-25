@@ -21,7 +21,9 @@
         <module>audio</module>
         <module>sandbox</module>
         <module>tools</module>
-        <module>packaging</module>
+        <module>common</module>
+        <module>environment</module>
+        <module>central</module>
         <module>testing</module>
     </modules>
 </project>

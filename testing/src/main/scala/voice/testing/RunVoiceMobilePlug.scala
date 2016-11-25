@@ -4,7 +4,7 @@ import java.io.File
 
 import mvnmod.builder.MavenTools
 import toolbox8.jartree.testing.StreamAppClient
-import toolbox8.rpi.installer.Rpis
+import voice.environment.Rpis
 import voice.modules.VoiceRpiModules
 
 /**

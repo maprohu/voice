@@ -21,16 +21,17 @@ object VoiceModules {
 
   object Core extends ScalaModule(
     "core",
-    Toolbox6Modules.Macros,
-    Toolbox6Modules.Pickling.R3,
+//    Toolbox6Modules.Macros,
+//    Toolbox6Modules.Pickling.R3,
     Toolbox8Modules.Common,
-    Toolbox8Modules.Leveldb,
-    mvn.`com.github.wendykierp:JTransforms:jar:3.1`,
+//    Toolbox8Modules.Leveldb,
+//    mvn.`com.github.wendykierp:JTransforms:jar:3.1`,
     mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`,
-    mvn.`de.dfki.mary:voice-cmu-slt-hsmm:jar:5.2`.exclude(
-      mvn.`org.slf4j:slf4j-log4j12:jar:1.7.21`,
-      mvn.`log4j:log4j:jar:1.2.17`
-    ),
+    mvn.`de.dfki.mary:voice-cmu-slt-hsmm:jar:5.2`
+      .exclude(
+        mvn.`org.slf4j:slf4j-log4j12:jar:1.7.21`,
+        mvn.`log4j:log4j:jar:1.2.17`
+      ),
     mvn.`org.mapdb:mapdb:jar:3.0.2`
   )
 
@@ -70,27 +71,47 @@ object VoiceModules {
     mvn.`com.github.yannrichet:JMathPlot:jar:1.0.1`
   )
 
-
-  object Packaging extends ScalaModule(
-    "packaging",
-    Toolbox6Modules.Packaging,
-    VoiceModules.Modules,
-    JarTree8Modules.Client,
-    RpiModules.Installer,
-    VoiceRpiModules.Home,
-    VoiceRpiModules.Mobile,
-    Extra8Modules.Hello,
-    VoiceRpiModules.Exec,
-    mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
+  object Common extends ScalaModule(
+    "common",
+    JarTree8Modules.Common,
+    mvn.`com.lihaoyi:upickle_2.11:jar:0.4.2`,
+    mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`
   )
+
+  object Environment extends ScalaModule(
+    "environment",
+    Common,
+    Toolbox8Modules.Installer
+  )
+
+  object Central extends ScalaModule(
+    "central",
+    Common
+  )
+
+//  object Packaging extends ScalaModule(
+//    "packaging",
+//    Toolbox6Modules.Packaging,
+//    Environment,
+//    VoiceModules.Modules,
+//    JarTree8Modules.Client,
+//    RpiModules.Installer,
+////    VoiceRpiModules.Home,
+//    VoiceRpiModules.Mobile,
+////    Extra8Modules.Hello,
+//    VoiceRpiModules.Exec,
+//    mvn.`org.slf4j:slf4j-simple:jar:1.7.21`
+//  )
 
   object Testing extends ScalaModule(
     "testing",
     Akka,
+    Environment,
+    Central,
     JarTree8Modules.Testing,
-    JarTree8Modules.App,
+//    JarTree8Modules.App,
     Modules,
-    VoiceRpiModules.Home,
+//    VoiceRpiModules.Home,
     VoiceRpiModules.Mobile,
     Tools,
 //    RpiModules.DBus,
@@ -99,12 +120,13 @@ object VoiceModules {
     RpiModules.Installer,
     Core,
     VoiceRpiModules.Core,
-    Extra8Modules.Hello,
+//    Extra8Modules.Hello,
     Toolbox6Modules.Logging,
     Toolbox6Modules.Logback,
     VoiceRpiModules.Exec,
     mvn.`com.jssrc:jssrc:jar:1.0.1`
   )
+
 
 
 

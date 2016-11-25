@@ -14,7 +14,6 @@ import monix.execution.cancelables.AssignableCancelable
 import org.mapdb.serializer.SerializerArrayTuple
 import org.mapdb.{DB, DBMaker, Serializer}
 import toolbox6.logging.LogTools
-import toolbox8.leveldb.{IntSize, LevelDB}
 import voice.core.ShortLongProcessor.{Click, Down, Wrap, Wrapped}
 import voice.core.SingleMixer.SoundForm
 import voice.core.SingleRecorder.RecorderProcessor
@@ -135,7 +134,7 @@ object Tables extends Enumeration {
   val TTS = Table()
 
   case class Table() extends Val {
-    val prefix = LevelDB.intPrefix(id)
+//    val prefix = LevelDB.intPrefix(id)
   }
 }
 

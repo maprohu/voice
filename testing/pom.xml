@@ -113,23 +113,23 @@
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>voice</groupId>
+            <artifactId>voice-environment</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>voice</groupId>
+            <artifactId>voice-central</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>toolbox8</groupId>
             <artifactId>toolbox8-jartree-testing</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-jartree-app</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>voice</groupId>
             <artifactId>voice-modules</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-rpi-home</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -165,11 +165,6 @@
         <dependency>
             <groupId>voice</groupId>
             <artifactId>voice-rpi-core</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-jartree-extra-hello</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
