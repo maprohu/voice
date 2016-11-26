@@ -11,8 +11,13 @@ object RunTunnelCentral {
   def main(args: Array[String]): Unit = {
     SshTools
       .tunnels(
-        forward = Seq(Rpis.Central.servicePort),
-        reverse = Seq(3000)
+        forward = Seq(
+          Rpis.Central.servicePort,
+          Rpis.Home.servicePort
+        ),
+        reverse = Seq(
+          3000
+        )
       )(Rpis.Central)
   }
 

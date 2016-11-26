@@ -14,7 +14,8 @@ import voice.rpi.exec.LogDumpAudio
 object RunLogDumpAudio {
 
 //  val Target = Rpis.Localhost
-  val Target = Rpis.Central.tunneled
+//  val Target = Rpis.Central.tunneled
+  val Target = Rpis.Home.tunneled
 
   def main(args: Array[String]): Unit = {
 //    MavenTools
