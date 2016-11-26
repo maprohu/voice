@@ -24,7 +24,7 @@ object RunLogDumpAudio {
 //        Seq("install")
 //      )
 
-    StreamAppClient
+    val info : String = StreamAppClient
       .request(
         VoiceRpiModules.Exec,
         classOf[LogDumpAudio].getName,
@@ -32,6 +32,7 @@ object RunLogDumpAudio {
         Target
       )
 
+    println(info)
 
   }
 
