@@ -1,7 +1,7 @@
 package voice.request
 
 import com.typesafe.scalalogging.LazyLogging
-import toolbox8.jartree.streamapp.Requestable
+import toolbox8.jartree.streamapp.{Plugged, Requestable}
 
 /**
   * Created by maprohu on 26-11-2016.
@@ -15,8 +15,8 @@ object GenerateKey {
   )
 }
 import GenerateKey._
-class GenerateKey extends Requestable[Input, Output] with LazyLogging {
-  override def request(input: Input): Output = {
+class GenerateKey extends Requestable[Plugged, Input, Output] with LazyLogging {
+  override def request(ctx: Plugged, input: Input): Output = {
     import ammonite.ops._
     import ImplicitWd._
     import input._

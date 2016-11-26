@@ -1,7 +1,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>voice</groupId>
-    <artifactId>voice</artifactId>
+    <artifactId>voice-requests</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <build>
@@ -14,17 +14,6 @@
         </plugins>
     </build>
     <modules>
-        <module>rpi</module>
-        <module>requests</module>
-        <module>modules</module>
-        <module>core</module>
-        <module>sandbox</module>
-        <module>tools</module>
-        <module>common</module>
-        <module>environment</module>
         <module>central</module>
-        <module>client</module>
-        <module>request</module>
-        <module>testing</module>
     </modules>
 </project>

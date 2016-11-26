@@ -13,19 +13,21 @@ object RunGenerateKey {
   val Target = Rpis.Home
 
   def main(args: Array[String]): Unit = {
+    println(
+      run(Target)
+    )
+  }
 
-    val output : GenerateKey.Output = StreamAppClient
+  def run(target: Rpis.Config) : GenerateKey.Output = {
+    StreamAppClient
       .request(
         VoiceModules.Request,
         classOf[GenerateKey].getName,
         GenerateKey.Input(
-          keyLocation = s"/home/${Target.serviceUser}/.ssh/id_rsa"
+          keyLocation = s"/home/${target.serviceUser}/.ssh/id_rsa"
         ),
-        Target
+        target
       )
-
-    println(output)
-
   }
 
 }

@@ -86,7 +86,9 @@ object VoiceModules {
 
   object Central extends ScalaModule(
     "central",
-    Common
+    Common,
+    JarTree8Modules.StreamApp,
+    mvn.`org.mapdb:mapdb:jar:3.0.2`
   )
 
   object Client extends ScalaModule(
@@ -136,6 +138,7 @@ object VoiceModules {
     Toolbox6Modules.Logging,
     Toolbox6Modules.Logback,
     VoiceRpiModules.Exec,
+    VoiceRequestModules.Central,
     mvn.`com.jssrc:jssrc:jar:1.0.1`
   )
 

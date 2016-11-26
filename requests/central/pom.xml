@@ -1,7 +1,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>voice</groupId>
-    <artifactId>voice-testing</artifactId>
+    <artifactId>voice-requests-central</artifactId>
     <version>2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <organization>
@@ -109,78 +109,8 @@
     <dependencies>
         <dependency>
             <groupId>voice</groupId>
-            <artifactId>voice-environment</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
             <artifactId>voice-central</artifactId>
             <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-request</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-jartree-testing</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-modules</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-rpi-mobile</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-tools</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-jartree-client</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-rpi-installer</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-core</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>toolbox6</groupId>
-            <artifactId>toolbox6-logging</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>toolbox6</groupId>
-            <artifactId>toolbox6-logback</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-rpi-exec</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-requests-central</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.jssrc</groupId>
-            <artifactId>jssrc</artifactId>
-            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -188,10 +118,5 @@
             <version>2.11.8</version>
         </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <id>jcenter</id>
-            <url>https://jcenter.bintray.com</url>
-        </repository>
-    </repositories>
+    <repositories> </repositories>
 </project>

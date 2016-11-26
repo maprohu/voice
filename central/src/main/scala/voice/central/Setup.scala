@@ -5,9 +5,6 @@ package voice.central
   */
 object Setup {
 
-  case class AsRoot(
-    commands: String*
-  )
   val Commands = Seq(
     "sudo add-apt-repository -y ppa:webupd8team/java",
     "sudo apt-get update",
@@ -26,7 +23,6 @@ object Setup {
     "sudo sysctl vm.swappiness=10",
     "echo vm.swappiness=10 | sudo tee -a /etc/sysctl.d/99-swappiness.conf",
     "echo vm.vfs_cache_pressure=50 | sudo tee -a /etc/sysctl.d/99-swappiness.conf"
-
   )
 
 }
