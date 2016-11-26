@@ -23,6 +23,7 @@
         <module>environment</module>
         <module>central</module>
         <module>client</module>
+        <module>request</module>
         <module>testing</module>
     </modules>
 </project>

@@ -94,6 +94,12 @@ object VoiceModules {
     Common
   )
 
+  object Request extends ScalaModule(
+    "request",
+    JarTree8Modules.StreamApp,
+    mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`
+  )
+
 //  object Packaging extends ScalaModule(
 //    "packaging",
 //    Toolbox6Modules.Packaging,
@@ -113,6 +119,7 @@ object VoiceModules {
 //    Akka,
     Environment,
     Central,
+    Request,
     JarTree8Modules.Testing,
 //    JarTree8Modules.App,
     Modules,

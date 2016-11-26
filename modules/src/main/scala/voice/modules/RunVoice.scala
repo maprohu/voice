@@ -28,6 +28,7 @@ object RunVoice {
     VoiceModules.Environment,
     VoiceModules.Central,
     VoiceModules.Client,
+    VoiceModules.Request,
 //    VoiceModules.Packaging,
 //    VoiceModules.Android,
 //    VoiceModules.Standalone,
