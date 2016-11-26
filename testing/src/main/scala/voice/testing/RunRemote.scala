@@ -63,7 +63,7 @@ object RunRemote {
         "package"
       ) { dir =>
         import ammonite.ops._
-        import toolbox8.installer.SshTools._
+        import toolbox6.ssh.SshTools._
         implicit val session = connect
 
         val TargetDir = "/tmp/tbrpiremote"

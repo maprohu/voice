@@ -13,7 +13,7 @@ object RunSshCommand {
   implicit val Target = Rpis.Central
 
   def main(args: Array[String]): Unit = {
-    import toolbox8.installer.SshTools._
+    import toolbox6.ssh.SshTools._
     implicit val session = connect
 
     command("which java")

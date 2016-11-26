@@ -7,14 +7,27 @@ case class SshConnectionDetails(
   address: String,
   user: String,
   port: Int,
-  key: String
+  key: String,
+  hostKey: Array[Byte]
 )
 
 object SshConnectionDetails {
+  def jsonName(name: String) = {
+    s"${name}.json"
+  }
+  def localPath(name: String) = {
+    import ammonite.ops._
+    pwd / up / 'voice / 'local / jsonName(name)
+  }
   def local(name: String) = {
     import ammonite.ops._
+    unpickle(
+      read(localPath(name))
+    )
+  }
+  def unpickle(json: String) = {
     upickle.default.read[SshConnectionDetails](
-      read(pwd / up / 'voice / 'local / s"${name}.json")
+      json
     )
   }
 

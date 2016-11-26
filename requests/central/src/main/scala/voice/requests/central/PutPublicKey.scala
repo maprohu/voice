@@ -27,7 +27,7 @@ class PutPublicKey extends Requestable[CentralPlugged, Input, Unit] with StrictL
       ctx.publicKeys.put(client, publicKey.trim)
       ctx.db.commit()
 
-      val authorizedKeys = root / 'home / ".ssh" / 'authorized_keys
+      val authorizedKeys = root / 'home / 'voicer / ".ssh" / 'authorized_keys
       logger.info(s"regenerating ${authorizedKeys}")
       write.over(
         authorizedKeys,

@@ -1,6 +1,6 @@
 package voice.testing
 
-import toolbox8.installer.SshTools
+import toolbox6.ssh.SshTools
 import voice.environment.Rpis
 
 /**

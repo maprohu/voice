@@ -13,6 +13,7 @@ import voice.modules.{VoiceModules, VoiceRpiModules}
   */
 object RunPlugCentral {
 
+//  val Target = Rpis.Localhost
   val Target = Rpis.Central.tunneled
 
   def main(args: Array[String]): Unit = {

@@ -15,7 +15,7 @@ class CentralPlugged extends Plugged with StrictLogging with LogTools {
   Dir.mkdirs()
   val DbFile = new File(Dir, "mapdb")
 
-  logger.info("creating mapdb")
+  logger.info(s"creating mapdb at: ${DbFile}")
   val db =
     DBMaker
       .fileDB(DbFile)

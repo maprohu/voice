@@ -22,7 +22,10 @@ object VoiceRpiModules {
 //  )
 
   object Home extends ScalaModule(
-    "home"
+    "home",
+    JarTree8Modules.StreamApp,
+    VoiceModules.Client,
+    VoiceModules.Environment
   )
 
   object Mobile extends ScalaModule(

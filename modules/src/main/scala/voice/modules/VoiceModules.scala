@@ -5,6 +5,7 @@ import mvnmod.modules.MvnmodModules
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
 import toolbox8.modules._
 import mvnmod.builder.Module
+import toolbox6.modules.Toolbox6Modules.Logging
 
 /**
   * Created by martonpapp on 29/08/16.
@@ -93,7 +94,10 @@ object VoiceModules {
 
   object Client extends ScalaModule(
     "client",
-    Common
+    Common,
+    Toolbox6Modules.Ssh,
+    Toolbox6Modules.Logging,
+    mvn.`io.monix:monix-execution_2.11:jar:2.1.1`
   )
 
   object Request extends ScalaModule(
@@ -121,7 +125,9 @@ object VoiceModules {
 //    Akka,
     Environment,
     Central,
+    Client,
     Request,
+    VoiceRpiModules.Home,
     JarTree8Modules.Testing,
 //    JarTree8Modules.App,
     Modules,
