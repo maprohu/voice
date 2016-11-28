@@ -1,5 +1,7 @@
 package voice.testing
 
+import java.net.InetAddress
+
 import toolbox6.ssh.SshTools
 import voice.environment.Rpis
 
@@ -10,9 +12,14 @@ import scala.io.Source
   */
 object RunSshClientAddress {
 
-  implicit val Target = Rpis.Central
+  implicit val Target = Rpis.Central.remote
 
   def main(args: Array[String]): Unit = {
+    println(
+      InetAddress.getLocalHost.getHostAddress
+    )
+
+
     import toolbox6.ssh.SshTools._
     implicit val session = connect
 

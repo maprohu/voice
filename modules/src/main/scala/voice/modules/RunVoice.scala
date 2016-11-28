@@ -26,6 +26,7 @@ object RunVoice {
     VoiceModules.Tools,
     VoiceModules.Common,
     VoiceModules.Environment,
+    VoiceApiModules.UpdateClientInfo,
     VoiceModules.Central,
     VoiceModules.Client,
     VoiceModules.Request,

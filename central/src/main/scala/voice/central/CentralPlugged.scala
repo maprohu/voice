@@ -6,6 +6,7 @@ import com.typesafe.scalalogging.StrictLogging
 import org.mapdb.{DBMaker, Serializer}
 import toolbox6.logging.LogTools
 import toolbox8.jartree.streamapp.Plugged
+import voice.api.updateclientinfo.ClientInfo
 
 /**
   * Created by maprohu on 26-11-2016.
@@ -28,6 +29,13 @@ class CentralPlugged extends Plugged with StrictLogging with LogTools {
       .hashMap("publicKeys")
       .keySerializer(Serializer.STRING)
       .valueSerializer(Serializer.STRING)
+      .createOrOpen()
+
+  val clientInfo =
+    db
+      .hashMap("clientInfo")
+      .keySerializer(Serializer.INTEGER)
+      .valueSerializer(Serializer.JAVA.asInstanceOf[Serializer[ClientInfo]])
       .createOrOpen()
 
   override def preUnplug: Any = {

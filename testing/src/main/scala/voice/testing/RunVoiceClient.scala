@@ -22,7 +22,7 @@ object RunVoiceClient {
         hostKey = hostKey
       ),
       5000,
-      5000
+      Seq()
     )
   }
 

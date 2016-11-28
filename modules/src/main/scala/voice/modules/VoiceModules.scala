@@ -85,9 +85,11 @@ object VoiceModules {
     Toolbox8Modules.Installer
   )
 
+
   object Central extends ScalaModule(
     "central",
     Common,
+    VoiceApiModules.UpdateClientInfo,
     JarTree8Modules.StreamApp,
     mvn.`org.mapdb:mapdb:jar:3.0.2`
   )
@@ -95,6 +97,7 @@ object VoiceModules {
   object Client extends ScalaModule(
     "client",
     Common,
+    VoiceApiModules.UpdateClientInfo,
     Toolbox6Modules.Ssh,
     Toolbox6Modules.Logging,
     mvn.`io.monix:monix-execution_2.11:jar:2.1.1`

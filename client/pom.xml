@@ -113,6 +113,11 @@
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>voice</groupId>
+            <artifactId>voice-api-updateclientinfo</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>toolbox6</groupId>
             <artifactId>toolbox6-ssh</artifactId>
             <version>2-SNAPSHOT</version>

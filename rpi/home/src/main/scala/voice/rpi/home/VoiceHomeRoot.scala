@@ -42,7 +42,7 @@ class VoiceHomePlugged extends Plugged {
         reversePort = Rpis.Home.servicePort,
         Seq(
           Rpis.Central,
-          Rpis.MobileCable
+          Rpis.Mobile
         ).map(_.servicePort)
       )
 

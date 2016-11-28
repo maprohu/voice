@@ -33,7 +33,7 @@ object VoiceClient extends StrictLogging with LogTools {
 
         import target._
         try {
-          val session = SshTools.tunnels(
+          implicit val session = SshTools.tunnels(
             forward =
               forwardPorts
                 .map(ForwardTunnel.apply),

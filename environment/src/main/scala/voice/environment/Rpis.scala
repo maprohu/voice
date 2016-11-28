@@ -8,10 +8,25 @@ import voice.common.SshConnectionDetails
 /**
   * Created by martonpapp on 19/10/16.
   */
+object RpiInstances extends Enumeration {
+  val
+
+    Central,
+    LocalHost,
+    Home,
+    Mobile
+
+  = Value
+}
+
 object Rpis {
+  val servicePortBase = 33000
+
   case class Config(
-    host: String,
-    servicePort : Int = 8767,
+    name: String,
+    id: Int,
+    servicePort : Int,
+    host: String = "localhost",
     serviceUser: String = "voicer",
     sshPort: Int = 22,
     user: String = "pi",
@@ -20,36 +35,84 @@ object Rpis {
     bindAddress: String = "0.0.0.0"
   ) extends SshTools.Config with JarTreeApp.Config {
     def tunneled = copy(host = "localhost")
+
+    def this(
+      name: String,
+      id: Int,
+      bindAddress: String
+    ) = {
+      this(
+        name = name,
+        id = id,
+        servicePort = servicePortBase + id,
+        bindAddress = bindAddress
+      )
+    }
+
+    def this(
+      rpiInstance: RpiInstances.Value,
+      bindAddress: String
+    ) = {
+      this(
+        name = rpiInstance.toString,
+        id = rpiInstance.id,
+        bindAddress = bindAddress
+      )
+    }
   }
 
-  implicit val Localhost = Config(
-    host = "localhost",
-    servicePort = 9981
-  )
-  val Home = Config(
-//    host = "192.168.1.36"
-    host = "172.24.1.1",
-    servicePort = 33001
-  )
-  val MobileCable = Config(
-    host = "10.1.1.49",
-    servicePort = 33002
-  )
-  val MobileHomeWlan = MobileCable.copy(
-    host = "192.168.10.215"
-  )
-  lazy val Central = {
-    val ssh = SshConnectionDetails.local(Sshs.Central)
-    import ssh._
-    Config(
-      host = address,
-      sshPort = port,
-      user = user,
-      key = Path(key),
-      bindAddress = "127.0.0.1",
-      hostKey = hostKey
+  object Config {
+    def apply(
+      rpiInstance: RpiInstances.Value
+    ): Config = {
+      new Config(
+        rpiInstance,
+        "0.0.0.0"
+      )
+    }
+  }
+
+  implicit val Localhost =
+    Config
+      .apply(
+        RpiInstances.LocalHost
+      )
+
+  val Home =
+    Config
+      .apply(
+        RpiInstances.Home
+      )
+
+  val Mobile = new Config(
+    RpiInstances.Mobile,
+    "0.0.0.0"
+  ) {
+    def cable = this.copy(
+      host = "10.1.1.49"
+    )
+    def home = this.copy(
+      host = "192.168.10.215"
     )
   }
+
+  val Central = new Config(
+    RpiInstances.Central,
+    bindAddress = "127.0.0.1"
+  ) {
+    def remote = {
+      val ssh = SshConnectionDetails.local(Sshs.Central)
+
+      copy(
+        host = ssh.address,
+        sshPort = ssh.port,
+        user = ssh.user,
+        key = Path(ssh.key),
+        hostKey = ssh.hostKey
+      )
+    }
+  }
+
 
 }
 

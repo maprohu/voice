@@ -1,7 +1,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>voice</groupId>
-    <artifactId>voice-central</artifactId>
+    <artifactId>voice-api-updateclientinfo</artifactId>
     <version>2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <organization>
@@ -107,26 +107,6 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-common</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>voice</groupId>
-            <artifactId>voice-api-updateclientinfo</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-jartree-streamapp</artifactId>
-            <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mapdb</groupId>
-            <artifactId>mapdb</artifactId>
-            <version>3.0.2</version>
-        </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
