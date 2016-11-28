@@ -14,8 +14,9 @@ case class ClientInfo(
 object ClientInfo {
 
   case object Update extends RequestMarker[ClientInfo, Unit]
+  case object Read extends RequestMarker[Int, Option[ClientInfo]]
+  case object ReadAll extends RequestMarker[Unit, Vector[ClientInfo]]
 
-//  val UPDATE = "voice.central.UpdateClientInfo"
 
 }
 

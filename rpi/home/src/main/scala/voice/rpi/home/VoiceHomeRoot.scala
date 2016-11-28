@@ -4,7 +4,7 @@ import toolbox8.jartree.requestapi.RequestMarker
 import toolbox8.jartree.streamapp.{PlugParams, Plugged, Root}
 import voice.client.VoiceClient
 import voice.common.SshConnectionDetails
-import voice.environment.{Rpis, Sshs}
+import voice.environment.Rpis
 
 import scala.io.{Codec, Source}
 
@@ -25,7 +25,7 @@ class VoiceHomePlugged extends Plugged {
           .fromURL(
             getClass.getClassLoader.getResource(
               SshConnectionDetails.jsonName(
-                Sshs.Central
+                Rpis.Central.name.toLowerCase
               )
             )
           )(Codec.UTF8)

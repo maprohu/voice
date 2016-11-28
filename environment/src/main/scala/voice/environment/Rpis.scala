@@ -88,11 +88,26 @@ object Rpis {
         RpiInstances.LocalHost
       )
 
-  val Home =
-    Config
-      .apply(
-        RpiInstances.Home
+  val Home = new Config(
+    RpiInstances.Home,
+    "0.0.0.0"
+  ) {
+    lazy val ssh = SshConnectionDetails.local(name.toLowerCase())
+
+    lazy val withKey = {
+      copy(
+        hostKey = ssh.hostKey
       )
+    }
+
+    def eth = withKey.copy(
+      host = "192.168.1.36"
+    )
+    def wlan = withKey.copy(
+      host = "172.24.1.1"
+    )
+
+  }
 
   val Mobile = new Config(
     RpiInstances.Mobile,
@@ -111,7 +126,7 @@ object Rpis {
     bindAddress = "127.0.0.1"
   ) {
     def remote = {
-      val ssh = SshConnectionDetails.local(Sshs.Central)
+      val ssh = SshConnectionDetails.local(name.toLowerCase())
 
       copy(
         host = ssh.address,
@@ -126,7 +141,7 @@ object Rpis {
 
 }
 
-object Sshs {
-  val Central = "central"
-
-}
+//object Sshs {
+//  val Central = "central"
+//
+//}

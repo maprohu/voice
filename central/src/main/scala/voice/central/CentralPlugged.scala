@@ -56,6 +56,21 @@ class CentralPlugged extends Plugged with StrictLogging with LogTools {
         db.commit()
         ().asInstanceOf[Out]
 
+      case ClientInfo.ReadAll =>
+        import scala.collection.JavaConversions._
+        clientInfo
+          .values()
+          .toVector
+          .asInstanceOf[Out]
+
+      case ClientInfo.Read =>
+        val id = in.asInstanceOf[Int]
+        Option
+          .apply(
+            clientInfo.get(id)
+          )
+          .asInstanceOf[Out]
+
       case _ => ???
     }
   }

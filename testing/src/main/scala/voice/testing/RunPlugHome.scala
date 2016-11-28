@@ -5,7 +5,7 @@ import toolbox6.jartree.packaging.ClassLoaderPackager
 import toolbox8.jartree.testing.StreamAppClient
 import voice.central.CentralRoot
 import voice.common.SshConnectionDetails
-import voice.environment.{Rpis, Sshs}
+import voice.environment.Rpis
 import voice.modules.{VoiceModules, VoiceRpiModules}
 import voice.rpi.home.VoiceHomeRoot
 
@@ -14,7 +14,7 @@ import voice.rpi.home.VoiceHomeRoot
   */
 object RunPlugHome {
 
-  val Target = Rpis.Home
+  val Target = Rpis.Home.wlan
 //  val Target = Rpis.Localhost
 
   def main(args: Array[String]): Unit = {
@@ -26,11 +26,11 @@ object RunPlugHome {
         { res =>
           val p = Path(res.getCanonicalFile.getAbsolutePath)
           val jsonPath = SshConnectionDetails.localPath(
-            Sshs.Central
+            Rpis.Central.name.toLowerCase
           )
           cp(
             jsonPath,
-            p / SshConnectionDetails.jsonName(Sshs.Central)
+            p / SshConnectionDetails.jsonName(Rpis.Central.name.toLowerCase)
           )
         }
       )
