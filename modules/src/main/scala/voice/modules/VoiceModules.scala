@@ -96,10 +96,13 @@ object VoiceModules {
 
   object Client extends ScalaModule(
     "client",
+    VoiceModules.Modules,
     Common,
+    Environment,
     VoiceApiModules.UpdateClientInfo,
     Toolbox6Modules.Ssh,
     Toolbox6Modules.Logging,
+    JarTree8Modules.Request,
     mvn.`io.monix:monix-execution_2.11:jar:2.1.1`
   )
 

@@ -17,11 +17,11 @@ object RunPlugCentral {
   val Target = Rpis.Central.tunneled
 
   def main(args: Array[String]): Unit = {
-    MavenTools
-      .runMavenProject(
-        new File("../voice"),
-        Seq("install")
-      )
+//    MavenTools
+//      .runMavenProject(
+//        new File("../voice"),
+//        Seq("install")
+//      )
 
     StreamAppClient
       .plug(

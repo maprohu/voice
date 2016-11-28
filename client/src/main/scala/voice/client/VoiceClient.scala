@@ -1,5 +1,6 @@
 package voice.client
 
+import java.net.{InetAddress, NetworkInterface}
 import java.util.concurrent.{Executors, TimeUnit}
 
 import ammonite.ops.Path
@@ -7,10 +8,14 @@ import com.jcraft.jsch.{JSchException, Session}
 import com.typesafe.scalalogging.StrictLogging
 import monix.execution.Cancelable
 import monix.execution.cancelables.{AssignableCancelable, SerialCancelable}
+import mvnmod.builder.ModulePath
 import toolbox6.logging.LogTools
 import toolbox6.ssh.SshTools
 import toolbox6.ssh.SshTools.{ForwardTunnel, ReverseTunnel}
+import toolbox8.jartree.request.StreamAppRequest
+import voice.api.updateclientinfo.ClientInfo
 import voice.common.SshConnectionDetails
+import voice.environment.{RpiInstances, Rpis}
 
 import scala.io.Source
 
@@ -19,25 +24,62 @@ import scala.io.Source
   */
 object VoiceClient extends StrictLogging with LogTools {
 
+  def createClientInfo(
+    source: Rpis.Config,
+    clientAddress: String
+  ) = {
+    import scala.collection.JavaConversions._
+    ClientInfo(
+      clientId = source.id,
+      publicAddress = clientAddress,
+      localAddresses =
+        NetworkInterface
+          .getNetworkInterfaces
+          .flatMap({ ni =>
+            ni.getInetAddresses
+          })
+          .map(_.getHostAddress)
+          .toVector
+          .distinct
+    )
+  }
+
   def run(
-    target: SshConnectionDetails,
-    reversePort: Int,
-    forwardPorts: Seq[Int]
+    source: Rpis.Config,
+    target: SshConnectionDetails
   ) : Cancelable = {
     val scheduler = Executors.newSingleThreadScheduledExecutor()
 
     val connectionCancelable = SerialCancelable()
 
+
+
     def doConnect() : Unit = {
+      def reconnect() = {
+        scheduler.schedule(
+          new Runnable {
+            override def run(): Unit = {
+              doConnect()
+            }
+          },
+          SshTools.ServerAliveInterval.length,
+          SshTools.ServerAliveInterval.unit
+        )
+      }
+
       if (!connectionCancelable.isCanceled) {
 
         import target._
         try {
           implicit val session = SshTools.tunnels(
             forward =
-              forwardPorts
+              RpiInstances
+                .values
+                .toSeq
+                .map(Rpis.servicePortFor)
+                .filterNot(_ == source.servicePort)
                 .map(ForwardTunnel.apply),
-            reverse = Seq(reversePort)
+            reverse = Seq(source.servicePort)
           )(
             SshTools.ConfigImpl(
               host = address,
@@ -48,31 +90,54 @@ object VoiceClient extends StrictLogging with LogTools {
             )
           )
 
-          val clientAddress =
-            SshTools
-              .execValue(
-                "echo $SSH_CLIENT",
-                { channel =>
-                  Source
-                    .fromInputStream(channel.getInputStream)
-                    .mkString
-                }
-              )
-              .split("\\s+")(0)
+          val schedule = try {
+            logger.info("getting own public address from central")
+            val clientAddress =
+              SshTools
+                .execValue(
+                  "echo $SSH_CLIENT",
+                  { channel =>
+                    Source
+                      .fromInputStream(channel.getInputStream)
+                      .mkString
+                  }
+                )
+                .split("\\s+")(0)
 
-          val schedule = scheduler.scheduleAtFixedRate(
-            new Runnable {
-              override def run(): Unit = {
-                if (!session.isConnected) {
-                  logger.warn(s"connection dropped: ${target.address}:${target.port}")
-                  doConnect()
+            val clientInfo = createClientInfo(
+              source,
+              clientAddress
+            )
+
+            logger.info(s"updating client info at central: ${clientInfo}")
+
+            StreamAppRequest
+              .request(
+                ClientInfo.Update,
+                clientInfo,
+                Rpis.Central.tunneled
+              )
+
+            logger.info("client info updated")
+
+            scheduler.scheduleAtFixedRate(
+              new Runnable {
+                override def run(): Unit = {
+                  if (!session.isConnected) {
+                    logger.warn(s"connection dropped: ${target.address}:${target.port}")
+                    doConnect()
+                  }
                 }
-              }
-            },
-            SshTools.ServerAliveInterval.length,
-            SshTools.ServerAliveInterval.length,
-            SshTools.ServerAliveInterval.unit
-          )
+              },
+              SshTools.ServerAliveInterval.length,
+              SshTools.ServerAliveInterval.length,
+              SshTools.ServerAliveInterval.unit
+            )
+          } catch {
+            case ex : Throwable =>
+              logger.warn(s"failed to update client info", ex)
+              reconnect()
+          }
 
           connectionCancelable := Cancelable({ () =>
             quietly { schedule.cancel(false) }
@@ -82,15 +147,7 @@ object VoiceClient extends StrictLogging with LogTools {
           case ex : JSchException =>
             logger.warn(s"failed to connect: ${ex.getMessage}")
 
-            val schedule = scheduler.schedule(
-              new Runnable {
-                override def run(): Unit = {
-                  doConnect()
-                }
-              },
-              SshTools.ServerAliveInterval.length,
-              SshTools.ServerAliveInterval.unit
-            )
+            val schedule = reconnect()
 
             connectionCancelable := Cancelable({ () =>
               quietly { schedule.cancel(false) }

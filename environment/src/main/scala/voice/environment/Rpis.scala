@@ -12,15 +12,25 @@ object RpiInstances extends Enumeration {
   val
 
     Central,
-    LocalHost,
     Home,
+    LocalHost,
     Mobile
 
   = Value
 }
 
 object Rpis {
+
+
   val servicePortBase = 33000
+
+  def servicePortFor(
+    rpi: RpiInstances.Value
+  ) : Int = servicePortFor(rpi.id)
+
+  def servicePortFor(
+    id: Int
+  ) : Int = servicePortBase + id
 
   case class Config(
     name: String,
@@ -44,7 +54,7 @@ object Rpis {
       this(
         name = name,
         id = id,
-        servicePort = servicePortBase + id,
+        servicePort = servicePortFor(id),
         bindAddress = bindAddress
       )
     }

@@ -16,9 +16,9 @@ object RunTunnelCentral {
           Rpis.Home.servicePort
         ),
         reverse = Seq(
-          3000
+          Rpis.Localhost.servicePort
         )
-      )(Rpis.Central)
+      )(Rpis.Central.remote)
   }
 
 }

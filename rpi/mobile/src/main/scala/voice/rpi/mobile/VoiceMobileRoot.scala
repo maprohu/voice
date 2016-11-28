@@ -3,6 +3,7 @@ package voice.rpi.mobile
 import java.io.{File, FileInputStream}
 
 import com.typesafe.scalalogging.StrictLogging
+import toolbox8.jartree.requestapi.RequestMarker
 import toolbox8.jartree.streamapp.{PlugParams, Plugged, Root}
 import voice.core._
 import voice.core.events.ControllerEvent
@@ -26,6 +27,8 @@ class VoiceMobileRoot extends Root with StrictLogging {
         cancel.cancel()
       }
       override def postUnplug: Unit = ()
+
+      override def marked[In, Out](marker: RequestMarker[In, Out], in: In): Out = ???
     }
   }
 }

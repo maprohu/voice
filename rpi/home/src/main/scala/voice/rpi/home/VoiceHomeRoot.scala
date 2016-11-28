@@ -1,5 +1,6 @@
 package voice.rpi.home
 
+import toolbox8.jartree.requestapi.RequestMarker
 import toolbox8.jartree.streamapp.{PlugParams, Plugged, Root}
 import voice.client.VoiceClient
 import voice.common.SshConnectionDetails
@@ -34,16 +35,12 @@ class VoiceHomePlugged extends Plugged {
   val client =
     VoiceClient
       .run(
+        Rpis.Home,
         central.copy(
           user = "voicer",
           port = 22,
           key = "/home/voicer/.ssh/id_rsa"
-        ),
-        reversePort = Rpis.Home.servicePort,
-        Seq(
-          Rpis.Central,
-          Rpis.Mobile
-        ).map(_.servicePort)
+        )
       )
 
 
@@ -54,4 +51,5 @@ class VoiceHomePlugged extends Plugged {
 
   override def postUnplug: Unit = {}
 
+  override def marked[In, Out](marker: RequestMarker[In, Out], in: In): Out = ???
 }

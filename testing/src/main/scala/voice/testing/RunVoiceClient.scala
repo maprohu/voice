@@ -14,15 +14,14 @@ object RunVoiceClient {
   def main(args: Array[String]): Unit = {
     import Target._
     VoiceClient.run(
+      Rpis.Localhost,
       SshConnectionDetails(
         address = host,
         user = user,
         port = sshPort,
         key = key.toString(),
         hostKey = hostKey
-      ),
-      5000,
-      Seq()
+      )
     )
   }
 

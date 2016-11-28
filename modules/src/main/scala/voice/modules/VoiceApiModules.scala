@@ -12,7 +12,8 @@ object VoiceApiModules {
 
 
   object UpdateClientInfo extends ScalaModule(
-    "updateclientinfo"
+    "updateclientinfo",
+    JarTree8Modules.RequestApi
   )
 
 

@@ -109,7 +109,17 @@
     <dependencies>
         <dependency>
             <groupId>voice</groupId>
+            <artifactId>voice-modules</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>voice</groupId>
             <artifactId>voice-common</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>voice</groupId>
+            <artifactId>voice-environment</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -125,6 +135,11 @@
         <dependency>
             <groupId>toolbox6</groupId>
             <artifactId>toolbox6-logging</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>toolbox8</groupId>
+            <artifactId>toolbox8-jartree-request</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
