@@ -9,8 +9,10 @@ import monix.execution.Cancelable
 import monix.execution.cancelables.{AssignableCancelable, SerialCancelable}
 import toolbox6.logging.LogTools
 import toolbox6.ssh.SshTools
-import toolbox6.ssh.SshTools.ReverseTunnel
+import toolbox6.ssh.SshTools.{ForwardTunnel, ReverseTunnel}
 import voice.common.SshConnectionDetails
+
+import scala.io.Source
 
 /**
   * Created by maprohu on 25-11-2016.
@@ -19,8 +21,8 @@ object VoiceClient extends StrictLogging with LogTools {
 
   def run(
     target: SshConnectionDetails,
-    localPort: Int,
-    remotePort: Int
+    reversePort: Int,
+    forwardPorts: Seq[Int]
   ) : Cancelable = {
     val scheduler = Executors.newSingleThreadScheduledExecutor()
 
@@ -32,12 +34,10 @@ object VoiceClient extends StrictLogging with LogTools {
         import target._
         try {
           val session = SshTools.tunnels(
-            reverse = Seq(
-              ReverseTunnel(
-                remotePort = remotePort,
-                localPort = localPort
-              )
-            )
+            forward =
+              forwardPorts
+                .map(ForwardTunnel.apply),
+            reverse = Seq(reversePort)
           )(
             SshTools.ConfigImpl(
               host = address,
@@ -47,6 +47,18 @@ object VoiceClient extends StrictLogging with LogTools {
               hostKey = hostKey
             )
           )
+
+          val clientAddress =
+            SshTools
+              .execValue(
+                "echo $SSH_CLIENT",
+                { channel =>
+                  Source
+                    .fromInputStream(channel.getInputStream)
+                    .mkString
+                }
+              )
+              .split("\\s+")(0)
 
           val schedule = scheduler.scheduleAtFixedRate(
             new Runnable {

@@ -39,8 +39,11 @@ class VoiceHomePlugged extends Plugged {
           port = 22,
           key = "/home/voicer/.ssh/id_rsa"
         ),
-        Rpis.Home.servicePort,
-        Rpis.Home.servicePort
+        reversePort = Rpis.Home.servicePort,
+        Seq(
+          Rpis.Central,
+          Rpis.MobileCable
+        ).map(_.servicePort)
       )
 
 
