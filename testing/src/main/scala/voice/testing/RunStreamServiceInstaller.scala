@@ -16,7 +16,7 @@ object RunStreamServiceInstaller {
   def main(args: Array[String]): Unit = {
 
     JavaServiceTools
-      .upload(
+      .uploadWithPom(
         "voicer",
         JarTree8Modules.StreamApp,
         "toolbox8.jartree.streamapp.StreamAppMain",
