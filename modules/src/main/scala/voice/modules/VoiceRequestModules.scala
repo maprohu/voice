@@ -11,6 +11,11 @@ object VoiceRequestModules {
   implicit val Root = SubModuleContainer(VoiceModules.Root, "requests")
 
 
+  object Common extends ScalaModule(
+    "common",
+    JarTree8Modules.StreamApp
+  )
+
   object Central extends ScalaModule(
     "central",
     VoiceModules.Central

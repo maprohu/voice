@@ -151,6 +151,7 @@ object VoiceModules {
     Toolbox6Modules.Logback,
     VoiceRpiModules.Exec,
     VoiceRequestModules.Central,
+    VoiceRequestModules.Common,
     mvn.`com.jssrc:jssrc:jar:1.0.1`
   )
 

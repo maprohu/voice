@@ -15,5 +15,6 @@
     </build>
     <modules>
         <module>central</module>
+        <module>common</module>
     </modules>
 </project>
