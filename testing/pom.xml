@@ -193,6 +193,11 @@
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-stream_2.11</artifactId>
+            <version>2.4.14</version>
+        </dependency>
+        <dependency>
             <groupId>com.jssrc</groupId>
             <artifactId>jssrc</artifactId>
             <version>1.0.1</version>

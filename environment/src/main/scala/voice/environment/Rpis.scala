@@ -23,6 +23,15 @@ object Rpis {
 
 
   val servicePortBase = 33000
+  val directPortBase = 32000
+
+  def directPortFor(
+    rpi: RpiInstances.Value
+  ) : Int = directPortFor(rpi.id)
+
+  def directPortFor(
+    id: Int
+  ) : Int = directPortBase + id
 
   def servicePortFor(
     rpi: RpiInstances.Value
@@ -36,6 +45,7 @@ object Rpis {
     name: String,
     id: Int,
     servicePort : Int,
+    directPort: Int,
     host: String = "localhost",
     serviceUser: String = "voicer",
     sshPort: Int = 22,
@@ -55,6 +65,7 @@ object Rpis {
         name = name,
         id = id,
         servicePort = servicePortFor(id),
+        directPort = directPortFor(id),
         bindAddress = bindAddress
       )
     }
@@ -106,6 +117,18 @@ object Rpis {
     def wlan = withKey.copy(
       host = "172.24.1.1"
     )
+
+    def remote(
+      ip: String
+    ) = {
+      withKey
+        .copy(
+          host = ip,
+          user = ssh.user,
+          sshPort = ssh.port,
+          key = Path(ssh.key)
+        )
+    }
 
   }
 
