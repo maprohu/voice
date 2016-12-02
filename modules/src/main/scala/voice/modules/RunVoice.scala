@@ -33,6 +33,7 @@ object RunVoice {
 //    VoiceModules.Packaging,
 //    VoiceModules.Android,
 //    VoiceModules.Standalone,
+//    VoiceModules.Jni,
     VoiceModules.Testing,
 //    VoiceModules.Swing,
     VoiceRpiModules.Home,

@@ -112,6 +112,10 @@ object VoiceModules {
     mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`
   )
 
+  object Jni extends ScalaModule(
+    "jni"
+  )
+
 //  object Packaging extends ScalaModule(
 //    "packaging",
 //    Toolbox6Modules.Packaging,
