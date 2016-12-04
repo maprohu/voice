@@ -31,6 +31,19 @@ enum nl_cb_kind {
 };
 struct nl_cb* nl_cb_alloc	(	enum nl_cb_kind 	kind	)	;
 
+enum {
+ CTRL_CMD_UNSPEC,
+ CTRL_CMD_NEWFAMILY,
+ CTRL_CMD_DELFAMILY,
+ CTRL_CMD_GETFAMILY,
+ CTRL_CMD_NEWOPS,
+ CTRL_CMD_DELOPS,
+ CTRL_CMD_GETOPS,
+ CTRL_CMD_NEWMCAST_GRP,
+ CTRL_CMD_DELMCAST_GRP,
+ CTRL_CMD_GETMCAST_GRP, /* unused */
+ __CTRL_CMD_MAX,
+};
 
 void* genlmsg_put	(	struct nl_msg * 	msg,
 uint32_t 	port,
@@ -40,4 +53,21 @@ int 	hdrlen,
 int 	flags,
 uint8_t 	cmd,
 uint8_t 	version
+);
+
+enum {
+ CTRL_ATTR_UNSPEC,
+ CTRL_ATTR_FAMILY_ID,
+ CTRL_ATTR_FAMILY_NAME,
+ CTRL_ATTR_VERSION,
+ CTRL_ATTR_HDRSIZE,
+ CTRL_ATTR_MAXATTR,
+ CTRL_ATTR_OPS,
+ CTRL_ATTR_MCAST_GROUPS,
+ __CTRL_ATTR_MAX,
+};
+
+int nla_put_string	(	struct nl_msg * 	msg,
+int 	attrtype,
+const char * 	str
 );

@@ -15,6 +15,8 @@ object RunTestJni {
     System.load(new File(RunJni.targetso).getAbsolutePath)
 
     import libnl._
+    import voice.jni.libnlConstants._
+
     val if_index = if_nametoindex("wlo1")
     val socket = nl_socket_alloc()
     genl_connect(socket)
@@ -22,7 +24,24 @@ object RunTestJni {
     val msg = nlmsg_alloc()
     val cb = nl_cb_alloc(nl_cb_kind.NL_CB_DEFAULT)
     val ctrlid = genl_ctrl_resolve(socket, "nlctrl")
-    genlmsg_put()
+    genlmsg_put(
+      msg,
+      0,
+      0,
+      ctrlid,
+      0,
+      0,
+      CTRL_CMD_GETFAMILY.toShort,
+      0
+    )
+    val family = "nl80211"
+    val group = "scan"
+
+    nla_put_string(
+      msg,
+      CTRL_ATTR_FAMILY_NAME,
+      family
+    )
 
 
 

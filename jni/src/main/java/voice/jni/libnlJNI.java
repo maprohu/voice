@@ -15,5 +15,26 @@ public class libnlJNI {
   public final static native int genl_ctrl_resolve(long jarg1, String jarg2);
   public final static native long nlmsg_alloc();
   public final static native long nl_cb_alloc(int jarg1);
+  public final static native int CTRL_CMD_UNSPEC_get();
+  public final static native int CTRL_CMD_NEWFAMILY_get();
+  public final static native int CTRL_CMD_DELFAMILY_get();
+  public final static native int CTRL_CMD_GETFAMILY_get();
+  public final static native int CTRL_CMD_NEWOPS_get();
+  public final static native int CTRL_CMD_DELOPS_get();
+  public final static native int CTRL_CMD_GETOPS_get();
+  public final static native int CTRL_CMD_NEWMCAST_GRP_get();
+  public final static native int CTRL_CMD_DELMCAST_GRP_get();
+  public final static native int CTRL_CMD_GETMCAST_GRP_get();
+  public final static native int __CTRL_CMD_MAX_get();
   public final static native long genlmsg_put(long jarg1, long jarg2, long jarg3, int jarg4, int jarg5, int jarg6, short jarg7, short jarg8);
+  public final static native int CTRL_ATTR_UNSPEC_get();
+  public final static native int CTRL_ATTR_FAMILY_ID_get();
+  public final static native int CTRL_ATTR_FAMILY_NAME_get();
+  public final static native int CTRL_ATTR_VERSION_get();
+  public final static native int CTRL_ATTR_HDRSIZE_get();
+  public final static native int CTRL_ATTR_MAXATTR_get();
+  public final static native int CTRL_ATTR_OPS_get();
+  public final static native int CTRL_ATTR_MCAST_GROUPS_get();
+  public final static native int __CTRL_ATTR_MAX_get();
+  public final static native int nla_put_string(long jarg1, int jarg2, String jarg3);
 }

@@ -8,7 +8,7 @@
 
 package voice.jni;
 
-public class libnl {
+public class libnl implements libnlConstants {
   public static long if_nametoindex(String ifname) {
     return libnlJNI.if_nametoindex(ifname);
   }
@@ -39,6 +39,10 @@ public class libnl {
   public static SWIGTYPE_p_void genlmsg_put(SWIGTYPE_p_nl_msg msg, long port, long seq, int family, int hdrlen, int flags, short cmd, short version) {
     long cPtr = libnlJNI.genlmsg_put(SWIGTYPE_p_nl_msg.getCPtr(msg), port, seq, family, hdrlen, flags, cmd, version);
     return (cPtr == 0) ? null : new SWIGTYPE_p_void(cPtr, false);
+  }
+
+  public static int nla_put_string(SWIGTYPE_p_nl_msg msg, int attrtype, String str) {
+    return libnlJNI.nla_put_string(SWIGTYPE_p_nl_msg.getCPtr(msg), attrtype, str);
   }
 
 }

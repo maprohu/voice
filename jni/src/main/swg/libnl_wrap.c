@@ -312,6 +312,138 @@ SWIGEXPORT jlong JNICALL Java_voice_jni_libnlJNI_nl_1cb_1alloc(JNIEnv *jenv, jcl
 }
 
 
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1CMD_1UNSPEC_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_CMD_UNSPEC;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1CMD_1NEWFAMILY_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_CMD_NEWFAMILY;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1CMD_1DELFAMILY_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_CMD_DELFAMILY;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1CMD_1GETFAMILY_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_CMD_GETFAMILY;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1CMD_1NEWOPS_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_CMD_NEWOPS;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1CMD_1DELOPS_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_CMD_DELOPS;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1CMD_1GETOPS_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_CMD_GETOPS;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1CMD_1NEWMCAST_1GRP_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_CMD_NEWMCAST_GRP;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1CMD_1DELMCAST_1GRP_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_CMD_DELMCAST_GRP;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1CMD_1GETMCAST_1GRP_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_CMD_GETMCAST_GRP;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI__1_1CTRL_1CMD_1MAX_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)__CTRL_CMD_MAX;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
 SWIGEXPORT jlong JNICALL Java_voice_jni_libnlJNI_genlmsg_1put(JNIEnv *jenv, jclass jcls, jlong jarg1, jlong jarg2, jlong jarg3, jint jarg4, jint jarg5, jint jarg6, jshort jarg7, jshort jarg8) {
   jlong jresult = 0 ;
   struct nl_msg *arg1 = (struct nl_msg *) 0 ;
@@ -336,6 +468,137 @@ SWIGEXPORT jlong JNICALL Java_voice_jni_libnlJNI_genlmsg_1put(JNIEnv *jenv, jcla
   arg8 = (uint8_t)jarg8; 
   result = (void *)genlmsg_put(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8);
   *(void **)&jresult = result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1ATTR_1UNSPEC_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_ATTR_UNSPEC;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1ATTR_1FAMILY_1ID_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_ATTR_FAMILY_ID;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1ATTR_1FAMILY_1NAME_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_ATTR_FAMILY_NAME;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1ATTR_1VERSION_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_ATTR_VERSION;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1ATTR_1HDRSIZE_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_ATTR_HDRSIZE;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1ATTR_1MAXATTR_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_ATTR_MAXATTR;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1ATTR_1OPS_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_ATTR_OPS;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_CTRL_1ATTR_1MCAST_1GROUPS_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)CTRL_ATTR_MCAST_GROUPS;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI__1_1CTRL_1ATTR_1MAX_1get(JNIEnv *jenv, jclass jcls) {
+  jint jresult = 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  result = (int)__CTRL_ATTR_MAX;
+  jresult = (jint)result; 
+  return jresult;
+}
+
+
+SWIGEXPORT jint JNICALL Java_voice_jni_libnlJNI_nla_1put_1string(JNIEnv *jenv, jclass jcls, jlong jarg1, jint jarg2, jstring jarg3) {
+  jint jresult = 0 ;
+  struct nl_msg *arg1 = (struct nl_msg *) 0 ;
+  int arg2 ;
+  char *arg3 = (char *) 0 ;
+  int result;
+  
+  (void)jenv;
+  (void)jcls;
+  arg1 = *(struct nl_msg **)&jarg1; 
+  arg2 = (int)jarg2; 
+  arg3 = 0;
+  if (jarg3) {
+    arg3 = (char *)(*jenv)->GetStringUTFChars(jenv, jarg3, 0);
+    if (!arg3) return 0;
+  }
+  result = (int)nla_put_string(arg1,arg2,(char const *)arg3);
+  jresult = (jint)result; 
+  if (arg3) (*jenv)->ReleaseStringUTFChars(jenv, jarg3, (const char *)arg3);
   return jresult;
 }
 

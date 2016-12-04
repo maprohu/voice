@@ -38,7 +38,6 @@ object RunJni {
       "-c", s"${swgdir}/${modulename}_wrap.c",
       "-I/usr/include/libnl3",
       "-I/usr/lib/jvm/java-8-oracle/include",
-      "-I/usr/lib/jvm/java-8-oracle/include",
       "-I/usr/lib/jvm/java-8-oracle/include/linux",
       "-o", targeto
     )
