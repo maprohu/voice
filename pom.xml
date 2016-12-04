@@ -23,6 +23,7 @@
         <module>storage</module>
         <module>tools</module>
         <module>common</module>
+        <module>jni</module>
         <module>environment</module>
         <module>central</module>
         <module>client</module>

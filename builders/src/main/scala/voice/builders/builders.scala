@@ -50,6 +50,11 @@ object build_voice_common extends mvnmod.builder.ModuleBuilder(
   "./common"
 )
            
+object build_voice_jni extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./jni"
+)
+           
 object build_voice_environment extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./environment"

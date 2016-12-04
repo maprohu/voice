@@ -114,6 +114,11 @@
         </dependency>
         <dependency>
             <groupId>voice</groupId>
+            <artifactId>voice-jni</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>voice</groupId>
             <artifactId>voice-central</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>

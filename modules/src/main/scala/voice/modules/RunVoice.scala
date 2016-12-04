@@ -30,6 +30,7 @@ object RunVoice {
     VoiceModules.Storage,
     VoiceModules.Tools,
     VoiceModules.Common,
+    VoiceModules.Jni,
     VoiceModules.Environment,
     VoiceApiModules.UpdateClientInfo,
     VoiceModules.Central,

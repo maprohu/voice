@@ -139,6 +139,7 @@ object VoiceModules {
     "testing",
 //    Akka,
     Environment,
+    Jni,
     Central,
     Client,
     Request,

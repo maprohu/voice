@@ -8,23 +8,8 @@
         <name>voice</name>
     </organization>
     <build>
+        <finalName>product</finalName>
         <plugins>
-            <plugin>
-                <artifactId>maven-swig-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <cpp>true</cpp>
-                            <packageName>com.companyname.jni</packageName>
-                            <source>YourCode.swg</source>
-                            <noWarn>401 470 813 822</noWarn>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>

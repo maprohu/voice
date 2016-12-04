@@ -2,7 +2,7 @@ package voice.testing
 
 import java.util.concurrent.Executors
 
-import voice.core.{Consonants, NatoAlphabet}
+import voice.core.NatoAlphabet
 import voice.storage.{Consonants, Vowels}
 
 import scala.io.StdIn
