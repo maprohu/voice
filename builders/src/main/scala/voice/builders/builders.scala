@@ -35,6 +35,11 @@ object build_voice_sandbox extends mvnmod.builder.ModuleBuilder(
   "./sandbox"
 )
            
+object build_voice_storage extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./storage"
+)
+           
 object build_voice_tools extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./tools"

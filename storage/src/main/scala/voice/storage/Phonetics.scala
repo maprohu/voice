@@ -1,4 +1,4 @@
-package voice.core
+package voice.storage
 
 import java.nio.ByteBuffer
 
@@ -57,12 +57,13 @@ object Consonants extends Enumeration {
 }
 
 object Syllables {
+  type Code = Short
 
   case class Syllable(
     consonant: Consonants.Value,
     vowel: Vowels.Value
   ) {
-    val code = (((consonant.id & Consonants.BitMask) << Vowels.MaxBitSize) | vowel.id).toShort
+    val code : Code = (((consonant.id & Consonants.BitMask) << Vowels.MaxBitSize) | vowel.id).toShort
     val codeBytes = ByteBuffer.allocate(java.lang.Short.BYTES).putShort(code).array()
     val string = consonant.toString().toLowerCase ++ vowel.toString().toLowerCase
   }

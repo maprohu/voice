@@ -24,6 +24,7 @@ object VoiceModules {
     "core",
 //    Toolbox6Modules.Macros,
 //    Toolbox6Modules.Pickling.R3,
+    Storage,
     Toolbox8Modules.Common,
 //    Toolbox8Modules.Leveldb,
 //    mvn.`com.github.wendykierp:JTransforms:jar:3.1`,
@@ -46,6 +47,10 @@ object VoiceModules {
 //
 //
 //  )
+
+  object Storage extends ScalaModule(
+    "storage"
+  )
 
   object Tools extends ScalaModule(
     "tools",

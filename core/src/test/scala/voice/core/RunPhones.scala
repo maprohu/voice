@@ -1,5 +1,7 @@
 package voice.core
 
+import voice.storage.{Consonants, Vowels}
+
 /**
   * Created by maprohu on 20-11-2016.
   */

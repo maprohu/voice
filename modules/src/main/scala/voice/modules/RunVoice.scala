@@ -27,6 +27,7 @@ object RunVoice {
 //    VoiceModules.Akka,
 //    VoiceModules.Audio,
     VoiceModules.Sandbox,
+    VoiceModules.Storage,
     VoiceModules.Tools,
     VoiceModules.Common,
     VoiceModules.Environment,

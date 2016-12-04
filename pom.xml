@@ -20,6 +20,7 @@
         <module>modules</module>
         <module>core</module>
         <module>sandbox</module>
+        <module>storage</module>
         <module>tools</module>
         <module>common</module>
         <module>environment</module>

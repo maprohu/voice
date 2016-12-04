@@ -17,8 +17,9 @@ import toolbox6.logging.LogTools
 import voice.core.ShortLongProcessor.{Click, Down, Wrap, Wrapped}
 import voice.core.SingleMixer.SoundForm
 import voice.core.SingleRecorder.RecorderProcessor
-import voice.core.Syllables.Syllable
+import voice.storage.Syllables.Syllable
 import voice.core.events._
+import voice.storage.Syllables
 
 import scala.concurrent.{Await, ExecutionContext, Future, Promise}
 import scala.concurrent.duration._
