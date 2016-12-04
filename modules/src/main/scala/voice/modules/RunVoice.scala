@@ -9,9 +9,13 @@ import mvnmod.builder.{Module, ModuleContainer, NamedModule, PlacedRoot}
 /**
   * Created by pappmar on 29/08/2016.
   */
+
+object Place {
+  val RootPath = Seq("..", "voice")
+}
 object RunVoice {
 
-  val RootDir = new File("../voice")
+  val RootDir = new File(Place.RootPath.mkString("/"))
 
   val Roots = Seq[PlacedRoot](
     VoiceModules.Root -> RootDir
