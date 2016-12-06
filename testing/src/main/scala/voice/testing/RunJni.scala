@@ -9,6 +9,9 @@ import ammonite.ops._
   */
 object RunJni {
 
+//  val swig = "swig3.0"
+  val swig = "swig"
+
   val srcdir = "../voice/jni/src/main"
   val ourdir = s"${srcdir}/java/voice/jni"
   val swgdir = s"${srcdir}/swg"
@@ -25,7 +28,7 @@ object RunJni {
 
     println("swig")
     %(
-      "swig3.0",
+      swig,
       "-java",
       "-package", "voice.jni",
       "-outdir", ourdir,

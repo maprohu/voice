@@ -10,8 +10,8 @@ import voice.requests.common.QueryPlugged
   */
 object RunQueryPlugged {
 
-//  val Target = Rpis.Home.tunneled
-  val Target = Rpis.Central.tunneled
+  val Target = Rpis.Home.tunneled
+//  val Target = Rpis.Central.tunneled
 
   def main(args: Array[String]): Unit = {
 
