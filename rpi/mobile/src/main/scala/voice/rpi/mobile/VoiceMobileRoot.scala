@@ -6,7 +6,6 @@ import com.typesafe.scalalogging.StrictLogging
 import toolbox8.jartree.requestapi.RequestMarker
 import toolbox8.jartree.streamapp.{PlugParams, Plugged, Root}
 import voice.core._
-import voice.core.events.ControllerEvent
 
 /**
   * Created by maprohu on 21-11-2016.
@@ -23,10 +22,9 @@ class VoiceMobileRoot extends Root with StrictLogging {
     val cancel = VoiceLogic.run(dbDir)
 
     new Plugged {
-      override def preUnplug: Any = {
+      override def stop(): Unit = {
         cancel.cancel()
       }
-      override def postUnplug: Unit = ()
 
       override def marked[In, Out](marker: RequestMarker[In, Out], in: In): Out = ???
     }

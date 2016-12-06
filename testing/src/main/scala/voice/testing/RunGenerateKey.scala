@@ -1,5 +1,7 @@
 package voice.testing
 
+import java.io.{ObjectInputStream, ObjectOutputStream}
+
 import toolbox8.jartree.testing.StreamAppClient
 import voice.environment.Rpis
 import voice.modules.VoiceModules
@@ -23,9 +25,22 @@ object RunGenerateKey {
       .request(
         VoiceModules.Request,
         classOf[GenerateKey].getName,
-        GenerateKey.Input(
-          keyLocation = s"/home/${target.serviceUser}/.ssh/id_rsa"
-        ),
+        { c =>
+          { (is, os) =>
+            val dos = new ObjectOutputStream(os)
+            dos.writeObject(
+              GenerateKey.Input(
+                keyLocation = s"/home/${target.serviceUser}/.ssh/id_rsa"
+              )
+            )
+            dos.flush()
+
+            val dis = new ObjectInputStream(is)
+            dis
+              .readObject()
+              .asInstanceOf[GenerateKey.Output]
+          }
+        },
         target
       )
   }

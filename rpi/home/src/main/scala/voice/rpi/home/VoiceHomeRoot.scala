@@ -44,12 +44,9 @@ class VoiceHomePlugged extends Plugged {
       )
 
 
-
-  override def preUnplug: Any = {
+  override def stop(): Unit = {
     client.cancel()
   }
-
-  override def postUnplug: Unit = {}
 
   override def marked[In, Out](marker: RequestMarker[In, Out], in: In): Out = ???
 }

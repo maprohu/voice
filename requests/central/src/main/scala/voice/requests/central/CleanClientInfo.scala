@@ -1,14 +1,24 @@
 package voice.requests.central
 
-import toolbox8.jartree.streamapp.Requestable
+import java.io.{InputStream, OutputStream}
+
+import toolbox8.jartree.streamapp.{Requestable, RootContext}
 import voice.central.CentralPlugged
 
 /**
   * Created by pappmar on 30/11/2016.
   */
-class CleanClientInfo extends Requestable[CentralPlugged, Unit, Unit] {
-  override def request(ctx: CentralPlugged, data: Unit): Unit = {
-    ctx.clientInfo.clear()
-    ctx.db.commit()
+class CleanClientInfo extends Requestable {
+
+  override def request(ctx: RootContext, in: InputStream, out: OutputStream): Unit = {
+    val p =
+      ctx
+        .holder
+        .get
+        .plugged
+        .asInstanceOf[CentralPlugged]
+
+    p.clientInfo.clear()
+    p.db.commit()
   }
 }

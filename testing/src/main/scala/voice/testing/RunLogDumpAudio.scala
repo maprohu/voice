@@ -1,11 +1,12 @@
 package voice.testing
 
-import java.io.File
+import java.io.{File, ObjectInputStream}
 
-import mvnmod.builder.MavenTools
+import mvnmod.builder.{MavenTools, ModulePath}
 import toolbox8.jartree.testing.StreamAppClient
+import toolbox8.modules.JarTree8Modules
 import voice.environment.Rpis
-import voice.modules.VoiceRpiModules
+import voice.modules.{VoiceModules, VoiceRpiModules}
 import voice.rpi.exec.LogDumpAudio
 
 /**
@@ -25,11 +26,25 @@ object RunLogDumpAudio {
 //      )
 
     val info : String = StreamAppClient
-      .request(
+      .requestPlugged(
         VoiceRpiModules.Exec,
         classOf[LogDumpAudio].getName,
-        "boo",
-        Target
+        { (is, os) =>
+          val dis = new ObjectInputStream(is)
+          dis
+            .readObject()
+            .asInstanceOf[String]
+        },
+        Target,
+        ModulePath(
+          VoiceRpiModules.Home,
+          Some(
+            ModulePath(
+              JarTree8Modules.StreamApp,
+              None
+            )
+          )
+        )
       )
 
     println(info)

@@ -6,7 +6,7 @@ import com.typesafe.scalalogging.StrictLogging
 import org.mapdb.{DBMaker, Serializer}
 import toolbox6.logging.LogTools
 import toolbox8.jartree.requestapi.RequestMarker
-import toolbox8.jartree.streamapp.Plugged
+import toolbox8.jartree.streamapp.{PlugParams, Plugged, Root}
 import voice.api.updateclientinfo.ClientInfo
 
 /**
@@ -39,13 +39,11 @@ class CentralPlugged extends Plugged with StrictLogging with LogTools {
       .valueSerializer(Serializer.JAVA.asInstanceOf[Serializer[ClientInfo]])
       .createOrOpen()
 
-  override def preUnplug: Any = {
+  override def stop(): Unit = {
     logger.info("closing mapdb")
     quietly { db.commit() }
     quietly { db.close() }
   }
-
-  override def postUnplug: Unit = {}
 
   override def marked[In, Out](marker: RequestMarker[In, Out], in: In): Out = {
     marker match {
@@ -74,4 +72,8 @@ class CentralPlugged extends Plugged with StrictLogging with LogTools {
       case _ => ???
     }
   }
+}
+
+class CentralRoot extends Root {
+  override def plug(params: PlugParams): Plugged = new CentralPlugged
 }

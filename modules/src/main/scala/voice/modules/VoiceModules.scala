@@ -145,6 +145,7 @@ object VoiceModules {
     Request,
     VoiceRpiModules.Home,
     JarTree8Modules.Testing,
+    JarTree8Modules.PluggedNull,
 //    JarTree8Modules.App,
     Modules,
 //    VoiceRpiModules.Home,

@@ -1,5 +1,7 @@
 package voice.testing
 
+import java.io.ObjectOutputStream
+
 import mvnmod.builder.ModulePath
 import toolbox8.jartree.testing.StreamAppClient
 import voice.environment.Rpis
@@ -25,13 +27,19 @@ object RunDeployPublicKey {
     println(s"${clientId} - ${publicKey}")
 
     StreamAppClient
-      .request(
+      .requestPlugged(
         VoiceRequestModules.Central,
         classOf[PutPublicKey].getName,
-        PutPublicKey.Input(
-          client = clientId,
-          publicKey = publicKey
-        ),
+        { (is, os) =>
+          val dos = new ObjectOutputStream(os)
+          dos.writeObject(
+            PutPublicKey.Input(
+              client = clientId,
+              publicKey = publicKey
+            )
+          )
+          dos.flush()
+        },
         To,
         ModulePath(
           VoiceModules.Central,
