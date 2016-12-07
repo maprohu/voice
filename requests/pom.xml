@@ -15,6 +15,7 @@
     </build>
     <modules>
         <module>central</module>
+        <module>compilerpi</module>
         <module>common</module>
     </modules>
 </project>

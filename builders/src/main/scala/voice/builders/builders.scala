@@ -105,6 +105,11 @@ object build_voice_requests_central extends mvnmod.builder.ModuleBuilder(
   "./requests/central"
 )
            
+object build_voice_requests_compilerpi extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./requests/compilerpi"
+)
+           
 object build_voice_requests_common extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./requests/common"

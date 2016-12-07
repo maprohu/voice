@@ -46,6 +46,7 @@ object RunVoice {
     VoiceRpiModules.Mobile,
     VoiceRpiModules.Exec,
     VoiceRequestModules.Central,
+    VoiceRequestModules.CompileRpi,
     VoiceRequestModules.Common
 //    VoiceRpiModules.Core
   )

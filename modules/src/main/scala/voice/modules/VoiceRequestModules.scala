@@ -21,6 +21,13 @@ object VoiceRequestModules {
     VoiceModules.Central
   )
 
+  object CompileRpi extends ScalaModule(
+    "compilerpi",
+    JarTree8Modules.StreamApp,
+    mvn.`org.zeroturnaround:zt-zip:jar:1.9`
+
+  )
+
 
 
 

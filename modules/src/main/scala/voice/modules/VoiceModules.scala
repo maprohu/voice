@@ -163,6 +163,7 @@ object VoiceModules {
     VoiceRpiModules.Exec,
     VoiceRequestModules.Central,
     VoiceRequestModules.Common,
+    VoiceRequestModules.CompileRpi,
     mvn.`com.typesafe.akka:akka-stream_2.11:jar:2.4.14`,
     mvn.`com.jssrc:jssrc:jar:1.0.1`
   )
