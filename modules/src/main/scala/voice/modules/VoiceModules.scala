@@ -1,24 +1,23 @@
 package voice.modules
 
-import mvnmod.builder.{RootModuleContainer, ScalaModule}
+import mvnmod.builder.{Module, ModulesBase, RootModuleContainer, ScalaModule}
 import mvnmod.modules.MvnmodModules
 import toolbox6.modules.{JarTreeModules, Toolbox6Modules, UiModules}
 import toolbox8.modules._
-import mvnmod.builder.Module
 import toolbox6.modules.Toolbox6Modules.Logging
 
 /**
   * Created by martonpapp on 29/08/16.
   */
-object VoiceModules {
+object VoiceModules extends ModulesBase(
+  "voice",
+  MvnmodModules.Builder,
+  Toolbox8Modules.Modules
+){
+  object Modules extends MetaModule {
 
-  implicit val Root = RootModuleContainer("voice")
 
-  object Modules extends ScalaModule(
-    "modules",
-    MvnmodModules.Builder,
-    Toolbox8Modules.Modules
-  )
+  }
 
   object Core extends ScalaModule(
     "core",
