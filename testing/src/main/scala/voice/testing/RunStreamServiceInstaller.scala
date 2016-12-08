@@ -10,9 +10,9 @@ import voice.environment.Rpis
 object RunStreamServiceInstaller {
 
 //  val Target = Rpis.Home.remote("85.247.199.73")
-//  val Target = Rpis.Home.wlan
+  val Target = Rpis.Home.wlan
 //  val Target = Rpis.MobileCable
-  val Target = Rpis.Central.remote
+//  val Target = Rpis.Central.remote
 
   def main(args: Array[String]): Unit = {
 
