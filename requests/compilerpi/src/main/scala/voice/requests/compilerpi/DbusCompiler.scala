@@ -15,7 +15,8 @@ import scala.xml.{PrettyPrinter, XML}
 class DbusCompiler extends Requestable {
 
   val services = Seq(
-    "org.bluez"
+    "org.bluez",
+    "org.freedesktop.NetworkManager"
   )
 
   // socat TCP-LISTEN:7272,reuseaddr,fork UNIX-CONNECT:/var/run/dbus/system_bus_socket
