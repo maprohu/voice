@@ -42,7 +42,8 @@ object RunTunnelCentralWithHome {
     SshTools
       .tunnels(
         forward = Seq(
-          Rpis.Home.servicePort
+          Rpis.Home.servicePort,
+          7272
         )
       )(
         homeRemote

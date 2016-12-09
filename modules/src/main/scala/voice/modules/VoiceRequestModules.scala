@@ -24,13 +24,10 @@ object VoiceRequestModules {
   object CompileRpi extends ScalaModule(
     "compilerpi",
     JarTree8Modules.StreamApp,
+    RpiModules.DBus,
     mvn.`org.zeroturnaround:zt-zip:jar:1.9`,
     mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`,
-    mvn.`libdbus-java:dbus:jar:2.8`,
-    mvn.`libdbus-java:dbus-bin:jar:2.8`,
-    mvn.`libunix-java:unix:jar:0.5`,
-    mvn.`libmatthew-debug-java:hexdump:jar:0.2`,
-    mvn.`libmatthew-debug-java:debug-enable:jar:1.1`
+    mvn.`org.scala-lang.modules:scala-xml_2.11:jar:1.0.6`
   )
 
 

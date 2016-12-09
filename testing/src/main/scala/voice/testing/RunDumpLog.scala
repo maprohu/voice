@@ -14,12 +14,13 @@ import voice.requests.compilerpi.DbusCompiler
   */
 object RunDumpLog {
 
-//  val Target = Rpis.Home.tunneled
-  val Target = Rpis.Central.tunneled
+  val Target = Rpis.Home.tunneled
+//  val Target = Rpis.Central.tunneled
   //  val Target = Rpis.Home.wlan
   //  val Target = Rpis.Localhost
 
   def main(args: Array[String]): Unit = {
+    println(s"connecting to: ${Target}")
 
 
 

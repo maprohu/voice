@@ -2,7 +2,9 @@ package voice.testing
 
 import java.io.ObjectInputStream
 
+import mvnmod.builder.{Module, ModulePath}
 import toolbox8.jartree.testing.StreamAppClient
+import toolbox8.modules.JarTree8Modules
 import voice.environment.Rpis
 import voice.modules.{VoiceModules, VoiceRequestModules, VoiceRpiModules}
 import voice.requests.compilerpi.DbusCompiler
@@ -12,8 +14,8 @@ import voice.requests.compilerpi.DbusCompiler
   */
 object RunDbusCompiler {
 
-//  val Target = Rpis.Home.tunneled
-  val Target = Rpis.Central.tunneled
+  val Target = Rpis.Home.tunneled
+//  val Target = Rpis.Central.tunneled
   //  val Target = Rpis.Home.wlan
   //  val Target = Rpis.Localhost
 
@@ -23,19 +25,21 @@ object RunDbusCompiler {
     voice.builders.build_voice_requests_compilerpi.main(args)
 
     StreamAppClient
-      .request(
+      .requestPlugged(
         VoiceRequestModules.CompileRpi,
         classOf[DbusCompiler].getName,
-        { _ =>
-
-          { (in, out) =>
-            val dis = new ObjectInputStream(in)
-            println(
-              dis.readObject()
-            )
-          }
+        { (in, out) =>
+          val dis = new ObjectInputStream(in)
+          println(
+            dis.readObject()
+          )
         },
-        Target
+        Target,
+        Seq(
+//          VoiceModules.Central,
+          VoiceRpiModules.Home,
+          JarTree8Modules.StreamApp
+        )
       )
   }
 
