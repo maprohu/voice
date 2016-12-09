@@ -38,7 +38,7 @@ class VoiceHomePlugged extends Plugged {
         Rpis.Home,
         central.copy(
           user = "voicer",
-          port = 22,
+          port = 21,
           key = "/home/voicer/.ssh/id_rsa"
         )
       )

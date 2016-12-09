@@ -14,8 +14,8 @@ import voice.rpi.home.VoiceHomeRoot
   */
 object RunPlugHome {
 
-//    val Target = Rpis.Home.tunneled
-  val Target = Rpis.Home.wlan
+    val Target = Rpis.Home.tunneled
+//  val Target = Rpis.Home.wlan
 //  val Target = Rpis.Localhost
 
   def main(args: Array[String]): Unit = {
