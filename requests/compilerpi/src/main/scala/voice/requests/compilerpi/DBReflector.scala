@@ -4,6 +4,7 @@ import com.typesafe.scalalogging.StrictLogging
 import org.freedesktop.DBus
 import org.freedesktop.dbus.DBusConnection
 import toolbox6.logging.LogTools
+import toolbox8.rpi.dbus.DBTuple
 
 import scala.xml.{Node, PrettyPrinter, XML}
 
@@ -136,7 +137,7 @@ object DBReflector extends StrictLogging with LogTools {
               )))
               .partition({ case (n, a) => (n \ "@direction").text == "out" })
 
-          require(o.size <= 1)
+          require(o.size <= DBTuple.Max)
 
           DBMethod(
             name = n \ "@name" text,

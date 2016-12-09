@@ -6,6 +6,7 @@ import java.util
 
 import org.freedesktop.dbus.Marshalling
 import sbt.io.IO
+import toolbox8.rpi.dbus.DBTuple
 import voice.requests.compilerpi.{DBArg, DBReflection}
 
 import scala.reflect.ManifestFactory
@@ -51,6 +52,9 @@ object DBusCodeGenerator {
                 m.out match {
                   case Seq() => "scala.Unit"
                   case Seq(single) => singleType(single)
+                  case other if other.size <= DBTuple.Max =>
+                    val count = other.size
+                    s"toolbox8.rpi.dbus.DBTuple${count}[${other.map(singleType).mkString(", ")}]"
                   case _ => ???
                 }
 

@@ -4,6 +4,7 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream, File, ObjectInputSt
 import java.lang.reflect.Type
 import java.util
 
+import org.freedesktop.NetworkManager
 import org.freedesktop.dbus.{DBusConnection, Marshalling, ObjectManager}
 import voice.requests.compilerpi.{DBReflection, DbusCompiler}
 
@@ -29,6 +30,21 @@ object RunDbusTestLocal {
         .toSeq
         .mkString("\n")
 
+    )
+
+    val nm =
+      conn.getRemoteObject(
+        "org.freedesktop.NetworkManager",
+        "/org/freedesktop/NetworkManager",
+        classOf[NetworkManager]
+      )
+
+    val l = nm.GetLogging()
+    println(
+      l.t1
+    )
+    println(
+      l.t2
     )
 
     conn.disconnect()

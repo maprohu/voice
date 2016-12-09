@@ -3,7 +3,7 @@ package voice.requests.compilerpi
 import java.io.{InputStream, ObjectOutputStream, OutputStream}
 
 import org.freedesktop.DBus
-import org.freedesktop.dbus.DBusConnection
+import org.freedesktop.dbus.{DBusConnection, Position, Tuple}
 import toolbox8.jartree.streamapp.{Requestable, RootContext}
 import toolbox8.rpi.dbus.DBF
 
@@ -153,6 +153,7 @@ object DBInterfaceName {
 
   }
 }
+
 
 case class DBArg(
   name: String,
