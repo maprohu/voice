@@ -137,6 +137,7 @@ object VoiceModules extends ModulesBase(
   object Testing extends ScalaModule(
     "testing",
 //    Akka,
+    Builders,
     Environment,
     Jni,
     Central,

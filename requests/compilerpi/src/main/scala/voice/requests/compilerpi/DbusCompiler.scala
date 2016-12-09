@@ -23,26 +23,27 @@ class DbusCompiler extends Requestable {
 
     val conn = DBusConnection.getConnection(DBusConnection.SYSTEM)
 
-//    val str =
-//      conn
-//        .getNames
-//        .mkString("\n")
+    try {
+      val dbus =
+        conn
+          .getRemoteObject(
+            "org.freedesktop.DBus",
+            "/",
+            classOf[DBus]
+          )
 
-    val dbus =
-      conn
-        .getRemoteObject(
-          "org.freedesktop.DBus",
-          "/",
-          classOf[DBus]
-        )
+      val str =
+        dbus
+          .ListNames()
+          .mkString("\n")
 
-    val str =
-      dbus
-        .ListNames()
-        .mkString("\n")
+      dos.writeObject(str)
+      dos.flush()
+    } finally {
+      conn.disconnect()
+    }
 
-    dos.writeObject(str)
-    dos.flush()
+
   }
 }
 
