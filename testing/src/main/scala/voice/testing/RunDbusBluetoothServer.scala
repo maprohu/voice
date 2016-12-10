@@ -3,9 +3,11 @@ package voice.testing
 import akka.actor.ActorSystem
 import akka.event.Logging
 import akka.stream.{ActorMaterializer, Attributes}
-import akka.stream.scaladsl.{Sink, Tcp}
+import akka.stream.scaladsl.{Sink, Source, Tcp}
+import akka.util.ByteString
+import cx.ath.matthew.utils.Hexdump
 import org.freedesktop.NetworkManager
-import org.freedesktop.dbus.{RootDBusConnection, ObjectManager}
+import org.freedesktop.dbus.{DBusConnection, ObjectManager}
 import voice.environment.Rpis
 
 import scala.concurrent.Await
@@ -18,7 +20,7 @@ import scala.io.StdIn
 object RunDbusBluetoothServer {
 
   def main(args: Array[String]): Unit = {
-    val conn = RootDBusConnection.getConnection(
+    val conn = DBusConnection.getConnection(
 //      "tcp:host=172.24.1.1,port=7272"
       "unix:abstract=/tmp/custom_dbus_name"
     )
@@ -68,15 +70,9 @@ class SniffClassLoader extends ClassLoader {
 
 object RunSniffDbus {
   def main(args: Array[String]): Unit = {
-    val cl = new SniffClassLoader()
-    val c = cl.loadClass("voice.testing.SniffDbus")
-    val ci = c.newInstance()
-    val m = c.getMethod("run")
-    m.invoke(ci)
+    run()
   }
-}
 
-class SniffDbus {
   def stopOnExit(p: Process) = {
     Runtime.getRuntime.addShutdownHook(
       new Thread() {
@@ -86,6 +82,10 @@ class SniffDbus {
         }
       }
     )
+  }
+
+  def stupidlyEncode(data: String): String = {
+    Hexdump.toHex(data.getBytes).replaceAll(" ", "")
   }
 
   val SocatPort = 7272
@@ -108,6 +108,7 @@ class SniffDbus {
 
     implicit val actorSystem = ActorSystem()
     implicit val materializer = ActorMaterializer()
+    import actorSystem.dispatcher
 
     println(s"runnig akka at ${AkkaPort}")
     println(
@@ -124,19 +125,44 @@ class SniffDbus {
                   "localhost",
                   SocatPort
                 )
-                .map({ bs =>
-                  println(s"in: ${bs.utf8String} - ${bs}")
-                  bs
-                })
+//                .map({ bs =>
+//                  println(s"in: ${bs.utf8String} - ${bs}")
+//                  bs
+//                })
                 .join(
                   c
                     .flow
-                    .map({ bs =>
-                      println(s"out: ${bs.utf8String} - ${bs}")
-                      bs
+//                    .map({ bs =>
+//                      println(s"orig: ${bs.utf8String} - ${bs}")
+//                      bs
+//                    })
+                    .prefixAndTail(1)
+                    .flatMapConcat({
+                      case (Seq(head), tail) =>
+                        Source
+                          .single(
+                            head
+                          )
+                          .concat(
+                            tail
+                              .prefixAndTail(1)
+                              .flatMapConcat({
+                                case (Seq(head2), tail2) =>
+                                  Source
+                                    .single(
+                                      ByteString(s"AUTH EXTERNAL ${stupidlyEncode("0")}\r\n")
+                                    )
+                                    .concat(tail2)
+                              })
+                          )
                     })
+//                    .map({ bs =>
+//                      println(s"trf: ${bs.utf8String} - ${bs}")
+//                      bs
+//                    })
                 )
                 .run()
+                .onComplete(println)
             })
           )
           .run(),
@@ -144,26 +170,38 @@ class SniffDbus {
       )
     )
 
-    println("starting socat reverse")
-    stopOnExit {
-      new ProcessBuilder()
-        .command(
-//          "sudo",
-          "socat",
-          s"ABSTRACT-LISTEN:${AbstractName},fork",
-          s"TCP:localhost:${AkkaPort}"
-        )
-        .start()
-    }
+//    println("starting socat reverse")
+//    stopOnExit {
+//      new ProcessBuilder()
+//        .command(
+////          "sudo",
+//          "socat",
+//          s"ABSTRACT-LISTEN:${AbstractName},fork",
+//          s"TCP:localhost:${AkkaPort}"
+//        )
+//        .start()
+//    }
 
     val addr =
-//      s"tcp:host=localhost,port=${AkkaPort},guid=0"
-          s"unix:abstract=${AbstractName}"
+      s"tcp:host=localhost,port=${AkkaPort}"
+//          s"unix:abstract=${AbstractName}"
 
     println(addr)
-    val conn = RootDBusConnection.getConnection(
+    val conn = DBusConnection.getConnection(
       addr
     )
+
+    val nm =
+      conn.getRemoteObject(
+        "org.freedesktop.NetworkManager",
+        "/org/freedesktop/NetworkManager",
+        classOf[NetworkManager]
+      )
+
+    println(
+      nm.GetPermissions()
+    )
+
 
     StdIn.readLine("enter...")
 

@@ -5,7 +5,7 @@ import java.lang.reflect.Type
 import java.util
 
 import org.freedesktop.NetworkManager
-import org.freedesktop.dbus.{RootDBusConnection, Marshalling, ObjectManager}
+import org.freedesktop.dbus.{DBusConnection, Marshalling, ObjectManager}
 import voice.requests.compilerpi.{DBReflection, DbusCompiler}
 
 /**
@@ -14,7 +14,7 @@ import voice.requests.compilerpi.{DBReflection, DbusCompiler}
 object RunDbusTestLocal {
 
   def main(args: Array[String]): Unit = {
-    val conn = RootDBusConnection.getConnection(RootDBusConnection.SYSTEM)
+    val conn = DBusConnection.getConnection(DBusConnection.SYSTEM)
 
     val om =
       conn.getRemoteObject(
