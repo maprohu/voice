@@ -27,9 +27,25 @@ class DbusCompiler extends Requestable {
     in: InputStream,
     out: OutputStream
   ): Unit = {
+    val conn = DBusConnection.getConnection(DBusConnection.SYSTEM)
+
+    run(
+      ctx,
+      in,
+      out,
+      conn
+    )
+
+  }
+
+  def run(
+    ctx: RootContext,
+    in: InputStream,
+    out: OutputStream,
+    conn: DBusConnection
+  ): Unit = {
     val dos = new ObjectOutputStream(out)
 
-    val conn = DBusConnection.getConnection(DBusConnection.SYSTEM)
 
     val pp = new PrettyPrinter(1000, 2)
 

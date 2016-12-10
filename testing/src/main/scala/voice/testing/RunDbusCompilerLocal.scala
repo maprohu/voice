@@ -4,7 +4,7 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream, File, ObjectInputSt
 import java.lang.reflect.Type
 import java.util
 
-import org.freedesktop.dbus.Marshalling
+import org.freedesktop.dbus.{DBusConnection, Marshalling}
 import voice.requests.compilerpi.{DBReflection, DbusCompiler}
 
 /**
@@ -14,9 +14,14 @@ object RunDbusCompilerLocal {
 
   def main(args: Array[String]): Unit = {
 
+    val conn = DBusConnection.getConnection(
+      "tcp:host=172.24.1.1,port=7272"
+      //      "unix:abstract=/tmp/custom_dbus_name"
+    )
     val c = new DbusCompiler()
     val os = new ByteArrayOutputStream()
-    c.request(null, null, os)
+
+    c.run(null, null, os, conn)
 
 
     val obj =

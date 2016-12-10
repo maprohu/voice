@@ -1,20 +1,18 @@
 package voice.testing
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, File, ObjectInputStream}
-import java.lang.reflect.Type
-import java.util
-
 import org.freedesktop.NetworkManager
-import org.freedesktop.dbus.{DBusConnection, Marshalling, ObjectManager}
-import voice.requests.compilerpi.{DBReflection, DbusCompiler}
+import org.freedesktop.dbus.{DBusConnection, ObjectManager}
 
 /**
   * Created by maprohu on 08-12-2016.
   */
-object RunDbusTestLocal {
+object RunDbusBluetoothServer {
 
   def main(args: Array[String]): Unit = {
-    val conn = DBusConnection.getConnection(DBusConnection.SYSTEM)
+    val conn = DBusConnection.getConnection(
+//      "tcp:host=172.24.1.1,port=7272"
+      "unix:abstract=/tmp/custom_dbus_name"
+    )
 
     val om =
       conn.getRemoteObject(
@@ -41,13 +39,6 @@ object RunDbusTestLocal {
 
     println(
       nm.GetPermissions()
-    )
-    val l = nm.GetLogging()
-    println(
-      l.t1
-    )
-    println(
-      l.t2
     )
 
     conn.disconnect()
