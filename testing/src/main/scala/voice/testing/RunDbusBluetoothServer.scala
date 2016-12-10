@@ -7,7 +7,8 @@ import akka.stream.scaladsl.{Sink, Source, Tcp}
 import akka.util.ByteString
 import cx.ath.matthew.utils.Hexdump
 import org.freedesktop.NetworkManager
-import org.freedesktop.dbus.{DBusConnection, ObjectManager}
+import org.freedesktop.dbus.{DBusConnection, ObjectManager, Variant}
+import org.freedesktop.networkmanager.Settings
 import voice.environment.Rpis
 
 import scala.concurrent.Await
@@ -201,6 +202,26 @@ object RunSniffDbus {
     println(
       nm.GetPermissions()
     )
+
+    val settings =
+      conn.getRemoteObject(
+        "org.freedesktop.NetworkManager",
+        "/org/freedesktop/NetworkManager/Settings",
+        classOf[Settings]
+      )
+
+
+    import scala.collection.JavaConversions._
+    settings
+      .AddConnectionUnsaved(
+        Map[String, java.util.Map[String, Variant[_]]](
+          "connection" -> Map(
+            "id" -> new Variant("br2")
+          )
+
+        )
+
+      )
 
 
     StdIn.readLine("enter...")
