@@ -182,12 +182,29 @@ case class DBMethod(
   out: Seq[DBArg]
 )
 
+sealed trait DBAccess
+case object DBRead extends DBAccess
+case object DBWrite extends DBAccess
+case object DBReadWrite extends DBAccess
+case class DBProperty(
+  name: String,
+  access: DBAccess,
+  typeString: String
+)
+
+case class DBInstance(
+  bus: String,
+  path: String
+)
+
 case class DBInterface(
   name: DBInterfaceName,
-  methods: Seq[DBMethod]
+  methods: Seq[DBMethod],
+  properties: Seq[DBProperty],
+  instances: Seq[DBInstance]
 )
 
 case class DBReflection(
   debug: Seq[String] = Seq.empty,
-  interfaces: Seq[DBInterface] = Seq.empty
+  interfaces: Map[DBInterfaceName, DBInterface] = Map.empty
 )

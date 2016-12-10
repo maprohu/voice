@@ -14,9 +14,12 @@ object RunDbusCompilerLocal {
 
   def main(args: Array[String]): Unit = {
 
+//    val conn = DBusConnection.getConnection(
+//      "tcp:host=172.24.1.1,port=7272"
+//      //      "unix:abstract=/tmp/custom_dbus_name"
+//    )
     val conn = DBusConnection.getConnection(
-      "tcp:host=172.24.1.1,port=7272"
-      //      "unix:abstract=/tmp/custom_dbus_name"
+      DBusConnection.SYSTEM
     )
     val c = new DbusCompiler()
     val os = new ByteArrayOutputStream()

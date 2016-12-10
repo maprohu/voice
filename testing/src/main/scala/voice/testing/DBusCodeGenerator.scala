@@ -4,10 +4,10 @@ import java.io.File
 import java.lang.reflect.Type
 import java.util
 
-import org.freedesktop.dbus.Marshalling
+import org.freedesktop.dbus.{DBusInterface, DBusInterfaceName, Marshalling, Struct}
 import sbt.io.IO
-import toolbox8.rpi.dbus.DBTuple
-import voice.requests.compilerpi.{DBArg, DBReflection}
+import toolbox8.rpi.dbus._
+import voice.requests.compilerpi._
 
 import scala.reflect.ManifestFactory
 
@@ -25,6 +25,7 @@ object DBusCodeGenerator {
 
     structure
       .interfaces
+      .values
       .foreach({ iface =>
 
         val packageSegments :+ ifaceName = iface.name.segments
@@ -72,14 +73,63 @@ object DBusCodeGenerator {
                """.stripMargin
             })
 
+        val props =
+          iface
+            .properties
+            .map({ p =>
+              val propertyAccess =
+                p.access match {
+                  case DBRead => "read"
+                  case DBWrite => "write"
+                  case DBReadWrite => "readwrite"
+                }
+
+              s"""    val ${p.name} = ${propertyAccess}[${Ref.getJavaType(p.typeString)}]("${p.name}")"""
+            })
+
+        val busInstances =
+          iface
+            .instances
+            .groupBy(_.bus)
+            .mapValues(_.map(_.path))
+            .toSeq
+            .sortBy(_._1)
+            .map({
+              case (bus, paths) =>
+                val is =
+                  paths
+                    .map({ p =>
+                      s"""      val `${p}` = instance("${p}")"""
+                    })
+                s"""    object `${bus}` extends BusInstances("${bus}") {
+                   |${is.mkString("\n")}
+                   |    }
+                 """.stripMargin
+            })
+
+        val dbusInterfaceName = iface.name.segments.mkString(".")
+
         IO.write(
           scalaFile,
           s"""package ${packageSegmentsLow.mkString(".")}
              |
-             |@org.freedesktop.dbus.DBusInterfaceName("${iface.name.segments.mkString(".")}")
-             |trait ${ifaceName} extends org.freedesktop.dbus.DBusInterface {
+             |@${classOf[DBusInterfaceName].getName}("${dbusInterfaceName}")
+             |trait ${ifaceName} extends ${classOf[DBusInterface].getName} {
              |
              |${methods.mkString("\n")}
+             |}
+             |
+             |object ${ifaceName} extends ${classOf[DBInterfaceCompanion[_]].getName}[${ifaceName}](classOf[${ifaceName}], "${dbusInterfaceName}") {
+             |
+             |  object Props {
+             |${props.mkString("\n")}
+             |  }
+             |
+             |  object Instances {
+             |
+             |${busInstances.mkString("\n")}
+             |  }
+             |
              |}
            """.stripMargin
         )
@@ -115,6 +165,8 @@ object Ref {
         val ts =
           x.getTypeParameters.map(_ => wildcardType(ManifestFactory.Nothing, ManifestFactory.Nothing))
 
+
+
         classType(
           x,
           ts(0),
@@ -124,7 +176,16 @@ object Ref {
 
     case x: ParameterizedType   =>
       val owner = x.getOwnerType
-      val raw   = x.getRawType() match { case clazz: Class[_] => clazz }
+      val raw   = x.getRawType() match {
+        case clazz: Class[_] if clazz == classOf[Struct] =>
+          x.getActualTypeArguments.length match {
+            case 2 => classOf[DBStruct2[_, _]]
+            case 3 => classOf[DBStruct3[_, _, _]]
+            case 4 => classOf[DBStruct4[_, _, _, _]]
+            case _ => ???
+          }
+        case clazz: Class[_] => clazz
+      }
       val targs = x.getActualTypeArguments() map javaType
 
       (owner == null, targs.isEmpty) match {

@@ -14,14 +14,14 @@ import voice.requests.compilerpi.{DBReflection, DbusCompiler}
 object RunDbusTestLocal {
 
   def main(args: Array[String]): Unit = {
-    val conn = DBusConnection.getConnection(DBusConnection.SYSTEM)
+    implicit val conn = DBusConnection.getConnection(DBusConnection.SYSTEM)
 
     val om =
-      conn.getRemoteObject(
-        "org.bluez",
-        "/",
-        classOf[ObjectManager]
-      )
+      ObjectManager
+        .Instances
+        .`org.bluez`
+        .`/`
+        .getRemoteObject
 
     import scala.collection.JavaConversions._
     println(
@@ -33,11 +33,11 @@ object RunDbusTestLocal {
     )
 
     val nm =
-      conn.getRemoteObject(
-        "org.freedesktop.NetworkManager",
-        "/org/freedesktop/NetworkManager",
-        classOf[NetworkManager]
-      )
+      NetworkManager
+        .Instances
+        .`org.freedesktop.NetworkManager`
+        .`/org/freedesktop/NetworkManager`
+        .getRemoteObject
 
     println(
       nm.GetPermissions()
@@ -48,6 +48,17 @@ object RunDbusTestLocal {
     )
     println(
       l.t2
+    )
+
+    import java.lang.reflect.{Proxy => JProxy}
+
+    val ih = JProxy.getInvocationHandler(nm)
+
+    println(
+      NetworkManager
+        .Props
+        .Version
+        .read(nm)
     )
 
     conn.disconnect()

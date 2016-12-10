@@ -74,20 +74,51 @@ object DBReflector extends StrictLogging with LogTools {
           val ifaceName =
             DBInterfaceName.fromName(iface \ "@name" text)
 
-          if (
-            Builtin.contains(ifaceName) ||
-            acc2.interfaces.map(_.name).contains(ifaceName)
-          ) {
+          if (Builtin.contains(ifaceName)) {
             acc2
           } else {
-            acc2.copy(
-              interfaces = acc2.interfaces :+
-                reflectInterface(
-                  ifaceName,
-                  iface
-                )
-            )
+            val instance = DBInstance(service, objectName)
+            acc2
+              .copy(
+                interfaces =
+                  acc2
+                    .interfaces
+                    .updated(
+                      ifaceName,
+                      acc2
+                        .interfaces
+                        .get(ifaceName)
+                        .map({ iface2 =>
+                          iface2.copy(
+                            instances = iface2.instances :+ instance
+                          )
+                        })
+                        .getOrElse(
+                          reflectInterface(
+                            ifaceName,
+                            iface,
+                            instance
+                          )
+                        )
+                    )
+              )
+
           }
+
+//          if (
+//            Builtin.contains(ifaceName) ||
+//            acc2.interfaces.map(_.name).contains(ifaceName)
+//          ) {
+//            acc2
+//          } else {
+//            acc2.copy(
+//              interfaces = acc2.interfaces :+
+//                reflectInterface(
+//                  ifaceName,
+//                  iface
+//                )
+//            )
+//          }
         })
 
 
@@ -124,10 +155,12 @@ object DBReflector extends StrictLogging with LogTools {
 
   def reflectInterface(
     name: DBInterfaceName,
-    ifaceNode: Node
+    ifaceNode: Node,
+    instance: DBInstance
   ) : DBInterface = {
     val methods =
       (ifaceNode \ "method")
+        .sortBy(_ \ "@name" text)
         .map({ n =>
           val (o, i) =
             (n \ "arg")
@@ -147,9 +180,33 @@ object DBReflector extends StrictLogging with LogTools {
         })
 
 
+
+    val props =
+      (ifaceNode \ "property")
+        .sortBy(_ \ "@name" text)
+        .map({ n =>
+          val access =
+            (n \ "@access" text) match {
+              case "read" => DBRead
+              case "write" => DBWrite
+              case "readwrite" => DBReadWrite
+              case _ => ???
+            }
+
+          DBProperty(
+            name = n \ "@name" text,
+            access = access,
+            typeString = n \ "@type" text
+          )
+        })
+
+
+
     DBInterface(
       name = name,
-      methods = methods
+      methods = methods,
+      properties = props,
+      instances = Seq(instance)
     )
   }
 
