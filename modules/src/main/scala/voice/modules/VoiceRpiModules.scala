@@ -26,7 +26,7 @@ object VoiceRpiModules {
     JarTree8Modules.StreamApp,
     VoiceModules.Client,
     VoiceModules.Environment,
-    RpiModules.DBus
+    DBusModules.Lib
   )
 
   object Mobile extends ScalaModule(

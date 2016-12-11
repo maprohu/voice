@@ -96,7 +96,7 @@ object VoiceModules extends ModulesBase(
     VoiceApiModules.UpdateClientInfo,
     JarTree8Modules.StreamApp,
     mvn.`org.mapdb:mapdb:jar:3.0.2`,
-    RpiModules.DBus
+    DBusModules.Lib
   )
 
   object Client extends ScalaModule(

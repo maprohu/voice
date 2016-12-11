@@ -7,7 +7,7 @@ import toolbox8.jartree.testing.StreamAppClient
 import toolbox8.modules.JarTree8Modules
 import voice.environment.Rpis
 import voice.modules.{VoiceModules, VoiceRequestModules, VoiceRpiModules}
-import voice.requests.compilerpi.DbusCompiler
+import voice.requests.compilerpi.{DbusCompilerRequest, DbusCompilerRequest$}
 
 /**
   * Created by maprohu on 08-12-2016.
@@ -27,7 +27,7 @@ object RunDbusCompiler {
     StreamAppClient
       .requestPlugged(
         VoiceRequestModules.CompileRpi,
-        classOf[DbusCompiler].getName,
+        classOf[DbusCompilerRequest].getName,
         { (in, out) =>
           val dis = new ObjectInputStream(in)
           println(

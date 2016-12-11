@@ -1,5 +1,7 @@
 package voice.rpi.home
 
+import com.typesafe.scalalogging.StrictLogging
+import toolbox6.logging.LogTools
 import toolbox8.jartree.requestapi.RequestMarker
 import toolbox8.jartree.streamapp.{PlugParams, Plugged, Root}
 import voice.client.VoiceClient
@@ -17,7 +19,12 @@ class VoiceHomeRoot extends Root {
   }
 }
 
-class VoiceHomePlugged extends Plugged {
+object VoiceHomePlugged {
+  val DBusPort = 7722
+}
+
+class VoiceHomePlugged extends Plugged with StrictLogging with LogTools {
+
   val central =
     SshConnectionDetails
       .unpickle(
@@ -43,9 +50,22 @@ class VoiceHomePlugged extends Plugged {
         )
       )
 
+  logger.info(s"running dbus socat on port ${VoiceHomePlugged.DBusPort}")
+  val dbusSocat =
+    new ProcessBuilder()
+      .command(
+        "sudo",
+        "socat",
+        s"TCP-LISTEN:${VoiceHomePlugged.DBusPort},reuseaddr,fork",
+        "UNIX-CONNECT:/var/run/dbus/system_bus_socket"
+      )
+      .start()
+
+
 
   override def stop(): Unit = {
-    client.cancel()
+    quietly { client.cancel() }
+    quietly { dbusSocat.destroy() }
   }
 
   override def marked[In, Out](marker: RequestMarker[In, Out], in: In): Out = ???
