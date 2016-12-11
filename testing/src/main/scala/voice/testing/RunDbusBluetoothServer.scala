@@ -3,11 +3,15 @@ package voice.testing
 import java.util.UUID
 
 import com.typesafe.scalalogging.StrictLogging
+import cx.ath.matthew.utils.Hexdump
 import org.bluez.NetworkServer1
 import org.freedesktop.NetworkManager
 import org.freedesktop.dbus.{DBusConnection, ObjectManager, Variant}
 import org.freedesktop.networkmanager.Settings
 import toolbox6.logging.LogTools
+import voice.rpi.home.VoiceHomePlugged
+
+import scala.io.StdIn
 
 /**
   * Created by maprohu on 08-12-2016.
@@ -85,10 +89,12 @@ object RunDbusBluetoothServer extends StrictLogging with LogTools {
 
       networkServer
         .Register(
-          "GN",
+          "NAP",
           BridgeName
         )
     }
+
+    StdIn.readLine("enter...")
 
     conn.disconnect()
   }
@@ -106,162 +112,66 @@ object RunDbusBluetoothServer extends StrictLogging with LogTools {
 //
 //
 //
-//object RunSniffDbus {
-//  def main(args: Array[String]): Unit = {
-//    run()
-//  }
-//
-//  def stopOnExit(p: Process) = {
-//    Runtime.getRuntime.addShutdownHook(
-//      new Thread() {
-//        override def run(): Unit = {
-//          println(s"stopping process: ${p}")
-//          p.destroy()
-//        }
-//      }
-//    )
-//  }
-//
-//  def stupidlyEncode(data: String): String = {
-//    Hexdump.toHex(data.getBytes).replaceAll(" ", "")
-//  }
-//
-//  val SocatPort = 7272
-//  val AkkaPort = 7273
-//  val AbstractName = "/tmp/socat_dbus"
-//
-//  def run(): Unit = {
-//
-//    println(s"launching socat on port ${SocatPort} ")
+object RunSniffDbus {
+  val SocatPort = VoiceHomePlugged.DBusPort
+  val AbstractName = "/tmp/socat_dbus"
+
+  def main(args: Array[String]): Unit = {
+    DBusSniff.run(
+      SocatPort
+    )
+    StdIn.readLine("enter...")
+  }
+
+}
+
+object DBusSniff {
+
+  def stopOnExit(p: Process) = {
+    Runtime.getRuntime.addShutdownHook(
+      new Thread() {
+        override def run(): Unit = {
+          println(s"stopping process: ${p}")
+          p.destroy()
+        }
+      }
+    )
+  }
+
+  def stupidlyEncode(data: String): String = {
+    Hexdump.toHex(data.getBytes).replaceAll(" ", "")
+  }
+
+
+  def run(
+    bindPort: Int
+  ): Unit = {
+
+    println(s"launching socat on port ${bindPort} ")
+    stopOnExit {
+      new ProcessBuilder()
+        .command(
+          "sudo",
+          "socat",
+          s"TCP-LISTEN:${bindPort},reuseaddr,fork",
+          "UNIX-CONNECT:/var/run/dbus/system_bus_socket"
+        )
+        .start()
+    }
+
+  }
+
+//    println("starting socat reverse")
 //    stopOnExit {
 //      new ProcessBuilder()
 //        .command(
-//          "sudo",
+////          "sudo",
 //          "socat",
-//          s"TCP-LISTEN:${SocatPort},reuseaddr,fork",
-//          "UNIX-CONNECT:/var/run/dbus/system_bus_socket"
+//          s"ABSTRACT-LISTEN:${AbstractName},fork",
+//          s"TCP:localhost:${AkkaPort}"
 //        )
 //        .start()
 //    }
-//
-//    implicit val actorSystem = ActorSystem()
-//    implicit val materializer = ActorMaterializer()
-//    import actorSystem.dispatcher
-//
-//    println(s"runnig akka at ${AkkaPort}")
-//    println(
-//      Await.ready(
-//        Tcp()
-//          .bind(
-//            "127.0.0.1",
-//            AkkaPort
-//          )
-//          .to(
-//            Sink.foreach({ c =>
-//              Tcp()
-//                .outgoingConnection(
-//                  "localhost",
-//                  SocatPort
-//                )
-////                .map({ bs =>
-////                  println(s"in: ${bs.utf8String} - ${bs}")
-////                  bs
-////                })
-//                .join(
-//                  c
-//                    .flow
-////                    .map({ bs =>
-////                      println(s"orig: ${bs.utf8String} - ${bs}")
-////                      bs
-////                    })
-//                    .prefixAndTail(1)
-//                    .flatMapConcat({
-//                      case (Seq(head), tail) =>
-//                        Source
-//                          .single(
-//                            head
-//                          )
-//                          .concat(
-//                            tail
-//                              .prefixAndTail(1)
-//                              .flatMapConcat({
-//                                case (Seq(head2), tail2) =>
-//                                  Source
-//                                    .single(
-//                                      ByteString(s"AUTH EXTERNAL ${stupidlyEncode("0")}\r\n")
-//                                    )
-//                                    .concat(tail2)
-//                              })
-//                          )
-//                    })
-////                    .map({ bs =>
-////                      println(s"trf: ${bs.utf8String} - ${bs}")
-////                      bs
-////                    })
-//                )
-//                .run()
-//                .onComplete(println)
-//            })
-//          )
-//          .run(),
-//        Duration.Inf
-//      )
-//    )
-//
-////    println("starting socat reverse")
-////    stopOnExit {
-////      new ProcessBuilder()
-////        .command(
-//////          "sudo",
-////          "socat",
-////          s"ABSTRACT-LISTEN:${AbstractName},fork",
-////          s"TCP:localhost:${AkkaPort}"
-////        )
-////        .start()
-////    }
-//
-//    val addr =
-//      s"tcp:host=localhost,port=${AkkaPort}"
-////          s"unix:abstract=${AbstractName}"
-//
-//    println(addr)
-//    val conn = DBusConnection.getConnection(
-//      addr
-//    )
-//
-//    val nm =
-//      conn.getRemoteObject(
-//        "org.freedesktop.NetworkManager",
-//        "/org/freedesktop/NetworkManager",
-//        classOf[NetworkManager]
-//      )
-//
-//    println(
-//      nm.GetPermissions()
-//    )
-//
-//    val settings =
-//      conn.getRemoteObject(
-//        "org.freedesktop.NetworkManager",
-//        "/org/freedesktop/NetworkManager/Settings",
-//        classOf[Settings]
-//      )
-//
-//
-//    import scala.collection.JavaConversions._
-//    settings
-//      .AddConnectionUnsaved(
-//        Map[String, java.util.Map[String, Variant[_]]](
-//          "connection" -> Map(
-//            "id" -> new Variant("br2")
-//          )
-//
-//        )
-//
-//      )
-//
-//
-//    StdIn.readLine("enter...")
-//
-//  }
-//}
+
+
+}

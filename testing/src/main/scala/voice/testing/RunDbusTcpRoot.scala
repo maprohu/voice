@@ -20,32 +20,50 @@ object RunDbusTcpRoot {
   val Target = Rpis.Home.wlan
 
   val SocatPort = VoiceHomePlugged.DBusPort
-  val AkkaPort = 7733
+  val AkkaPort = 7780
   val UserId = 0
 
+
+  def main(args: Array[String]): Unit = {
+    DBusTcp.run(
+      AkkaPort,
+      Target.host,
+      SocatPort
+    )
+
+  }
+}
+
+object DBusTcp {
   def stupidlyEncode(data: String): String = {
     Hexdump.toHex(data.getBytes).replaceAll(" ", "")
   }
 
-  def main(args: Array[String]): Unit = {
+  def run(
+    rootPort: Int,
+    targetHost: String,
+    targetPort: Int,
+    userId: Int = 0,
+    logLevel : Logging.LogLevel = Logging.InfoLevel
+  ) = {
     implicit val actorSystem = ActorSystem()
     implicit val materializer = ActorMaterializer()
     import actorSystem.dispatcher
 
-    println(s"runnig akka at ${AkkaPort}")
+    println(s"runnig akka at ${rootPort}")
     println(
       Await.ready(
         Tcp()
           .bind(
             "127.0.0.1",
-            AkkaPort
+            rootPort
           )
           .to(
             Sink.foreach({ c =>
               Tcp()
                 .outgoingConnection(
-                  Target.host,
-                  SocatPort
+                  targetHost,
+                  targetPort
                 )
                 .log("server->client", extract = bs => (bs.utf8String, bs))
                 .join(
@@ -66,7 +84,7 @@ object RunDbusTcpRoot {
                                 case (Seq(head2), tail2) =>
                                   Source
                                     .single(
-                                      ByteString(s"AUTH EXTERNAL ${stupidlyEncode(s"${UserId}")}\r\n")
+                                      ByteString(s"AUTH EXTERNAL ${stupidlyEncode(s"${userId}")}\r\n")
                                     )
                                     .concat(tail2)
                               })
@@ -74,7 +92,7 @@ object RunDbusTcpRoot {
                     })
                     .log("sniff->server", extract = bs => (bs.utf8String, bs))
                 )
-                .withAttributes(Attributes.logLevels(onElement = Logging.InfoLevel))
+                .withAttributes(Attributes.logLevels(onElement = logLevel))
                 .run()
                 .onComplete(println)
             })
