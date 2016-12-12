@@ -1,6 +1,7 @@
 package voice.linux.testing
 
 import org.bridj.Pointer
+import voice.linux.jna.bluetooth.BluetoothLibrary
 import voice.linux.jna.c.CLibrary
 
 /**
@@ -24,6 +25,10 @@ object RunTestJNA {
         Pointer.pointerToCString("wlo1")
       )
     )
+
+    BluetoothLibrary.hci_open_dev(0)
+
+
 
   }
 

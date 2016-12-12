@@ -28,7 +28,9 @@ class LinuxLibraries(
     Lib(
       "bluetooth",
       Seq(
-        s"${IncludeDir}/bluetooth/hci.h"
+        s"${IncludeDir}/bluetooth/bluetooth.h",
+        s"${IncludeDir}/bluetooth/hci.h",
+        s"${IncludeDir}/bluetooth/hci_lib.h"
       )
     )
   )

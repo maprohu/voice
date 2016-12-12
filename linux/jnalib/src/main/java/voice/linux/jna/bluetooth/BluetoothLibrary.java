@@ -1,7 +1,12 @@
 package voice.linux.jna.bluetooth;
 import org.bridj.BridJ;
 import org.bridj.CRuntime;
+import org.bridj.Callback;
+import org.bridj.Pointer;
+import org.bridj.ann.CLong;
 import org.bridj.ann.Library;
+import org.bridj.ann.Name;
+import org.bridj.ann.Ptr;
 import org.bridj.ann.Runtime;
 /**
  * Wrapper for library <b>bluetooth</b><br>
@@ -15,6 +20,16 @@ public class BluetoothLibrary {
 	static {
 		BridJ.register();
 	}
+	/** Equal to TCP_ESTABLISHED to make net code happy */
+	public static final int BT_CONNECTED = 1;
+	public static final int BT_OPEN = 2;
+	public static final int BT_BOUND = 3;
+	public static final int BT_LISTEN = 4;
+	public static final int BT_CONNECT = 5;
+	public static final int BT_CONNECT2 = 6;
+	public static final int BT_CONFIG = 7;
+	public static final int BT_DISCONN = 8;
+	public static final int BT_CLOSED = 9;
 	public static final int HCI_UP = 0;
 	public static final int HCI_INIT = 1;
 	public static final int HCI_RUNNING = 2;
@@ -26,6 +41,101 @@ public class BluetoothLibrary {
 	public static final int HCI_RAW = 8;
 	public static final int LE_PUBLIC_ADDRESS = 0x00;
 	public static final int LE_RANDOM_ADDRESS = 0x01;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BTPROTO_L2CAP = (int)0;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BTPROTO_HCI = (int)1;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BTPROTO_SCO = (int)2;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BTPROTO_RFCOMM = (int)3;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BTPROTO_BNEP = (int)4;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BTPROTO_CMTP = (int)5;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BTPROTO_HIDP = (int)6;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BTPROTO_AVDTP = (int)7;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int SOL_HCI = (int)0;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int SOL_L2CAP = (int)6;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int SOL_SCO = (int)17;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int SOL_RFCOMM = (int)18;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_SECURITY = (int)4;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_SECURITY_SDP = (int)0;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_SECURITY_LOW = (int)1;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_SECURITY_MEDIUM = (int)2;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_SECURITY_HIGH = (int)3;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_SECURITY_FIPS = (int)4;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_DEFER_SETUP = (int)7;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_FLUSHABLE = (int)8;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_FLUSHABLE_OFF = (int)0;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_FLUSHABLE_ON = (int)1;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_POWER = (int)9;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_POWER_FORCE_ACTIVE_OFF = (int)0;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_POWER_FORCE_ACTIVE_ON = (int)1;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_CHANNEL_POLICY = (int)10;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_CHANNEL_POLICY_BREDR_ONLY = (int)0;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_CHANNEL_POLICY_BREDR_PREFERRED = (int)1;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_CHANNEL_POLICY_AMP_PREFERRED = (int)2;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_VOICE = (int)11;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_SNDMTU = (int)12;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_RCVMTU = (int)13;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_VOICE_TRANSPARENT = (int)0x0003;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BT_VOICE_CVSD_16BIT = (int)0x0060;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BDADDR_BREDR = (int)0x00;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BDADDR_LE_PUBLIC = (int)0x01;
+	/** <i>native declaration : bluetooth/bluetooth.h</i> */
+	public static final int BDADDR_LE_RANDOM = (int)0x02;
+	/**
+	 * define<br>
+	 * Conversion Error : 0, 0, 0, 0, 0<br>
+	 * SKIPPED:<br>
+	 * <i>native declaration : bluetooth/bluetooth.h:0</i><br>
+	 * 0, 0, 0, 0, 0
+	 */
+	/**
+	 * define<br>
+	 * Conversion Error : 0xff, 0xff, 0xff, 0xff, 0xff<br>
+	 * SKIPPED:<br>
+	 * <i>native declaration : bluetooth/bluetooth.h:0</i><br>
+	 * 0xff, 0xff, 0xff, 0xff, 0xff
+	 */
+	/**
+	 * define<br>
+	 * Conversion Error : 0, 0, 0xff, 0xff, 0xff<br>
+	 * SKIPPED:<br>
+	 * <i>native declaration : bluetooth/bluetooth.h:0</i><br>
+	 * 0, 0, 0xff, 0xff, 0xff
+	 */
 	/** <i>native declaration : bluetooth/hci.h</i> */
 	public static final int HCI_MAX_DEV = (int)16;
 	/** <i>native declaration : bluetooth/hci.h</i> */
@@ -1540,6 +1650,772 @@ public class BluetoothLibrary {
 	public static final int HCI_FLT_OCF_BITS = (int)127;
 	/** <i>native declaration : bluetooth/hci.h</i> */
 	public static final int IREQ_CACHE_FLUSH = (int)0x0001;
+	/** <i>native declaration : bluetooth/hci_lib.h:145</i> */
+	public static abstract class hci_for_each_dev_func_callback extends Callback<hci_for_each_dev_func_callback > {
+		public abstract int apply(int dd, int dev_id, @CLong long arg);
+	};
+	/**
+	 * Original signature : <code>int hci_open_dev(int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:51</i>
+	 */
+	public static native int hci_open_dev(int dev_id);
+	/**
+	 * Original signature : <code>int hci_close_dev(int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:52</i>
+	 */
+	public static native int hci_close_dev(int dd);
+	/**
+	 * Original signature : <code>int hci_send_cmd(int, uint16_t, uint16_t, uint8_t, void*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:53</i>
+	 */
+	public static int hci_send_cmd(int dd, short ogf, short ocf, byte plen, Pointer<? > param) {
+		return hci_send_cmd(dd, ogf, ocf, plen, Pointer.getPeer(param));
+	}
+	protected native static int hci_send_cmd(int dd, short ogf, short ocf, byte plen, @Ptr long param);
+	/**
+	 * Original signature : <code>int hci_send_req(int, hci_request*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:54</i>
+	 */
+	public static int hci_send_req(int dd, Pointer<hci_request > req, int timeout) {
+		return hci_send_req(dd, Pointer.getPeer(req), timeout);
+	}
+	protected native static int hci_send_req(int dd, @Ptr long req, int timeout);
+	/**
+	 * Original signature : <code>int hci_create_connection(int, const bdaddr_t*, uint16_t, uint16_t, uint8_t, uint16_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:56</i>
+	 */
+	public static int hci_create_connection(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, short ptype, short clkoffset, byte rswitch, Pointer<Short > handle, int to) {
+		return hci_create_connection(dd, Pointer.getPeer(bdaddr), ptype, clkoffset, rswitch, Pointer.getPeer(handle), to);
+	}
+	protected native static int hci_create_connection(int dd, @Ptr long bdaddr, short ptype, short clkoffset, byte rswitch, @Ptr long handle, int to);
+	/**
+	 * Original signature : <code>int hci_disconnect(int, uint16_t, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:57</i>
+	 */
+	public static native int hci_disconnect(int dd, short handle, byte reason, int to);
+	/**
+	 * Original signature : <code>int hci_inquiry(int, int, int, const uint8_t*, inquiry_info**, long)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:59</i>
+	 */
+	public static int hci_inquiry(int dev_id, int len, int num_rsp, Pointer<Byte > lap, Pointer<Pointer<inquiry_info > > ii, @CLong long flags) {
+		return hci_inquiry(dev_id, len, num_rsp, Pointer.getPeer(lap), Pointer.getPeer(ii), flags);
+	}
+	protected native static int hci_inquiry(int dev_id, int len, int num_rsp, @Ptr long lap, @Ptr long ii, @CLong long flags);
+	/**
+	 * Original signature : <code>int hci_devinfo(int, hci_dev_info*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:60</i>
+	 */
+	public static int hci_devinfo(int dev_id, Pointer<hci_dev_info > di) {
+		return hci_devinfo(dev_id, Pointer.getPeer(di));
+	}
+	protected native static int hci_devinfo(int dev_id, @Ptr long di);
+	/**
+	 * Original signature : <code>int hci_devba(int, bdaddr_t*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:61</i>
+	 */
+	public static int hci_devba(int dev_id, Pointer<BluetoothLibrary.bdaddr_t > bdaddr) {
+		return hci_devba(dev_id, Pointer.getPeer(bdaddr));
+	}
+	protected native static int hci_devba(int dev_id, @Ptr long bdaddr);
+	/**
+	 * Original signature : <code>int hci_devid(const char*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:62</i>
+	 */
+	public static int hci_devid(Pointer<Byte > str) {
+		return hci_devid(Pointer.getPeer(str));
+	}
+	protected native static int hci_devid(@Ptr long str);
+	/**
+	 * Original signature : <code>int hci_read_local_name(int, int, char*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:64</i>
+	 */
+	public static int hci_read_local_name(int dd, int len, Pointer<Byte > name, int to) {
+		return hci_read_local_name(dd, len, Pointer.getPeer(name), to);
+	}
+	protected native static int hci_read_local_name(int dd, int len, @Ptr long name, int to);
+	/**
+	 * Original signature : <code>int hci_write_local_name(int, const char*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:65</i>
+	 */
+	public static int hci_write_local_name(int dd, Pointer<Byte > name, int to) {
+		return hci_write_local_name(dd, Pointer.getPeer(name), to);
+	}
+	protected native static int hci_write_local_name(int dd, @Ptr long name, int to);
+	/**
+	 * Original signature : <code>int hci_read_remote_name(int, const bdaddr_t*, int, char*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:66</i>
+	 */
+	public static int hci_read_remote_name(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, int len, Pointer<Byte > name, int to) {
+		return hci_read_remote_name(dd, Pointer.getPeer(bdaddr), len, Pointer.getPeer(name), to);
+	}
+	protected native static int hci_read_remote_name(int dd, @Ptr long bdaddr, int len, @Ptr long name, int to);
+	/**
+	 * Original signature : <code>int hci_read_remote_name_with_clock_offset(int, const bdaddr_t*, uint8_t, uint16_t, int, char*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:67</i>
+	 */
+	public static int hci_read_remote_name_with_clock_offset(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, byte pscan_rep_mode, short clkoffset, int len, Pointer<Byte > name, int to) {
+		return hci_read_remote_name_with_clock_offset(dd, Pointer.getPeer(bdaddr), pscan_rep_mode, clkoffset, len, Pointer.getPeer(name), to);
+	}
+	protected native static int hci_read_remote_name_with_clock_offset(int dd, @Ptr long bdaddr, byte pscan_rep_mode, short clkoffset, int len, @Ptr long name, int to);
+	/**
+	 * Original signature : <code>int hci_read_remote_name_cancel(int, const bdaddr_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:68</i>
+	 */
+	public static int hci_read_remote_name_cancel(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, int to) {
+		return hci_read_remote_name_cancel(dd, Pointer.getPeer(bdaddr), to);
+	}
+	protected native static int hci_read_remote_name_cancel(int dd, @Ptr long bdaddr, int to);
+	/**
+	 * Original signature : <code>int hci_read_remote_version(int, uint16_t, hci_version*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:69</i>
+	 */
+	public static int hci_read_remote_version(int dd, short handle, Pointer<hci_version > ver, int to) {
+		return hci_read_remote_version(dd, handle, Pointer.getPeer(ver), to);
+	}
+	protected native static int hci_read_remote_version(int dd, short handle, @Ptr long ver, int to);
+	/**
+	 * Original signature : <code>int hci_read_remote_features(int, uint16_t, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:70</i>
+	 */
+	public static int hci_read_remote_features(int dd, short handle, Pointer<Byte > features, int to) {
+		return hci_read_remote_features(dd, handle, Pointer.getPeer(features), to);
+	}
+	protected native static int hci_read_remote_features(int dd, short handle, @Ptr long features, int to);
+	/**
+	 * Original signature : <code>int hci_read_remote_ext_features(int, uint16_t, uint8_t, uint8_t*, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:71</i>
+	 */
+	public static int hci_read_remote_ext_features(int dd, short handle, byte page, Pointer<Byte > max_page, Pointer<Byte > features, int to) {
+		return hci_read_remote_ext_features(dd, handle, page, Pointer.getPeer(max_page), Pointer.getPeer(features), to);
+	}
+	protected native static int hci_read_remote_ext_features(int dd, short handle, byte page, @Ptr long max_page, @Ptr long features, int to);
+	/**
+	 * Original signature : <code>int hci_read_clock_offset(int, uint16_t, uint16_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:72</i>
+	 */
+	public static int hci_read_clock_offset(int dd, short handle, Pointer<Short > clkoffset, int to) {
+		return hci_read_clock_offset(dd, handle, Pointer.getPeer(clkoffset), to);
+	}
+	protected native static int hci_read_clock_offset(int dd, short handle, @Ptr long clkoffset, int to);
+	/**
+	 * Original signature : <code>int hci_read_local_version(int, hci_version*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:73</i>
+	 */
+	public static int hci_read_local_version(int dd, Pointer<hci_version > ver, int to) {
+		return hci_read_local_version(dd, Pointer.getPeer(ver), to);
+	}
+	protected native static int hci_read_local_version(int dd, @Ptr long ver, int to);
+	/**
+	 * Original signature : <code>int hci_read_local_commands(int, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:74</i>
+	 */
+	public static int hci_read_local_commands(int dd, Pointer<Byte > commands, int to) {
+		return hci_read_local_commands(dd, Pointer.getPeer(commands), to);
+	}
+	protected native static int hci_read_local_commands(int dd, @Ptr long commands, int to);
+	/**
+	 * Original signature : <code>int hci_read_local_features(int, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:75</i>
+	 */
+	public static int hci_read_local_features(int dd, Pointer<Byte > features, int to) {
+		return hci_read_local_features(dd, Pointer.getPeer(features), to);
+	}
+	protected native static int hci_read_local_features(int dd, @Ptr long features, int to);
+	/**
+	 * Original signature : <code>int hci_read_local_ext_features(int, uint8_t, uint8_t*, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:76</i>
+	 */
+	public static int hci_read_local_ext_features(int dd, byte page, Pointer<Byte > max_page, Pointer<Byte > features, int to) {
+		return hci_read_local_ext_features(dd, page, Pointer.getPeer(max_page), Pointer.getPeer(features), to);
+	}
+	protected native static int hci_read_local_ext_features(int dd, byte page, @Ptr long max_page, @Ptr long features, int to);
+	/**
+	 * Original signature : <code>int hci_read_bd_addr(int, bdaddr_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:77</i>
+	 */
+	public static int hci_read_bd_addr(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, int to) {
+		return hci_read_bd_addr(dd, Pointer.getPeer(bdaddr), to);
+	}
+	protected native static int hci_read_bd_addr(int dd, @Ptr long bdaddr, int to);
+	/**
+	 * Original signature : <code>int hci_read_class_of_dev(int, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:78</i>
+	 */
+	public static int hci_read_class_of_dev(int dd, Pointer<Byte > cls, int to) {
+		return hci_read_class_of_dev(dd, Pointer.getPeer(cls), to);
+	}
+	protected native static int hci_read_class_of_dev(int dd, @Ptr long cls, int to);
+	/**
+	 * Original signature : <code>int hci_write_class_of_dev(int, uint32_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:79</i>
+	 */
+	public static native int hci_write_class_of_dev(int dd, int cls, int to);
+	/**
+	 * Original signature : <code>int hci_read_voice_setting(int, uint16_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:80</i>
+	 */
+	public static int hci_read_voice_setting(int dd, Pointer<Short > vs, int to) {
+		return hci_read_voice_setting(dd, Pointer.getPeer(vs), to);
+	}
+	protected native static int hci_read_voice_setting(int dd, @Ptr long vs, int to);
+	/**
+	 * Original signature : <code>int hci_write_voice_setting(int, uint16_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:81</i>
+	 */
+	public static native int hci_write_voice_setting(int dd, short vs, int to);
+	/**
+	 * Original signature : <code>int hci_read_current_iac_lap(int, uint8_t*, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:82</i>
+	 */
+	public static int hci_read_current_iac_lap(int dd, Pointer<Byte > num_iac, Pointer<Byte > lap, int to) {
+		return hci_read_current_iac_lap(dd, Pointer.getPeer(num_iac), Pointer.getPeer(lap), to);
+	}
+	protected native static int hci_read_current_iac_lap(int dd, @Ptr long num_iac, @Ptr long lap, int to);
+	/**
+	 * Original signature : <code>int hci_write_current_iac_lap(int, uint8_t, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:83</i>
+	 */
+	public static int hci_write_current_iac_lap(int dd, byte num_iac, Pointer<Byte > lap, int to) {
+		return hci_write_current_iac_lap(dd, num_iac, Pointer.getPeer(lap), to);
+	}
+	protected native static int hci_write_current_iac_lap(int dd, byte num_iac, @Ptr long lap, int to);
+	/**
+	 * Original signature : <code>int hci_read_stored_link_key(int, bdaddr_t*, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:84</i>
+	 */
+	public static int hci_read_stored_link_key(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, byte all, int to) {
+		return hci_read_stored_link_key(dd, Pointer.getPeer(bdaddr), all, to);
+	}
+	protected native static int hci_read_stored_link_key(int dd, @Ptr long bdaddr, byte all, int to);
+	/**
+	 * Original signature : <code>int hci_write_stored_link_key(int, bdaddr_t*, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:85</i>
+	 */
+	public static int hci_write_stored_link_key(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, Pointer<Byte > key, int to) {
+		return hci_write_stored_link_key(dd, Pointer.getPeer(bdaddr), Pointer.getPeer(key), to);
+	}
+	protected native static int hci_write_stored_link_key(int dd, @Ptr long bdaddr, @Ptr long key, int to);
+	/**
+	 * Original signature : <code>int hci_delete_stored_link_key(int, bdaddr_t*, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:86</i>
+	 */
+	public static int hci_delete_stored_link_key(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, byte all, int to) {
+		return hci_delete_stored_link_key(dd, Pointer.getPeer(bdaddr), all, to);
+	}
+	protected native static int hci_delete_stored_link_key(int dd, @Ptr long bdaddr, byte all, int to);
+	/**
+	 * Original signature : <code>int hci_authenticate_link(int, uint16_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:87</i>
+	 */
+	public static native int hci_authenticate_link(int dd, short handle, int to);
+	/**
+	 * Original signature : <code>int hci_encrypt_link(int, uint16_t, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:88</i>
+	 */
+	public static native int hci_encrypt_link(int dd, short handle, byte encrypt, int to);
+	/**
+	 * Original signature : <code>int hci_change_link_key(int, uint16_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:89</i>
+	 */
+	public static native int hci_change_link_key(int dd, short handle, int to);
+	/**
+	 * Original signature : <code>int hci_switch_role(int, bdaddr_t*, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:90</i>
+	 */
+	public static int hci_switch_role(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, byte role, int to) {
+		return hci_switch_role(dd, Pointer.getPeer(bdaddr), role, to);
+	}
+	protected native static int hci_switch_role(int dd, @Ptr long bdaddr, byte role, int to);
+	/**
+	 * Original signature : <code>int hci_park_mode(int, uint16_t, uint16_t, uint16_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:91</i>
+	 */
+	public static native int hci_park_mode(int dd, short handle, short max_interval, short min_interval, int to);
+	/**
+	 * Original signature : <code>int hci_exit_park_mode(int, uint16_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:92</i>
+	 */
+	public static native int hci_exit_park_mode(int dd, short handle, int to);
+	/**
+	 * Original signature : <code>int hci_read_inquiry_scan_type(int, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:93</i>
+	 */
+	public static int hci_read_inquiry_scan_type(int dd, Pointer<Byte > type, int to) {
+		return hci_read_inquiry_scan_type(dd, Pointer.getPeer(type), to);
+	}
+	protected native static int hci_read_inquiry_scan_type(int dd, @Ptr long type, int to);
+	/**
+	 * Original signature : <code>int hci_write_inquiry_scan_type(int, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:94</i>
+	 */
+	public static native int hci_write_inquiry_scan_type(int dd, byte type, int to);
+	/**
+	 * Original signature : <code>int hci_read_inquiry_mode(int, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:95</i>
+	 */
+	public static int hci_read_inquiry_mode(int dd, Pointer<Byte > mode, int to) {
+		return hci_read_inquiry_mode(dd, Pointer.getPeer(mode), to);
+	}
+	protected native static int hci_read_inquiry_mode(int dd, @Ptr long mode, int to);
+	/**
+	 * Original signature : <code>int hci_write_inquiry_mode(int, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:96</i>
+	 */
+	public static native int hci_write_inquiry_mode(int dd, byte mode, int to);
+	/**
+	 * Original signature : <code>int hci_read_afh_mode(int, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:97</i>
+	 */
+	public static int hci_read_afh_mode(int dd, Pointer<Byte > mode, int to) {
+		return hci_read_afh_mode(dd, Pointer.getPeer(mode), to);
+	}
+	protected native static int hci_read_afh_mode(int dd, @Ptr long mode, int to);
+	/**
+	 * Original signature : <code>int hci_write_afh_mode(int, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:98</i>
+	 */
+	public static native int hci_write_afh_mode(int dd, byte mode, int to);
+	/**
+	 * Original signature : <code>int hci_read_ext_inquiry_response(int, uint8_t*, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:99</i>
+	 */
+	public static int hci_read_ext_inquiry_response(int dd, Pointer<Byte > fec, Pointer<Byte > data, int to) {
+		return hci_read_ext_inquiry_response(dd, Pointer.getPeer(fec), Pointer.getPeer(data), to);
+	}
+	protected native static int hci_read_ext_inquiry_response(int dd, @Ptr long fec, @Ptr long data, int to);
+	/**
+	 * Original signature : <code>int hci_write_ext_inquiry_response(int, uint8_t, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:100</i>
+	 */
+	public static int hci_write_ext_inquiry_response(int dd, byte fec, Pointer<Byte > data, int to) {
+		return hci_write_ext_inquiry_response(dd, fec, Pointer.getPeer(data), to);
+	}
+	protected native static int hci_write_ext_inquiry_response(int dd, byte fec, @Ptr long data, int to);
+	/**
+	 * Original signature : <code>int hci_read_simple_pairing_mode(int, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:101</i>
+	 */
+	public static int hci_read_simple_pairing_mode(int dd, Pointer<Byte > mode, int to) {
+		return hci_read_simple_pairing_mode(dd, Pointer.getPeer(mode), to);
+	}
+	protected native static int hci_read_simple_pairing_mode(int dd, @Ptr long mode, int to);
+	/**
+	 * Original signature : <code>int hci_write_simple_pairing_mode(int, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:102</i>
+	 */
+	public static native int hci_write_simple_pairing_mode(int dd, byte mode, int to);
+	/**
+	 * Original signature : <code>int hci_read_local_oob_data(int, uint8_t*, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:103</i>
+	 */
+	public static int hci_read_local_oob_data(int dd, Pointer<Byte > hash, Pointer<Byte > randomizer, int to) {
+		return hci_read_local_oob_data(dd, Pointer.getPeer(hash), Pointer.getPeer(randomizer), to);
+	}
+	protected native static int hci_read_local_oob_data(int dd, @Ptr long hash, @Ptr long randomizer, int to);
+	/**
+	 * Original signature : <code>int hci_read_inq_response_tx_power_level(int, int8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:104</i>
+	 */
+	public static int hci_read_inq_response_tx_power_level(int dd, Pointer<Byte > level, int to) {
+		return hci_read_inq_response_tx_power_level(dd, Pointer.getPeer(level), to);
+	}
+	protected native static int hci_read_inq_response_tx_power_level(int dd, @Ptr long level, int to);
+	/**
+	 * Original signature : <code>int hci_read_inquiry_transmit_power_level(int, int8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:105</i>
+	 */
+	public static int hci_read_inquiry_transmit_power_level(int dd, Pointer<Byte > level, int to) {
+		return hci_read_inquiry_transmit_power_level(dd, Pointer.getPeer(level), to);
+	}
+	protected native static int hci_read_inquiry_transmit_power_level(int dd, @Ptr long level, int to);
+	/**
+	 * Original signature : <code>int hci_write_inquiry_transmit_power_level(int, int8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:106</i>
+	 */
+	public static native int hci_write_inquiry_transmit_power_level(int dd, byte level, int to);
+	/**
+	 * Original signature : <code>int hci_read_transmit_power_level(int, uint16_t, uint8_t, int8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:107</i>
+	 */
+	public static int hci_read_transmit_power_level(int dd, short handle, byte type, Pointer<Byte > level, int to) {
+		return hci_read_transmit_power_level(dd, handle, type, Pointer.getPeer(level), to);
+	}
+	protected native static int hci_read_transmit_power_level(int dd, short handle, byte type, @Ptr long level, int to);
+	/**
+	 * Original signature : <code>int hci_read_link_policy(int, uint16_t, uint16_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:108</i>
+	 */
+	public static int hci_read_link_policy(int dd, short handle, Pointer<Short > policy, int to) {
+		return hci_read_link_policy(dd, handle, Pointer.getPeer(policy), to);
+	}
+	protected native static int hci_read_link_policy(int dd, short handle, @Ptr long policy, int to);
+	/**
+	 * Original signature : <code>int hci_write_link_policy(int, uint16_t, uint16_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:109</i>
+	 */
+	public static native int hci_write_link_policy(int dd, short handle, short policy, int to);
+	/**
+	 * Original signature : <code>int hci_read_link_supervision_timeout(int, uint16_t, uint16_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:110</i>
+	 */
+	public static int hci_read_link_supervision_timeout(int dd, short handle, Pointer<Short > timeout, int to) {
+		return hci_read_link_supervision_timeout(dd, handle, Pointer.getPeer(timeout), to);
+	}
+	protected native static int hci_read_link_supervision_timeout(int dd, short handle, @Ptr long timeout, int to);
+	/**
+	 * Original signature : <code>int hci_write_link_supervision_timeout(int, uint16_t, uint16_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:111</i>
+	 */
+	public static native int hci_write_link_supervision_timeout(int dd, short handle, short timeout, int to);
+	/**
+	 * Original signature : <code>int hci_set_afh_classification(int, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:112</i>
+	 */
+	public static int hci_set_afh_classification(int dd, Pointer<Byte > map, int to) {
+		return hci_set_afh_classification(dd, Pointer.getPeer(map), to);
+	}
+	protected native static int hci_set_afh_classification(int dd, @Ptr long map, int to);
+	/**
+	 * Original signature : <code>int hci_read_link_quality(int, uint16_t, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:113</i>
+	 */
+	public static int hci_read_link_quality(int dd, short handle, Pointer<Byte > link_quality, int to) {
+		return hci_read_link_quality(dd, handle, Pointer.getPeer(link_quality), to);
+	}
+	protected native static int hci_read_link_quality(int dd, short handle, @Ptr long link_quality, int to);
+	/**
+	 * Original signature : <code>int hci_read_rssi(int, uint16_t, int8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:114</i>
+	 */
+	public static int hci_read_rssi(int dd, short handle, Pointer<Byte > rssi, int to) {
+		return hci_read_rssi(dd, handle, Pointer.getPeer(rssi), to);
+	}
+	protected native static int hci_read_rssi(int dd, short handle, @Ptr long rssi, int to);
+	/**
+	 * Original signature : <code>int hci_read_afh_map(int, uint16_t, uint8_t*, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:115</i>
+	 */
+	public static int hci_read_afh_map(int dd, short handle, Pointer<Byte > mode, Pointer<Byte > map, int to) {
+		return hci_read_afh_map(dd, handle, Pointer.getPeer(mode), Pointer.getPeer(map), to);
+	}
+	protected native static int hci_read_afh_map(int dd, short handle, @Ptr long mode, @Ptr long map, int to);
+	/**
+	 * Original signature : <code>int hci_read_clock(int, uint16_t, uint8_t, uint32_t*, uint16_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:116</i>
+	 */
+	public static int hci_read_clock(int dd, short handle, byte which, Pointer<Integer > clock, Pointer<Short > accuracy, int to) {
+		return hci_read_clock(dd, handle, which, Pointer.getPeer(clock), Pointer.getPeer(accuracy), to);
+	}
+	protected native static int hci_read_clock(int dd, short handle, byte which, @Ptr long clock, @Ptr long accuracy, int to);
+	/**
+	 * Original signature : <code>int hci_le_set_scan_enable(int, uint8_t, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:118</i>
+	 */
+	public static native int hci_le_set_scan_enable(int dev_id, byte enable, byte filter_dup, int to);
+	/**
+	 * Original signature : <code>int hci_le_set_scan_parameters(int, uint8_t, uint16_t, uint16_t, uint8_t, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:119</i>
+	 */
+	public static native int hci_le_set_scan_parameters(int dev_id, byte type, short interval, short window, byte own_type, byte filter, int to);
+	/**
+	 * Original signature : <code>int hci_le_set_advertise_enable(int, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:122</i>
+	 */
+	public static native int hci_le_set_advertise_enable(int dev_id, byte enable, int to);
+	/**
+	 * Original signature : <code>int hci_le_create_conn(int, uint16_t, uint16_t, uint8_t, uint8_t, bdaddr_t, uint8_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:123</i>
+	 */
+	public static int hci_le_create_conn(int dd, short interval, short window, byte initiator_filter, byte peer_bdaddr_type, BluetoothLibrary.bdaddr_t peer_bdaddr, byte own_bdaddr_type, short min_interval, short max_interval, short latency, short supervision_timeout, short min_ce_length, short max_ce_length, Pointer<Short > handle, int to) {
+		return hci_le_create_conn(dd, interval, window, initiator_filter, peer_bdaddr_type, Pointer.getPeer(peer_bdaddr), own_bdaddr_type, min_interval, max_interval, latency, supervision_timeout, min_ce_length, max_ce_length, Pointer.getPeer(handle), to);
+	}
+	protected native static int hci_le_create_conn(int dd, short interval, short window, byte initiator_filter, byte peer_bdaddr_type, @Ptr long peer_bdaddr, byte own_bdaddr_type, short min_interval, short max_interval, short latency, short supervision_timeout, short min_ce_length, short max_ce_length, @Ptr long handle, int to);
+	/**
+	 * Original signature : <code>int hci_le_conn_update(int, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:130</i>
+	 */
+	public static native int hci_le_conn_update(int dd, short handle, short min_interval, short max_interval, short latency, short supervision_timeout, int to);
+	/**
+	 * Original signature : <code>int hci_le_add_white_list(int, const bdaddr_t*, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:133</i>
+	 */
+	public static int hci_le_add_white_list(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, byte type, int to) {
+		return hci_le_add_white_list(dd, Pointer.getPeer(bdaddr), type, to);
+	}
+	protected native static int hci_le_add_white_list(int dd, @Ptr long bdaddr, byte type, int to);
+	/**
+	 * Original signature : <code>int hci_le_rm_white_list(int, const bdaddr_t*, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:134</i>
+	 */
+	public static int hci_le_rm_white_list(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, byte type, int to) {
+		return hci_le_rm_white_list(dd, Pointer.getPeer(bdaddr), type, to);
+	}
+	protected native static int hci_le_rm_white_list(int dd, @Ptr long bdaddr, byte type, int to);
+	/**
+	 * Original signature : <code>int hci_le_read_white_list_size(int, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:135</i>
+	 */
+	public static int hci_le_read_white_list_size(int dd, Pointer<Byte > size, int to) {
+		return hci_le_read_white_list_size(dd, Pointer.getPeer(size), to);
+	}
+	protected native static int hci_le_read_white_list_size(int dd, @Ptr long size, int to);
+	/**
+	 * Original signature : <code>int hci_le_clear_white_list(int, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:136</i>
+	 */
+	public static native int hci_le_clear_white_list(int dd, int to);
+	/**
+	 * Original signature : <code>int hci_le_add_resolving_list(int, const bdaddr_t*, uint8_t, uint8_t*, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:137</i>
+	 */
+	public static int hci_le_add_resolving_list(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, byte type, Pointer<Byte > peer_irk, Pointer<Byte > local_irk, int to) {
+		return hci_le_add_resolving_list(dd, Pointer.getPeer(bdaddr), type, Pointer.getPeer(peer_irk), Pointer.getPeer(local_irk), to);
+	}
+	protected native static int hci_le_add_resolving_list(int dd, @Ptr long bdaddr, byte type, @Ptr long peer_irk, @Ptr long local_irk, int to);
+	/**
+	 * Original signature : <code>int hci_le_rm_resolving_list(int, const bdaddr_t*, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:139</i>
+	 */
+	public static int hci_le_rm_resolving_list(int dd, Pointer<BluetoothLibrary.bdaddr_t > bdaddr, byte type, int to) {
+		return hci_le_rm_resolving_list(dd, Pointer.getPeer(bdaddr), type, to);
+	}
+	protected native static int hci_le_rm_resolving_list(int dd, @Ptr long bdaddr, byte type, int to);
+	/**
+	 * Original signature : <code>int hci_le_clear_resolving_list(int, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:140</i>
+	 */
+	public static native int hci_le_clear_resolving_list(int dd, int to);
+	/**
+	 * Original signature : <code>int hci_le_read_resolving_list_size(int, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:141</i>
+	 */
+	public static int hci_le_read_resolving_list_size(int dd, Pointer<Byte > size, int to) {
+		return hci_le_read_resolving_list_size(dd, Pointer.getPeer(size), to);
+	}
+	protected native static int hci_le_read_resolving_list_size(int dd, @Ptr long size, int to);
+	/**
+	 * Original signature : <code>int hci_le_set_address_resolution_enable(int, uint8_t, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:142</i>
+	 */
+	public static native int hci_le_set_address_resolution_enable(int dev_id, byte enable, int to);
+	/**
+	 * Original signature : <code>int hci_le_read_remote_features(int, uint16_t, uint8_t*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:143</i>
+	 */
+	public static int hci_le_read_remote_features(int dd, short handle, Pointer<Byte > features, int to) {
+		return hci_le_read_remote_features(dd, handle, Pointer.getPeer(features), to);
+	}
+	protected native static int hci_le_read_remote_features(int dd, short handle, @Ptr long features, int to);
+	/**
+	 * Original signature : <code>int hci_for_each_dev(int, hci_for_each_dev_func_callback*, long)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:145</i>
+	 */
+	public static int hci_for_each_dev(int flag, Pointer<BluetoothLibrary.hci_for_each_dev_func_callback > func, @CLong long arg) {
+		return hci_for_each_dev(flag, Pointer.getPeer(func), arg);
+	}
+	protected native static int hci_for_each_dev(int flag, @Ptr long func, @CLong long arg);
+	/**
+	 * Original signature : <code>int hci_get_route(bdaddr_t*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:146</i>
+	 */
+	public static int hci_get_route(Pointer<BluetoothLibrary.bdaddr_t > bdaddr) {
+		return hci_get_route(Pointer.getPeer(bdaddr));
+	}
+	protected native static int hci_get_route(@Ptr long bdaddr);
+	/**
+	 * Original signature : <code>char* hci_bustostr(int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:148</i>
+	 */
+	public static Pointer<Byte > hci_bustostr(int bus) {
+		return (Pointer)Pointer.pointerToAddress(hci_bustostr$2(bus), Byte.class);
+	}
+	@Ptr 
+	@Name("hci_bustostr") 
+	protected native static long hci_bustostr$2(int bus);
+	/**
+	 * Original signature : <code>char* hci_typetostr(int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:149</i>
+	 */
+	public static Pointer<Byte > hci_typetostr(int type) {
+		return (Pointer)Pointer.pointerToAddress(hci_typetostr$2(type), Byte.class);
+	}
+	@Ptr 
+	@Name("hci_typetostr") 
+	protected native static long hci_typetostr$2(int type);
+	/**
+	 * Original signature : <code>char* hci_dtypetostr(int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:150</i>
+	 */
+	public static Pointer<Byte > hci_dtypetostr(int type) {
+		return (Pointer)Pointer.pointerToAddress(hci_dtypetostr$2(type), Byte.class);
+	}
+	@Ptr 
+	@Name("hci_dtypetostr") 
+	protected native static long hci_dtypetostr$2(int type);
+	/**
+	 * Original signature : <code>char* hci_dflagstostr(uint32_t)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:151</i>
+	 */
+	public static Pointer<Byte > hci_dflagstostr(int flags) {
+		return (Pointer)Pointer.pointerToAddress(hci_dflagstostr$2(flags), Byte.class);
+	}
+	@Ptr 
+	@Name("hci_dflagstostr") 
+	protected native static long hci_dflagstostr$2(int flags);
+	/**
+	 * Original signature : <code>char* hci_ptypetostr(unsigned int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:152</i>
+	 */
+	public static Pointer<Byte > hci_ptypetostr(int ptype) {
+		return (Pointer)Pointer.pointerToAddress(hci_ptypetostr$2(ptype), Byte.class);
+	}
+	@Ptr 
+	@Name("hci_ptypetostr") 
+	protected native static long hci_ptypetostr$2(int ptype);
+	/**
+	 * Original signature : <code>int hci_strtoptype(char*, unsigned int*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:153</i>
+	 */
+	public static int hci_strtoptype(Pointer<Byte > str, Pointer<Integer > val) {
+		return hci_strtoptype(Pointer.getPeer(str), Pointer.getPeer(val));
+	}
+	protected native static int hci_strtoptype(@Ptr long str, @Ptr long val);
+	/**
+	 * Original signature : <code>char* hci_scoptypetostr(unsigned int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:154</i>
+	 */
+	public static Pointer<Byte > hci_scoptypetostr(int ptype) {
+		return (Pointer)Pointer.pointerToAddress(hci_scoptypetostr$2(ptype), Byte.class);
+	}
+	@Ptr 
+	@Name("hci_scoptypetostr") 
+	protected native static long hci_scoptypetostr$2(int ptype);
+	/**
+	 * Original signature : <code>int hci_strtoscoptype(char*, unsigned int*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:155</i>
+	 */
+	public static int hci_strtoscoptype(Pointer<Byte > str, Pointer<Integer > val) {
+		return hci_strtoscoptype(Pointer.getPeer(str), Pointer.getPeer(val));
+	}
+	protected native static int hci_strtoscoptype(@Ptr long str, @Ptr long val);
+	/**
+	 * Original signature : <code>char* hci_lptostr(unsigned int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:156</i>
+	 */
+	public static Pointer<Byte > hci_lptostr(int ptype) {
+		return (Pointer)Pointer.pointerToAddress(hci_lptostr$2(ptype), Byte.class);
+	}
+	@Ptr 
+	@Name("hci_lptostr") 
+	protected native static long hci_lptostr$2(int ptype);
+	/**
+	 * Original signature : <code>int hci_strtolp(char*, unsigned int*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:157</i>
+	 */
+	public static int hci_strtolp(Pointer<Byte > str, Pointer<Integer > val) {
+		return hci_strtolp(Pointer.getPeer(str), Pointer.getPeer(val));
+	}
+	protected native static int hci_strtolp(@Ptr long str, @Ptr long val);
+	/**
+	 * Original signature : <code>char* hci_lmtostr(unsigned int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:158</i>
+	 */
+	public static Pointer<Byte > hci_lmtostr(int ptype) {
+		return (Pointer)Pointer.pointerToAddress(hci_lmtostr$2(ptype), Byte.class);
+	}
+	@Ptr 
+	@Name("hci_lmtostr") 
+	protected native static long hci_lmtostr$2(int ptype);
+	/**
+	 * Original signature : <code>int hci_strtolm(char*, unsigned int*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:159</i>
+	 */
+	public static int hci_strtolm(Pointer<Byte > str, Pointer<Integer > val) {
+		return hci_strtolm(Pointer.getPeer(str), Pointer.getPeer(val));
+	}
+	protected native static int hci_strtolm(@Ptr long str, @Ptr long val);
+	/**
+	 * Original signature : <code>char* hci_cmdtostr(unsigned int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:161</i>
+	 */
+	public static Pointer<Byte > hci_cmdtostr(int cmd) {
+		return (Pointer)Pointer.pointerToAddress(hci_cmdtostr$2(cmd), Byte.class);
+	}
+	@Ptr 
+	@Name("hci_cmdtostr") 
+	protected native static long hci_cmdtostr$2(int cmd);
+	/**
+	 * Original signature : <code>char* hci_commandstostr(uint8_t*, char*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:162</i>
+	 */
+	public static Pointer<Byte > hci_commandstostr(Pointer<Byte > commands, Pointer<Byte > pref, int width) {
+		return (Pointer)Pointer.pointerToAddress(hci_commandstostr(Pointer.getPeer(commands), Pointer.getPeer(pref), width), Byte.class);
+	}
+	@Ptr 
+	protected native static long hci_commandstostr(@Ptr long commands, @Ptr long pref, int width);
+	/**
+	 * Original signature : <code>char* hci_vertostr(unsigned int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:164</i>
+	 */
+	public static Pointer<Byte > hci_vertostr(int ver) {
+		return (Pointer)Pointer.pointerToAddress(hci_vertostr$2(ver), Byte.class);
+	}
+	@Ptr 
+	@Name("hci_vertostr") 
+	protected native static long hci_vertostr$2(int ver);
+	/**
+	 * Original signature : <code>int hci_strtover(char*, unsigned int*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:165</i>
+	 */
+	public static int hci_strtover(Pointer<Byte > str, Pointer<Integer > ver) {
+		return hci_strtover(Pointer.getPeer(str), Pointer.getPeer(ver));
+	}
+	protected native static int hci_strtover(@Ptr long str, @Ptr long ver);
+	/**
+	 * Original signature : <code>char* lmp_vertostr(unsigned int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:166</i>
+	 */
+	public static Pointer<Byte > lmp_vertostr(int ver) {
+		return (Pointer)Pointer.pointerToAddress(lmp_vertostr$2(ver), Byte.class);
+	}
+	@Ptr 
+	@Name("lmp_vertostr") 
+	protected native static long lmp_vertostr$2(int ver);
+	/**
+	 * Original signature : <code>int lmp_strtover(char*, unsigned int*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:167</i>
+	 */
+	public static int lmp_strtover(Pointer<Byte > str, Pointer<Integer > ver) {
+		return lmp_strtover(Pointer.getPeer(str), Pointer.getPeer(ver));
+	}
+	protected native static int lmp_strtover(@Ptr long str, @Ptr long ver);
+	/**
+	 * Original signature : <code>char* pal_vertostr(unsigned int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:168</i>
+	 */
+	public static Pointer<Byte > pal_vertostr(int ver) {
+		return (Pointer)Pointer.pointerToAddress(pal_vertostr$2(ver), Byte.class);
+	}
+	@Ptr 
+	@Name("pal_vertostr") 
+	protected native static long pal_vertostr$2(int ver);
+	/**
+	 * Original signature : <code>int pal_strtover(char*, unsigned int*)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:169</i>
+	 */
+	public static int pal_strtover(Pointer<Byte > str, Pointer<Integer > ver) {
+		return pal_strtover(Pointer.getPeer(str), Pointer.getPeer(ver));
+	}
+	protected native static int pal_strtover(@Ptr long str, @Ptr long ver);
+	/**
+	 * Original signature : <code>char* lmp_featurestostr(uint8_t*, char*, int)</code><br>
+	 * <i>native declaration : bluetooth/hci_lib.h:171</i>
+	 */
+	public static Pointer<Byte > lmp_featurestostr(Pointer<Byte > features, Pointer<Byte > pref, int width) {
+		return (Pointer)Pointer.pointerToAddress(lmp_featurestostr(Pointer.getPeer(features), Pointer.getPeer(pref), width), Byte.class);
+	}
+	@Ptr 
+	protected native static long lmp_featurestostr(@Ptr long features, @Ptr long pref, int width);
 	/** Undefined type */
 	public static interface bdaddr_t {
 		
