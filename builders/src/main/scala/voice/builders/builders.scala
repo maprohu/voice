@@ -20,6 +20,11 @@ object build_voice_requests extends mvnmod.builder.ModuleBuilder(
   "./requests"
 )
            
+object build_voice_linux extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./linux"
+)
+           
 object build_voice_modules extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./modules"
@@ -113,6 +118,11 @@ object build_voice_requests_compilerpi extends mvnmod.builder.ModuleBuilder(
 object build_voice_requests_common extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./requests/common"
+)
+           
+object build_voice_linux_generator extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./linux/generator"
 )
            
        

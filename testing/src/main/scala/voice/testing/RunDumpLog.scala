@@ -14,9 +14,9 @@ import voice.requests.compilerpi.DbusCompilerRequest$
   */
 object RunDumpLog {
 
-//  val Target = Rpis.Home.tunneled
+//  val Target = Rpis.Home.wlan
+  val Target = Rpis.Home.tunneled
 //  val Target = Rpis.Central.tunneled
-    val Target = Rpis.Home.wlan
   //  val Target = Rpis.Localhost
 
   def main(args: Array[String]): Unit = {

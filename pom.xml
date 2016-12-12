@@ -17,6 +17,7 @@
         <module>api</module>
         <module>rpi</module>
         <module>requests</module>
+        <module>linux</module>
         <module>modules</module>
         <module>core</module>
         <module>sandbox</module>
