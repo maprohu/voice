@@ -26,7 +26,7 @@ object RunLinuxDonwloadHeaders {
 
 
   val files =
-    LinuxLibraries
+    LinuxLibraries.Pi
       .libs
       .flatMap(_.headers)
       .++(extraFiles)

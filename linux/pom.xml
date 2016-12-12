@@ -15,5 +15,6 @@
     </build>
     <modules>
         <module>generator</module>
+        <module>testing</module>
     </modules>
 </project>

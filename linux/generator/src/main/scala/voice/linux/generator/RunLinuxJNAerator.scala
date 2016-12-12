@@ -13,6 +13,16 @@ object RunLinuxJNAerator {
   val TargetMavenDir = "../voice/linux/jnalib"
 
   def main(args: Array[String]): Unit = {
+    run(
+      LinuxLibraries.Pi,
+      RunLinuxDonwloadHeaders.TargetDirPath
+    )
+  }
+
+  def run(
+    libs: LinuxLibraries,
+    targetDir: String
+  ) = {
     val tf = new File(TargetMavenDir)
 
     IO.delete(tf)
@@ -26,14 +36,14 @@ object RunLinuxJNAerator {
           "-mavenArtifactId", "voice-linux-jnalib",
           "-mavenVersion", "2-SNAPSHOT",
           "-D_GNU_SOURCE=1",
-          "-I", s"${RunLinuxDonwloadHeaders.TargetDirPath}/usr/include",
-          "-I", s"${RunLinuxDonwloadHeaders.TargetDirPath}/usr/include/linux",
-          "-I", s"${RunLinuxDonwloadHeaders.TargetDirPath}/usr/include/arm-linux-gnueabihf",
+          "-I", s"${targetDir}${libs.IncludeDir}",
+          "-I", s"${targetDir}${libs.IncludeDir}/linux",
+          "-I", s"${targetDir}${libs.LibIncludeDir}",
           "-o", "../voice/linux/jnalib",
           "-mode", "Maven",
           "-rootPackage", "voice.linux.jna"
         ) ++
-        LinuxLibraries
+        libs
           .libs
           .flatMap({ lib =>
             Seq(
@@ -42,10 +52,21 @@ object RunLinuxJNAerator {
               lib
                 .headers
                 .map({ f =>
-                  new File(new File(RunLinuxDonwloadHeaders.TargetDir.getPath), f.tail).toString
+                  new File(targetDir, f.tail)
                 })
+//                .filter(_.exists())
+                .map(_.toString)
           })
       )
   }
 
+}
+
+object RunJNALocal {
+  def main(args: Array[String]): Unit = {
+    RunLinuxJNAerator.run(
+      LinuxLibraries.X86,
+      ""
+    )
+  }
 }

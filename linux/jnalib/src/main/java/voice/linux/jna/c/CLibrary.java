@@ -1,7 +1,10 @@
 package voice.linux.jna.c;
 import org.bridj.BridJ;
 import org.bridj.CRuntime;
+import org.bridj.Pointer;
 import org.bridj.ann.Library;
+import org.bridj.ann.Name;
+import org.bridj.ann.Ptr;
 import org.bridj.ann.Runtime;
 /**
  * Wrapper for library <b>c</b><br>
@@ -21,17 +24,483 @@ public class CLibrary {
 	public static final int SHUT_WR = 1;
 	/** No more receptions or transmissions. */
 	public static final int SHUT_RDWR = 2;
-	/** <i>native declaration : linux\generator\src\main\c\\usr\include\arm-linux-gnueabihf\sys\\uio.h</i> */
-	public static final int _SYS_UIO_H = (int)1;
-	/** <i>native declaration : linux\generator\src\main\c\\usr\include\arm-linux-gnueabihf\sys\socket.h</i> */
+	/** Interface is up. */
+	public static final int IFF_UP = 0x1;
+	/** Broadcast address valid. */
+	public static final int IFF_BROADCAST = 0x2;
+	/** Turn on debugging. */
+	public static final int IFF_DEBUG = 0x4;
+	/** Is a loopback net. */
+	public static final int IFF_LOOPBACK = 0x8;
+	/** Interface is point-to-point link. */
+	public static final int IFF_POINTOPOINT = 0x10;
+	/** Avoid use of trailers. */
+	public static final int IFF_NOTRAILERS = 0x20;
+	/** Resources allocated. */
+	public static final int IFF_RUNNING = 0x40;
+	/** No address resolution protocol. */
+	public static final int IFF_NOARP = 0x80;
+	/** Receive all packets. */
+	public static final int IFF_PROMISC = 0x100;
+	/** Receive all multicast packets. */
+	public static final int IFF_ALLMULTI = 0x200;
+	/** Master of a load balancer. */
+	public static final int IFF_MASTER = 0x400;
+	/** Slave of a load balancer. */
+	public static final int IFF_SLAVE = 0x800;
+	/** Supports multicast. */
+	public static final int IFF_MULTICAST = 0x1000;
+	/** Can set media type. */
+	public static final int IFF_PORTSEL = 0x2000;
+	/** Auto media select active. */
+	public static final int IFF_AUTOMEDIA = 0x4000;
+	/** Dialup device with changing addresses. */
+	public static final int IFF_DYNAMIC = 0x8000;
+	/** <i>native declaration : net/if.h</i> */
+	public static final int _NET_IF_H = (int)1;
+	/** <i>native declaration : x86_64-linux-gnu/sys/cdefs.h</i> */
+	public static final int _SYS_CDEFS_H = (int)1;
+	/** <i>native declaration : x86_64-linux-gnu/sys/types.h</i> */
+	public static final int _SYS_TYPES_H = (int)1;
+	/** <i>native declaration : x86_64-linux-gnu/sys/types.h</i> */
+	public static final int __BIT_TYPES_DEFINED__ = (int)1;
+	/** <i>native declaration : x86_64-linux-gnu/sys/select.h</i> */
+	public static final int _SYS_SELECT_H = (int)1;
+	/** <i>native declaration : x86_64-linux-gnu/sys/select.h</i> */
+	public static final int FD_SETSIZE = (int)1024;
+	/** <i>native declaration : x86_64-linux-gnu/sys/sysmacros.h</i> */
+	public static final int _SYS_SYSMACROS_H = (int)1;
+	/** <i>native declaration : x86_64-linux-gnu/sys/socket.h</i> */
 	public static final int _SYS_SOCKET_H = (int)1;
+	/** <i>native declaration : x86_64-linux-gnu/sys/uio.h</i> */
+	public static final int _SYS_UIO_H = (int)1;
+	/** <i>native declaration : net/if.h</i> */
+	public static final int IF_NAMESIZE = (int)16;
+	/** <i>native declaration : net/if.h</i> */
+	public static final int IFHWADDRLEN = (int)6;
+	/** <i>native declaration : net/if.h</i> */
+	public static final int IFNAMSIZ = (int)16;
 	/**
-	 * Original signature : <code>int boo()</code><br>
-	 * <i>native declaration : linux\generator\src\main\c\\usr\include\arm-linux-gnueabihf\sys\socket.h:71</i>
+	 * Check the first NFDS descriptors each in READFDS (if not NULL) for read<br>
+	 * readiness, in WRITEFDS (if not NULL) for write readiness, and in EXCEPTFDS<br>
+	 * (if not NULL) for exceptional conditions.  If TIMEOUT is not NULL, time out<br>
+	 * after waiting the interval specified therein.  Returns the number of ready<br>
+	 * descriptors, or -1 for errors.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>int select(int, fd_set*, fd_set*, fd_set*, timeval*)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/select.h:99</i>
 	 */
-	public static native int boo();
+	public static int select(int __nfds, Pointer<fd_set > __readfds, Pointer<fd_set > __writefds, Pointer<fd_set > __exceptfds, Pointer __timeout) {
+		return select(__nfds, Pointer.getPeer(__readfds), Pointer.getPeer(__writefds), Pointer.getPeer(__exceptfds), Pointer.getPeer(__timeout));
+	}
+	protected native static int select(int __nfds, @Ptr long __readfds, @Ptr long __writefds, @Ptr long __exceptfds, @Ptr long __timeout);
+	/**
+	 * Same as above only that the TIMEOUT value is given with higher<br>
+	 * resolution and a sigmask which is been set temporarily.  This version<br>
+	 * should be used.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>int pselect(int, fd_set*, fd_set*, fd_set*, timespec*, const __sigset_t*)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/select.h:111</i>
+	 */
+	public static int pselect(int __nfds, Pointer<fd_set > __readfds, Pointer<fd_set > __writefds, Pointer<fd_set > __exceptfds, Pointer<CLibrary.timespec > __timeout, Pointer __sigmask) {
+		return pselect(__nfds, Pointer.getPeer(__readfds), Pointer.getPeer(__writefds), Pointer.getPeer(__exceptfds), Pointer.getPeer(__timeout), Pointer.getPeer(__sigmask));
+	}
+	protected native static int pselect(int __nfds, @Ptr long __readfds, @Ptr long __writefds, @Ptr long __exceptfds, @Ptr long __timeout, @Ptr long __sigmask);
+	/**
+	 * Original signature : <code>int gnu_dev_major(unsigned long long long)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/sysmacros.h:5</i>
+	 */
+	public static native int gnu_dev_major(long __dev);
+	/**
+	 * Original signature : <code>int gnu_dev_minor(unsigned long long long)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/sysmacros.h:8</i>
+	 */
+	public static native int gnu_dev_minor(long __dev);
+	/**
+	 * Original signature : <code>long long long gnu_dev_makedev(unsigned int, unsigned int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/sysmacros.h:11</i>
+	 */
+	public static native long gnu_dev_makedev(int __major, int __minor);
+	/**
+	 * Read data from file descriptor FD, and put the result in the<br>
+	 * buffers described by IOVEC, which is a vector of COUNT 'struct iovec's.<br>
+	 * The buffers are filled in the order specified.<br>
+	 * Operates just like 'read' (see <unistd.h>) except that data are<br>
+	 * put in IOVEC instead of a contiguous buffer.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t readv(int, iovec*, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/uio.h:37</i>
+	 */
+	public static long readv(int __fd, Pointer __iovec, int __count) {
+		return readv(__fd, Pointer.getPeer(__iovec), __count);
+	}
+	protected native static long readv(int __fd, @Ptr long __iovec, int __count);
+	/**
+	 * Write data pointed by the buffers described by IOVEC, which<br>
+	 * is a vector of COUNT 'struct iovec's, to file descriptor FD.<br>
+	 * The data is written in the order specified.<br>
+	 * Operates just like 'write' (see <unistd.h>) except that the data<br>
+	 * are taken from IOVEC instead of a contiguous buffer.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t writev(int, iovec*, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/uio.h:48</i>
+	 */
+	public static long writev(int __fd, Pointer __iovec, int __count) {
+		return writev(__fd, Pointer.getPeer(__iovec), __count);
+	}
+	protected native static long writev(int __fd, @Ptr long __iovec, int __count);
+	/**
+	 * Read data from file descriptor FD at the given position OFFSET<br>
+	 * without change the file pointer, and put the result in the buffers<br>
+	 * described by IOVEC, which is a vector of COUNT 'struct iovec's.<br>
+	 * The buffers are filled in the order specified.  Operates just like<br>
+	 * 'pread' (see <unistd.h>) except that data are put in IOVEC instead<br>
+	 * of a contiguous buffer.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t preadv(int, iovec*, int, __off_t)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/uio.h:63</i>
+	 */
+	public static long preadv(int __fd, Pointer __iovec, int __count, long __offset) {
+		return preadv(__fd, Pointer.getPeer(__iovec), __count, __offset);
+	}
+	protected native static long preadv(int __fd, @Ptr long __iovec, int __count, long __offset);
+	/**
+	 * Write data pointed by the buffers described by IOVEC, which is a<br>
+	 * vector of COUNT 'struct iovec's, to file descriptor FD at the given<br>
+	 * position OFFSET without change the file pointer.  The data is<br>
+	 * written in the order specified.  Operates just like 'pwrite' (see<br>
+	 * <unistd.h>) except that the data are taken from IOVEC instead of a<br>
+	 * contiguous buffer.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t pwritev(int, iovec*, int, __off_t)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/uio.h:75</i>
+	 */
+	public static long pwritev(int __fd, Pointer __iovec, int __count, long __offset) {
+		return pwritev(__fd, Pointer.getPeer(__iovec), __count, __offset);
+	}
+	protected native static long pwritev(int __fd, @Ptr long __iovec, int __count, long __offset);
+	/**
+	 * Read data from file descriptor FD at the given position OFFSET<br>
+	 * without change the file pointer, and put the result in the buffers<br>
+	 * described by IOVEC, which is a vector of COUNT 'struct iovec's.<br>
+	 * The buffers are filled in the order specified.  Operates just like<br>
+	 * 'pread' (see <unistd.h>) except that data are put in IOVEC instead<br>
+	 * of a contiguous buffer.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t preadv64(int, iovec*, int, __off64_t)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/uio.h:101</i>
+	 */
+	public static long preadv64(int __fd, Pointer __iovec, int __count, long __offset) {
+		return preadv64(__fd, Pointer.getPeer(__iovec), __count, __offset);
+	}
+	protected native static long preadv64(int __fd, @Ptr long __iovec, int __count, long __offset);
+	/**
+	 * Write data pointed by the buffers described by IOVEC, which is a<br>
+	 * vector of COUNT 'struct iovec's, to file descriptor FD at the given<br>
+	 * position OFFSET without change the file pointer.  The data is<br>
+	 * written in the order specified.  Operates just like 'pwrite' (see<br>
+	 * <unistd.h>) except that the data are taken from IOVEC instead of a<br>
+	 * contiguous buffer.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t pwritev64(int, iovec*, int, __off64_t)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/uio.h:113</i>
+	 */
+	public static long pwritev64(int __fd, Pointer __iovec, int __count, long __offset) {
+		return pwritev64(__fd, Pointer.getPeer(__iovec), __count, __offset);
+	}
+	protected native static long pwritev64(int __fd, @Ptr long __iovec, int __count, long __offset);
+	/**
+	 * Create a new socket of type TYPE in domain DOMAIN, using<br>
+	 * protocol PROTOCOL.  If PROTOCOL is zero, one is chosen automatically.<br>
+	 * Returns a file descriptor for the new socket, or -1 for errors.<br>
+	 * Original signature : <code>int socket(int, int, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:108</i>
+	 */
+	public static native int socket(int __domain, int __type, int __protocol);
+	/**
+	 * Create two new sockets, of type TYPE in domain DOMAIN and using<br>
+	 * protocol PROTOCOL, which are connected to each other, and put file<br>
+	 * descriptors for them in FDS[0] and FDS[1].  If PROTOCOL is zero,<br>
+	 * one will be chosen automatically.  Returns 0 on success, -1 for errors.<br>
+	 * Original signature : <code>int socketpair(int, int, int, int[2])</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:114</i>
+	 */
+	public static int socketpair(int __domain, int __type, int __protocol, Pointer<Integer > __fds) {
+		return socketpair(__domain, __type, __protocol, Pointer.getPeer(__fds));
+	}
+	protected native static int socketpair(int __domain, int __type, int __protocol, @Ptr long __fds);
+	/**
+	 * Give the socket FD the local address ADDR (which is LEN bytes long).<br>
+	 * Original signature : <code>int bind(int, sockaddr*, socklen_t)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:118</i>
+	 */
+	public static int bind(int __fd, Pointer __addr, int __len) {
+		return bind(__fd, Pointer.getPeer(__addr), __len);
+	}
+	protected native static int bind(int __fd, @Ptr long __addr, int __len);
+	/**
+	 * Put the local address of FD into *ADDR and its length in *LEN.<br>
+	 * Original signature : <code>int getsockname(int, sockaddr*, socklen_t*)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:122</i>
+	 */
+	public static int getsockname(int __fd, Pointer __addr, Pointer<Integer > __len) {
+		return getsockname(__fd, Pointer.getPeer(__addr), Pointer.getPeer(__len));
+	}
+	protected native static int getsockname(int __fd, @Ptr long __addr, @Ptr long __len);
+	/**
+	 * Open a connection on socket FD to peer at ADDR (which LEN bytes long).<br>
+	 * For connectionless socket types, just set the default address to send to<br>
+	 * and the only address from which to accept transmissions.<br>
+	 * Return 0 on success, -1 for errors.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>int connect(int, sockaddr*, socklen_t)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:132</i>
+	 */
+	public static int connect(int __fd, Pointer __addr, int __len) {
+		return connect(__fd, Pointer.getPeer(__addr), __len);
+	}
+	protected native static int connect(int __fd, @Ptr long __addr, int __len);
+	/**
+	 * Put the address of the peer connected to socket FD into *ADDR<br>
+	 * (which is *LEN bytes long), and its actual length into *LEN.<br>
+	 * Original signature : <code>int getpeername(int, sockaddr*, socklen_t*)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:136</i>
+	 */
+	public static int getpeername(int __fd, Pointer __addr, Pointer<Integer > __len) {
+		return getpeername(__fd, Pointer.getPeer(__addr), Pointer.getPeer(__len));
+	}
+	protected native static int getpeername(int __fd, @Ptr long __addr, @Ptr long __len);
+	/**
+	 * Send N bytes of BUF to socket FD.  Returns the number sent or -1.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t send(int, const void*, size_t, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:144</i>
+	 */
+	public static long send(int __fd, Pointer<? > __buf, @Ptr long __n, int __flags) {
+		return send(__fd, Pointer.getPeer(__buf), __n, __flags);
+	}
+	protected native static long send(int __fd, @Ptr long __buf, @Ptr long __n, int __flags);
+	/**
+	 * Read N bytes into BUF from socket FD.<br>
+	 * Returns the number read or -1 for errors.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t recv(int, void*, size_t, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:151</i>
+	 */
+	public static long recv(int __fd, Pointer<? > __buf, @Ptr long __n, int __flags) {
+		return recv(__fd, Pointer.getPeer(__buf), __n, __flags);
+	}
+	protected native static long recv(int __fd, @Ptr long __buf, @Ptr long __n, int __flags);
+	/**
+	 * Send N bytes of BUF on socket FD to peer at address ADDR (which is<br>
+	 * ADDR_LEN bytes long).  Returns the number sent, or -1 for errors.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t sendto(int, const void*, size_t, int, sockaddr*, socklen_t)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:158</i>
+	 */
+	public static long sendto(int __fd, Pointer<? > __buf, @Ptr long __n, int __flags, Pointer __addr, int __addr_len) {
+		return sendto(__fd, Pointer.getPeer(__buf), __n, __flags, Pointer.getPeer(__addr), __addr_len);
+	}
+	protected native static long sendto(int __fd, @Ptr long __buf, @Ptr long __n, int __flags, @Ptr long __addr, int __addr_len);
+	/**
+	 * Read N bytes into BUF through socket FD.<br>
+	 * If ADDR is not NULL, fill in *ADDR_LEN bytes of it with tha address of<br>
+	 * the sender, and store the actual size of the address in *ADDR_LEN.<br>
+	 * Returns the number of bytes read or -1 for errors.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t recvfrom(int, void*, size_t, int, sockaddr*, socklen_t*)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:169</i>
+	 */
+	public static long recvfrom(int __fd, Pointer<? > __buf, @Ptr long __n, int __flags, Pointer __addr, Pointer<Integer > __addr_len) {
+		return recvfrom(__fd, Pointer.getPeer(__buf), __n, __flags, Pointer.getPeer(__addr), Pointer.getPeer(__addr_len));
+	}
+	protected native static long recvfrom(int __fd, @Ptr long __buf, @Ptr long __n, int __flags, @Ptr long __addr, @Ptr long __addr_len);
+	/**
+	 * Send a message described MESSAGE on socket FD.<br>
+	 * Returns the number of bytes sent, or -1 for errors.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t sendmsg(int, msghdr*, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:179</i>
+	 */
+	public static long sendmsg(int __fd, Pointer __message, int __flags) {
+		return sendmsg(__fd, Pointer.getPeer(__message), __flags);
+	}
+	protected native static long sendmsg(int __fd, @Ptr long __message, int __flags);
+	/**
+	 * Send a VLEN messages as described by VMESSAGES to socket FD.<br>
+	 * Returns the number of datagrams successfully written or -1 for errors.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>int sendmmsg(int, mmsghdr*, unsigned int, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:188</i>
+	 */
+	public static int sendmmsg(int __fd, Pointer<mmsghdr > __vmessages, int __vlen, int __flags) {
+		return sendmmsg(__fd, Pointer.getPeer(__vmessages), __vlen, __flags);
+	}
+	protected native static int sendmmsg(int __fd, @Ptr long __vmessages, int __vlen, int __flags);
+	/**
+	 * Receive a message as described by MESSAGE from socket FD.<br>
+	 * Returns the number of bytes read or -1 for errors.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>ssize_t recvmsg(int, msghdr*, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:197</i>
+	 */
+	public static long recvmsg(int __fd, Pointer __message, int __flags) {
+		return recvmsg(__fd, Pointer.getPeer(__message), __flags);
+	}
+	protected native static long recvmsg(int __fd, @Ptr long __message, int __flags);
+	/**
+	 * Receive up to VLEN messages as described by VMESSAGES from socket FD.<br>
+	 * Returns the number of messages received or -1 for errors.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>int recvmmsg(int, mmsghdr*, unsigned int, int, timespec*)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:205</i>
+	 */
+	public static int recvmmsg(int __fd, Pointer<mmsghdr > __vmessages, int __vlen, int __flags, Pointer<CLibrary.timespec > __tmo) {
+		return recvmmsg(__fd, Pointer.getPeer(__vmessages), __vlen, __flags, Pointer.getPeer(__tmo));
+	}
+	protected native static int recvmmsg(int __fd, @Ptr long __vmessages, int __vlen, int __flags, @Ptr long __tmo);
+	/**
+	 * Put the current value for socket FD's option OPTNAME at protocol level LEVEL<br>
+	 * into OPTVAL (which is *OPTLEN bytes long), and set *OPTLEN to the value's<br>
+	 * actual length.  Returns 0 on success, -1 for errors.<br>
+	 * Original signature : <code>int getsockopt(int, int, int, void*, socklen_t*)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:214</i>
+	 */
+	public static int getsockopt(int __fd, int __level, int __optname, Pointer<? > __optval, Pointer<Integer > __optlen) {
+		return getsockopt(__fd, __level, __optname, Pointer.getPeer(__optval), Pointer.getPeer(__optlen));
+	}
+	protected native static int getsockopt(int __fd, int __level, int __optname, @Ptr long __optval, @Ptr long __optlen);
+	/**
+	 * Set socket FD's option OPTNAME at protocol level LEVEL<br>
+	 * to *OPTVAL (which is OPTLEN bytes long).<br>
+	 * Returns 0 on success, -1 for errors.<br>
+	 * Original signature : <code>int setsockopt(int, int, int, const void*, socklen_t)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:221</i>
+	 */
+	public static int setsockopt(int __fd, int __level, int __optname, Pointer<? > __optval, int __optlen) {
+		return setsockopt(__fd, __level, __optname, Pointer.getPeer(__optval), __optlen);
+	}
+	protected native static int setsockopt(int __fd, int __level, int __optname, @Ptr long __optval, int __optlen);
+	/**
+	 * Prepare to accept connections on socket FD.<br>
+	 * N connection requests will be queued before further requests are refused.<br>
+	 * Returns 0 on success, -1 for errors.<br>
+	 * Original signature : <code>int listen(int, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:228</i>
+	 */
+	public static native int listen(int __fd, int __n);
+	/**
+	 * Await a connection on socket FD.<br>
+	 * When a connection arrives, open a new socket to communicate with it,<br>
+	 * set *ADDR (which is *ADDR_LEN bytes long) to the address of the connecting<br>
+	 * peer and *ADDR_LEN to the address's actual length, and return the<br>
+	 * new socket's descriptor, or -1 for errors.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>int accept(int, sockaddr*, socklen_t*)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:238</i>
+	 */
+	public static int accept(int __fd, Pointer __addr, Pointer<Integer > __addr_len) {
+		return accept(__fd, Pointer.getPeer(__addr), Pointer.getPeer(__addr_len));
+	}
+	protected native static int accept(int __fd, @Ptr long __addr, @Ptr long __addr_len);
+	/**
+	 * Similar to 'accept' but takes an additional parameter to specify flags.<br>
+	 * This function is a cancellation point and therefore not marked with<br>
+	 * __THROW.<br>
+	 * Original signature : <code>int accept4(int, sockaddr*, socklen_t*, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:246</i>
+	 */
+	public static int accept4(int __fd, Pointer __addr, Pointer<Integer > __addr_len, int __flags) {
+		return accept4(__fd, Pointer.getPeer(__addr), Pointer.getPeer(__addr_len), __flags);
+	}
+	protected native static int accept4(int __fd, @Ptr long __addr, @Ptr long __addr_len, int __flags);
+	/**
+	 * Shut down all or part of the connection open on socket FD.<br>
+	 * HOW determines what to shut down:<br>
+	 * SHUT_RD   = No more receptions;<br>
+	 * SHUT_WR   = No more transmissions;<br>
+	 * SHUT_RDWR = No more receptions or transmissions.<br>
+	 * Returns 0 on success, -1 for errors.<br>
+	 * Original signature : <code>int shutdown(int, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:256</i>
+	 */
+	public static native int shutdown(int __fd, int __how);
+	/**
+	 * Determine wheter socket is at a out-of-band mark.<br>
+	 * Original signature : <code>int sockatmark(int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:261</i>
+	 */
+	public static native int sockatmark(int __fd);
+	/**
+	 * FDTYPE is S_IFSOCK or another S_IF* macro defined in <sys/stat.h>;<br>
+	 * returns 1 if FD is open on an object of the indicated type, 0 if not,<br>
+	 * or -1 for errors (setting errno).<br>
+	 * Original signature : <code>int isfdtype(int, int)</code><br>
+	 * <i>native declaration : x86_64-linux-gnu/sys/socket.h:269</i>
+	 */
+	public static native int isfdtype(int __fd, int __fdtype);
+	/**
+	 * Convert an interface name to an index, and vice versa.<br>
+	 * Original signature : <code>int if_nametoindex(const char*)</code><br>
+	 * <i>native declaration : net/if.h:191</i>
+	 */
+	public static int if_nametoindex(Pointer<Byte > __ifname) {
+		return if_nametoindex(Pointer.getPeer(__ifname));
+	}
+	protected native static int if_nametoindex(@Ptr long __ifname);
+	/**
+	 * Original signature : <code>char* if_indextoname(unsigned int, char*)</code><br>
+	 * <i>native declaration : net/if.h:192</i>
+	 */
+	public static Pointer<Byte > if_indextoname(int __ifindex, Pointer<Byte > __ifname) {
+		return (Pointer)Pointer.pointerToAddress(if_indextoname(__ifindex, Pointer.getPeer(__ifname)), Byte.class);
+	}
+	@Ptr 
+	protected native static long if_indextoname(int __ifindex, @Ptr long __ifname);
+	/**
+	 * Return a list of all interfaces and their indices.<br>
+	 * Original signature : <code>if_nameindex* if_nameindex()</code><br>
+	 * <i>native declaration : net/if.h:195</i>
+	 */
+	public static Pointer<if_nameindex > if_nameindex() {
+		return (Pointer)Pointer.pointerToAddress(if_nameindex$2(), if_nameindex.class);
+	}
+	@Ptr 
+	@Name("if_nameindex") 
+	protected native static long if_nameindex$2();
+	/**
+	 * Free the data returned from if_nameindex.<br>
+	 * Original signature : <code>void if_freenameindex(if_nameindex*)</code><br>
+	 * <i>native declaration : net/if.h:198</i>
+	 */
+	public static void if_freenameindex(Pointer<if_nameindex > __ptr) {
+		if_freenameindex(Pointer.getPeer(__ptr));
+	}
+	protected native static void if_freenameindex(@Ptr long __ptr);
 	/** Undefined type */
-	public static interface msghdr {
+	public static interface iface {
+		
+	};
+	/** Undefined type */
+	public static interface timespec {
 		
 	};
 }

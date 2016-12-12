@@ -125,4 +125,9 @@ object build_voice_linux_generator extends mvnmod.builder.ModuleBuilder(
   "./linux/generator"
 )
            
+object build_voice_linux_testing extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./linux/testing"
+)
+           
        

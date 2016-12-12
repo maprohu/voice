@@ -1,6 +1,6 @@
 package voice.modules
 
-import mvnmod.builder.{ScalaModule, SubModuleContainer}
+import mvnmod.builder.{MavenCentralModule, Module, ScalaModule, SubModuleContainer}
 import toolbox8.modules._
 
 /**
@@ -18,6 +18,16 @@ object LinuxModules {
     JarTree8Modules.Testing,
     VoiceRequestModules.Common,
     mvn.`com.nativelibs4java:jnaerator:jar:0.12`
+  )
+
+  object Testing extends ScalaModule(
+    "testing",
+    new MavenCentralModule(
+      VoiceModules.Root.groupId,
+      "voice-linux-jnalib",
+      "1.0-SNAPSHOT"
+    )
+
 
   )
 
