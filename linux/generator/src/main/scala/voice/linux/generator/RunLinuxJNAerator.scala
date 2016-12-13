@@ -36,6 +36,8 @@ object RunLinuxJNAerator {
           "-mavenArtifactId", "voice-linux-jnalib",
           "-mavenVersion", "2-SNAPSHOT",
           "-D_GNU_SOURCE=1",
+          "-D__ARM_PCS_VFP=1",
+          "-I", s"${targetDir}/usr/lib/gcc/arm-linux-gnueabihf/4.9.2/include",
           "-I", s"${targetDir}${libs.IncludeDir}",
           "-I", s"${targetDir}${libs.IncludeDir}/linux",
           "-I", s"${targetDir}${libs.LibIncludeDir}",
@@ -70,3 +72,36 @@ object RunJNALocal {
     )
   }
 }
+
+object RunJNALocalPi {
+  def main(args: Array[String]): Unit = {
+    RunLinuxJNAerator.run(
+      LinuxLibraries.Pi,
+      "../voice/local/headers"
+    )
+  }
+}
+
+/*
+
+
+/* Bluetooth unaligned access */
+#define bt_get_unaligned(ptr)			0
+//#define bt_get_unaligned(ptr)			\
+//({						\
+//	struct __attribute__((packed)) {	\
+//		__typeof__(*(ptr)) __v;		\
+//	} *__p = (__typeof__(__p)) (ptr);	\
+//	__p->__v;				\
+//})
+
+#define bt_put_unaligned(val, ptr)		0
+//#define bt_put_unaligned(val, ptr)		\
+//do {						\
+//	struct __attribute__((packed)) {	\
+//		__typeof__(*(ptr)) __v;		\
+//	} *__p = (__typeof__(__p)) (ptr);	\
+//	__p->__v = (val);			\
+//} while(0)
+
+ */

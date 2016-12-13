@@ -30,7 +30,7 @@ object RunGenerateKey {
             val dos = new ObjectOutputStream(os)
             dos.writeObject(
               GenerateKey.Input(
-                keyLocation = s"/home/${target.serviceUser}/.ssh/id_rsa"
+                keyLocation = s"/home/${target.connectUser}/.ssh/id_rsa"
               )
             )
             dos.flush()

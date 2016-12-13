@@ -47,7 +47,8 @@ object Rpis {
     servicePort : Int,
     directPort: Int,
     host: String = "localhost",
-    serviceUser: String = "voicer",
+    processUser: String = "voicer",
+    connectUser: String = "voicer",
     sshPort: Int = 22,
     user: String = "pi",
     hostKey: Array[Byte] = Array(),
@@ -103,10 +104,16 @@ object Rpis {
     RpiInstances.Home,
     "0.0.0.0"
   ) {
-    lazy val ssh = SshConnectionDetails.local(name.toLowerCase())
+    val base =
+      copy(
+        processUser = "root"
+      )
+
+    lazy val ssh =
+      SshConnectionDetails.local(name.toLowerCase())
 
     lazy val withKey = {
-      copy(
+      base.copy(
         hostKey = ssh.hostKey
       )
     }
@@ -126,6 +133,16 @@ object Rpis {
           host = ip,
           user = ssh.user,
           sshPort = ssh.port,
+          key = Path(ssh.key)
+        )
+    }
+
+    def direct = {
+      withKey
+        .copy(
+          host = "localhost",
+          user = ssh.user,
+          sshPort = directPort,
           key = Path(ssh.key)
         )
     }
@@ -156,7 +173,8 @@ object Rpis {
         sshPort = ssh.port,
         user = ssh.user,
         key = Path(ssh.key),
-        hostKey = ssh.hostKey
+        hostKey = ssh.hostKey,
+        processUser = "root"
       )
     }
   }
