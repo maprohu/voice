@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class evt_si_device extends Structure {
+public class evt_si_device extends Structure<evt_si_device, evt_si_device.ByValue, evt_si_device.ByReference > {
 	public short event;
 	public short dev_id;
 	public evt_si_device() {
@@ -25,6 +25,12 @@ public class evt_si_device extends Structure {
 	}
 	public evt_si_device(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected evt_si_device newInstance() { return new evt_si_device(); }
+	public static evt_si_device[] newArray(int arrayLength) {
+		return Structure.newArray(evt_si_device.class, arrayLength);
 	}
 	public static class ByReference extends evt_si_device implements Structure.ByReference {
 		

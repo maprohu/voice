@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class refresh_encryption_key_rp extends Structure {
+public class refresh_encryption_key_rp extends Structure<refresh_encryption_key_rp, refresh_encryption_key_rp.ByValue, refresh_encryption_key_rp.ByReference > {
 	public byte status;
 	public refresh_encryption_key_rp() {
 		super();
@@ -23,6 +23,12 @@ public class refresh_encryption_key_rp extends Structure {
 	}
 	public refresh_encryption_key_rp(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected refresh_encryption_key_rp newInstance() { return new refresh_encryption_key_rp(); }
+	public static refresh_encryption_key_rp[] newArray(int arrayLength) {
+		return Structure.newArray(refresh_encryption_key_rp.class, arrayLength);
 	}
 	public static class ByReference extends refresh_encryption_key_rp implements Structure.ByReference {
 		

@@ -1,6 +1,6 @@
 package voice.linux.jna.c;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 import voice.linux.jna.c.CLibrary.in_addr;
@@ -11,7 +11,7 @@ import voice.linux.jna.c.CLibrary.in_addr;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class ip_mreqn extends Structure {
+public class ip_mreqn extends Structure<ip_mreqn, ip_mreqn.ByValue, ip_mreqn.ByReference > {
 	/**
 	 * IP multicast address of group<br>
 	 * C type : in_addr
@@ -45,6 +45,12 @@ public class ip_mreqn extends Structure {
 	}
 	public ip_mreqn(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected ip_mreqn newInstance() { return new ip_mreqn(); }
+	public static ip_mreqn[] newArray(int arrayLength) {
+		return Structure.newArray(ip_mreqn.class, arrayLength);
 	}
 	public static class ByReference extends ip_mreqn implements Structure.ByReference {
 		

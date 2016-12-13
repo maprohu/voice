@@ -1,6 +1,6 @@
 package voice.linux.jna.c;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class _G_fpos_t extends Structure {
+public class _G_fpos_t extends Structure<_G_fpos_t, _G_fpos_t.ByValue, _G_fpos_t.ByReference > {
 	/** C type : __off_t */
 	public long __pos;
 	/** C type : __mbstate_t */
@@ -31,6 +31,12 @@ public class _G_fpos_t extends Structure {
 	}
 	public _G_fpos_t(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected _G_fpos_t newInstance() { return new _G_fpos_t(); }
+	public static _G_fpos_t[] newArray(int arrayLength) {
+		return Structure.newArray(_G_fpos_t.class, arrayLength);
 	}
 	public static class ByReference extends _G_fpos_t implements Structure.ByReference {
 		

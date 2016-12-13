@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class evt_physical_link_recovery extends Structure {
+public class evt_physical_link_recovery extends Structure<evt_physical_link_recovery, evt_physical_link_recovery.ByValue, evt_physical_link_recovery.ByReference > {
 	public byte handle;
 	public evt_physical_link_recovery() {
 		super();
@@ -23,6 +23,12 @@ public class evt_physical_link_recovery extends Structure {
 	}
 	public evt_physical_link_recovery(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected evt_physical_link_recovery newInstance() { return new evt_physical_link_recovery(); }
+	public static evt_physical_link_recovery[] newArray(int arrayLength) {
+		return Structure.newArray(evt_physical_link_recovery.class, arrayLength);
 	}
 	public static class ByReference extends evt_physical_link_recovery implements Structure.ByReference {
 		

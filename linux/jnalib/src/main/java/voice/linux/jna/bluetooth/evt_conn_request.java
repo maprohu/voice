@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class evt_conn_request extends Structure {
+public class evt_conn_request extends Structure<evt_conn_request, evt_conn_request.ByValue, evt_conn_request.ByReference > {
 	/** C type : bdaddr_t */
 	public bdaddr_t bdaddr;
 	/** C type : uint8_t[3] */
@@ -35,6 +35,12 @@ public class evt_conn_request extends Structure {
 	}
 	public evt_conn_request(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected evt_conn_request newInstance() { return new evt_conn_request(); }
+	public static evt_conn_request[] newArray(int arrayLength) {
+		return Structure.newArray(evt_conn_request.class, arrayLength);
 	}
 	public static class ByReference extends evt_conn_request implements Structure.ByReference {
 		

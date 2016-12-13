@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -10,7 +10,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class hci_dev_stats extends Structure {
+public class hci_dev_stats extends Structure<hci_dev_stats, hci_dev_stats.ByValue, hci_dev_stats.ByReference > {
 	public int err_rx;
 	public int err_tx;
 	public int cmd_tx;
@@ -29,6 +29,12 @@ public class hci_dev_stats extends Structure {
 	}
 	public hci_dev_stats(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected hci_dev_stats newInstance() { return new hci_dev_stats(); }
+	public static hci_dev_stats[] newArray(int arrayLength) {
+		return Structure.newArray(hci_dev_stats.class, arrayLength);
 	}
 	public static class ByReference extends hci_dev_stats implements Structure.ByReference {
 		

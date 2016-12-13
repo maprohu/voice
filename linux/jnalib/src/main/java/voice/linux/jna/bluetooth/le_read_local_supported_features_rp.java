@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class le_read_local_supported_features_rp extends Structure {
+public class le_read_local_supported_features_rp extends Structure<le_read_local_supported_features_rp, le_read_local_supported_features_rp.ByValue, le_read_local_supported_features_rp.ByReference > {
 	public byte status;
 	/** C type : uint8_t[8] */
 	public byte[] features = new byte[8];
@@ -29,6 +29,12 @@ public class le_read_local_supported_features_rp extends Structure {
 	}
 	public le_read_local_supported_features_rp(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected le_read_local_supported_features_rp newInstance() { return new le_read_local_supported_features_rp(); }
+	public static le_read_local_supported_features_rp[] newArray(int arrayLength) {
+		return Structure.newArray(le_read_local_supported_features_rp.class, arrayLength);
 	}
 	public static class ByReference extends le_read_local_supported_features_rp implements Structure.ByReference {
 		

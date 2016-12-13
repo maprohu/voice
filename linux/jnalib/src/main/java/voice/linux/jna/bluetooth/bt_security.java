@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class bt_security extends Structure {
+public class bt_security extends Structure<bt_security, bt_security.ByValue, bt_security.ByReference > {
 	public byte level;
 	public byte key_size;
 	public bt_security() {
@@ -25,6 +25,12 @@ public class bt_security extends Structure {
 	}
 	public bt_security(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected bt_security newInstance() { return new bt_security(); }
+	public static bt_security[] newArray(int arrayLength) {
+		return Structure.newArray(bt_security.class, arrayLength);
 	}
 	public static class ByReference extends bt_security implements Structure.ByReference {
 		

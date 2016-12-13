@@ -1,6 +1,6 @@
 package voice.linux.jna.c;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -10,7 +10,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class if_nameindex extends Structure {
+public class if_nameindex extends Structure<if_nameindex, if_nameindex.ByValue, if_nameindex.ByReference > {
 	/** 1, 2, ... */
 	public int if_index;
 	/**
@@ -36,6 +36,12 @@ public class if_nameindex extends Structure {
 	}
 	public if_nameindex(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected if_nameindex newInstance() { return new if_nameindex(); }
+	public static if_nameindex[] newArray(int arrayLength) {
+		return Structure.newArray(if_nameindex.class, arrayLength);
 	}
 	public static class ByReference extends if_nameindex implements Structure.ByReference {
 		

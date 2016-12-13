@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class evt_flush_occured extends Structure {
+public class evt_flush_occured extends Structure<evt_flush_occured, evt_flush_occured.ByValue, evt_flush_occured.ByReference > {
 	public short handle;
 	public evt_flush_occured() {
 		super();
@@ -23,6 +23,12 @@ public class evt_flush_occured extends Structure {
 	}
 	public evt_flush_occured(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected evt_flush_occured newInstance() { return new evt_flush_occured(); }
+	public static evt_flush_occured[] newArray(int arrayLength) {
+		return Structure.newArray(evt_flush_occured.class, arrayLength);
 	}
 	public static class ByReference extends evt_flush_occured implements Structure.ByReference {
 		

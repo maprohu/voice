@@ -1,6 +1,6 @@
 package voice.linux.jna.c;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class __fsid_t extends Structure {
+public class __fsid_t extends Structure<__fsid_t, __fsid_t.ByValue, __fsid_t.ByReference > {
 	/** C type : int[2] */
 	public int[] __val = new int[2];
 	public __fsid_t() {
@@ -27,6 +27,12 @@ public class __fsid_t extends Structure {
 	}
 	public __fsid_t(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected __fsid_t newInstance() { return new __fsid_t(); }
+	public static __fsid_t[] newArray(int arrayLength) {
+		return Structure.newArray(__fsid_t.class, arrayLength);
 	}
 	public static class ByReference extends __fsid_t implements Structure.ByReference {
 		

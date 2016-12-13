@@ -1,7 +1,7 @@
 package voice.linux.jna.c;
+import com.ochafik.lang.jnaerator.runtime.Structure;
+import com.ochafik.lang.jnaerator.runtime.Union;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
-import com.sun.jna.Union;
 import java.util.Arrays;
 import java.util.List;
 import voice.linux.jna.c.CLibrary.iface;
@@ -15,7 +15,7 @@ import voice.linux.jna.c.CLibrary.iface;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class ifaddr extends Structure {
+public class ifaddr extends Structure<ifaddr, ifaddr.ByValue, ifaddr.ByReference > {
 	/**
 	 * Address of interface.<br>
 	 * C type : sockaddr
@@ -34,7 +34,7 @@ public class ifaddr extends Structure {
 	 */
 	public ifaddr.ByReference ifa_next;
 	/** <i>native declaration : net\if.h:89</i> */
-	public static class ifa_ifu_union extends Union {
+	public static class ifa_ifu_union extends Union<ifa_ifu_union, ifa_ifu_union.ByValue, ifa_ifu_union.ByReference > {
 		/** C type : sockaddr */
 		public sockaddr ifu_broadaddr;
 		/** C type : sockaddr */
@@ -50,6 +50,12 @@ public class ifaddr extends Structure {
 		}
 		public ifa_ifu_union(Pointer peer) {
 			super(peer);
+		}
+		protected ByReference newByReference() { return new ByReference(); }
+		protected ByValue newByValue() { return new ByValue(); }
+		protected ifa_ifu_union newInstance() { return new ifa_ifu_union(); }
+		public static ifa_ifu_union[] newArray(int arrayLength) {
+			return Union.newArray(ifa_ifu_union.class, arrayLength);
 		}
 		public static class ByReference extends ifa_ifu_union implements Structure.ByReference {
 			
@@ -82,6 +88,12 @@ public class ifaddr extends Structure {
 	}
 	public ifaddr(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected ifaddr newInstance() { return new ifaddr(); }
+	public static ifaddr[] newArray(int arrayLength) {
+		return Structure.newArray(ifaddr.class, arrayLength);
 	}
 	public static class ByReference extends ifaddr implements Structure.ByReference {
 		

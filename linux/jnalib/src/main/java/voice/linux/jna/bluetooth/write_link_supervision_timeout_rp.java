@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class write_link_supervision_timeout_rp extends Structure {
+public class write_link_supervision_timeout_rp extends Structure<write_link_supervision_timeout_rp, write_link_supervision_timeout_rp.ByValue, write_link_supervision_timeout_rp.ByReference > {
 	public byte status;
 	public short handle;
 	public write_link_supervision_timeout_rp() {
@@ -25,6 +25,12 @@ public class write_link_supervision_timeout_rp extends Structure {
 	}
 	public write_link_supervision_timeout_rp(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected write_link_supervision_timeout_rp newInstance() { return new write_link_supervision_timeout_rp(); }
+	public static write_link_supervision_timeout_rp[] newArray(int arrayLength) {
+		return Structure.newArray(write_link_supervision_timeout_rp.class, arrayLength);
 	}
 	public static class ByReference extends write_link_supervision_timeout_rp implements Structure.ByReference {
 		

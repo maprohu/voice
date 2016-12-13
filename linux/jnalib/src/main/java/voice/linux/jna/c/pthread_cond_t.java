@@ -1,7 +1,7 @@
 package voice.linux.jna.c;
+import com.ochafik.lang.jnaerator.runtime.Structure;
+import com.ochafik.lang.jnaerator.runtime.Union;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
-import com.sun.jna.Union;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -10,14 +10,14 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class pthread_cond_t extends Union {
+public class pthread_cond_t extends Union<pthread_cond_t, pthread_cond_t.ByValue, pthread_cond_t.ByReference > {
 	/** C type : __data_struct */
 	public __data_struct __data;
 	/** C type : char[48] */
 	public byte[] __size = new byte[48];
 	public long __align;
 	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\pthreadtypes.h:70</i> */
-	public static class __data_struct extends Structure {
+	public static class __data_struct extends Structure<__data_struct, __data_struct.ByValue, __data_struct.ByReference > {
 		public int __lock;
 		public int __futex;
 		public long __total_seq;
@@ -47,6 +47,12 @@ public class pthread_cond_t extends Union {
 		}
 		public __data_struct(Pointer peer) {
 			super(peer);
+		}
+		protected ByReference newByReference() { return new ByReference(); }
+		protected ByValue newByValue() { return new ByValue(); }
+		protected __data_struct newInstance() { return new __data_struct(); }
+		public static __data_struct[] newArray(int arrayLength) {
+			return Structure.newArray(__data_struct.class, arrayLength);
 		}
 		public static class ByReference extends __data_struct implements Structure.ByReference {
 			
@@ -79,6 +85,12 @@ public class pthread_cond_t extends Union {
 	}
 	public pthread_cond_t(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected pthread_cond_t newInstance() { return new pthread_cond_t(); }
+	public static pthread_cond_t[] newArray(int arrayLength) {
+		return Union.newArray(pthread_cond_t.class, arrayLength);
 	}
 	public static class ByReference extends pthread_cond_t implements Structure.ByReference {
 		

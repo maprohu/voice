@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class cancel_logical_link_rp extends Structure {
+public class cancel_logical_link_rp extends Structure<cancel_logical_link_rp, cancel_logical_link_rp.ByValue, cancel_logical_link_rp.ByReference > {
 	public byte status;
 	public byte handle;
 	public byte tx_flow_id;
@@ -27,6 +27,12 @@ public class cancel_logical_link_rp extends Structure {
 	}
 	public cancel_logical_link_rp(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected cancel_logical_link_rp newInstance() { return new cancel_logical_link_rp(); }
+	public static cancel_logical_link_rp[] newArray(int arrayLength) {
+		return Structure.newArray(cancel_logical_link_rp.class, arrayLength);
 	}
 	public static class ByReference extends cancel_logical_link_rp implements Structure.ByReference {
 		

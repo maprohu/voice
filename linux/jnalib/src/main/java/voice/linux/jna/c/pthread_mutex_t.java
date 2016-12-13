@@ -1,7 +1,7 @@
 package voice.linux.jna.c;
+import com.ochafik.lang.jnaerator.runtime.Structure;
+import com.ochafik.lang.jnaerator.runtime.Union;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
-import com.sun.jna.Union;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -10,14 +10,14 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class pthread_mutex_t extends Union {
+public class pthread_mutex_t extends Union<pthread_mutex_t, pthread_mutex_t.ByValue, pthread_mutex_t.ByReference > {
 	/** C type : __pthread_mutex_s */
 	public __pthread_mutex_s __data;
 	/** C type : char[24] */
 	public byte[] __size = new byte[24];
 	public long __align;
 	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\pthreadtypes.h:40</i> */
-	public static class __pthread_mutex_s extends Structure {
+	public static class __pthread_mutex_s extends Structure<__pthread_mutex_s, __pthread_mutex_s.ByValue, __pthread_mutex_s.ByReference > {
 		public int __lock;
 		public int __count;
 		public int __owner;
@@ -26,7 +26,7 @@ public class pthread_mutex_t extends Union {
 		/** C type : field1_union */
 		public field1_union field1;
 		/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\pthreadtypes.h:49</i> */
-		public static class field1_union extends Union {
+		public static class field1_union extends Union<field1_union, field1_union.ByValue, field1_union.ByReference > {
 			public int __spins;
 			/** C type : __pthread_slist_t */
 			public __pthread_internal_slist __list;
@@ -46,6 +46,12 @@ public class pthread_mutex_t extends Union {
 			}
 			public field1_union(Pointer peer) {
 				super(peer);
+			}
+			protected ByReference newByReference() { return new ByReference(); }
+			protected ByValue newByValue() { return new ByValue(); }
+			protected field1_union newInstance() { return new field1_union(); }
+			public static field1_union[] newArray(int arrayLength) {
+				return Union.newArray(field1_union.class, arrayLength);
 			}
 			public static class ByReference extends field1_union implements Structure.ByReference {
 				
@@ -72,6 +78,12 @@ public class pthread_mutex_t extends Union {
 		}
 		public __pthread_mutex_s(Pointer peer) {
 			super(peer);
+		}
+		protected ByReference newByReference() { return new ByReference(); }
+		protected ByValue newByValue() { return new ByValue(); }
+		protected __pthread_mutex_s newInstance() { return new __pthread_mutex_s(); }
+		public static __pthread_mutex_s[] newArray(int arrayLength) {
+			return Structure.newArray(__pthread_mutex_s.class, arrayLength);
 		}
 		public static class ByReference extends __pthread_mutex_s implements Structure.ByReference {
 			
@@ -104,6 +116,12 @@ public class pthread_mutex_t extends Union {
 	}
 	public pthread_mutex_t(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected pthread_mutex_t newInstance() { return new pthread_mutex_t(); }
+	public static pthread_mutex_t[] newArray(int arrayLength) {
+		return Union.newArray(pthread_mutex_t.class, arrayLength);
 	}
 	public static class ByReference extends pthread_mutex_t implements Structure.ByReference {
 		

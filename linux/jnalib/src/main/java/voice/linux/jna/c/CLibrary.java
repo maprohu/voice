@@ -1,12 +1,18 @@
 package voice.linux.jna.c;
+import com.ochafik.lang.jnaerator.runtime.LibraryExtractor;
+import com.ochafik.lang.jnaerator.runtime.MangledFunctionMapper;
 import com.ochafik.lang.jnaerator.runtime.NativeSize;
 import com.ochafik.lang.jnaerator.runtime.NativeSizeByReference;
+import com.ochafik.lang.jnaerator.runtime.globals.GlobalInt;
+import com.ochafik.lang.jnaerator.runtime.globals.GlobalPointerType;
+import com.ochafik.lang.jnaerator.runtime.globals.GlobalStruct;
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
 import com.sun.jna.Pointer;
 import com.sun.jna.PointerType;
+import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.PointerByReference;
@@ -22,9 +28,9 @@ import voice.linux.jna.c._IO_cookie_io_functions_t.ByValue;
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
 public interface CLibrary extends Library {
-	public static final String JNA_LIBRARY_NAME = (com.sun.jna.Platform.isWindows() ? "msvcrt" : "c");
-	public static final NativeLibrary JNA_NATIVE_LIB = NativeLibrary.getInstance(CLibrary.JNA_LIBRARY_NAME);
-	public static final CLibrary INSTANCE = (CLibrary)Native.loadLibrary(CLibrary.JNA_LIBRARY_NAME, CLibrary.class);
+	public static final String JNA_LIBRARY_NAME = LibraryExtractor.getLibraryPath((com.sun.jna.Platform.isWindows() ? "msvcrt" : "c"), true, CLibrary.class);
+	public static final NativeLibrary JNA_NATIVE_LIB = NativeLibrary.getInstance(CLibrary.JNA_LIBRARY_NAME, MangledFunctionMapper.DEFAULT_OPTIONS);
+	public static final CLibrary INSTANCE = (CLibrary)Native.loadLibrary(CLibrary.JNA_LIBRARY_NAME, CLibrary.class, MangledFunctionMapper.DEFAULT_OPTIONS);
 	public static final int _PC_LINK_MAX = 0;
 	public static final int _PC_MAX_CANON = 1;
 	public static final int _PC_MAX_INPUT = 2;
@@ -5993,6 +5999,62 @@ public interface CLibrary extends Library {
 	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:573</i>
 	 */
 	Pointer basename(String __filename);
+	/**
+	 * For communication from `getopt' to the caller.<br>
+	 * When `getopt' finds an option that takes an argument,<br>
+	 * the argument value is returned here.<br>
+	 * Also, when `ordering' is RETURN_IN_ORDER,<br>
+	 * each non-option ARGV-element is returned here.
+	 */
+	public static final GlobalPointerType<ByteByReference > optarg = new GlobalPointerType<ByteByReference >(CLibrary.JNA_NATIVE_LIB, ByteByReference.class, "optarg");
+	/**
+	 * Index in ARGV of the next element to be scanned.<br>
+	 * This is used for communication to and from the caller<br>
+	 * and for communication between successive calls to `getopt'.<br>
+	 * On entry to `getopt', zero means this is the first call; initialize.<br>
+	 * When `getopt' returns -1, this is the index of the first of the<br>
+	 * non-option elements that the caller should itself scan.<br>
+	 * Otherwise, `optind' communicates from one call to the next<br>
+	 * how much of ARGV has been scanned so far.
+	 */
+	public static final GlobalInt optind = new GlobalInt(CLibrary.JNA_NATIVE_LIB, "optind");
+	/**
+	 * Callers store zero here to inhibit the error message `getopt' prints<br>
+	 * for unrecognized options.
+	 */
+	public static final GlobalInt opterr = new GlobalInt(CLibrary.JNA_NATIVE_LIB, "opterr");
+	/** Set to an option character which was unrecognized. */
+	public static final GlobalInt optopt = new GlobalInt(CLibrary.JNA_NATIVE_LIB, "optopt");
+	/**
+	 * java.lang.IllegalArgumentException: Not a simple identifier : 'com.sun.jna.Pointer'<br>
+	 * SKIPPED:<br>
+	 * <i>native declaration : ..\voice\local\headers\\usr\include\libio.h:304</i><br>
+	 * _IO_2_1_stdin_
+	 */
+	/**
+	 * java.lang.IllegalArgumentException: Not a simple identifier : 'com.sun.jna.Pointer'<br>
+	 * SKIPPED:<br>
+	 * <i>native declaration : ..\voice\local\headers\\usr\include\libio.h:305</i><br>
+	 * _IO_2_1_stdout_
+	 */
+	/**
+	 * java.lang.IllegalArgumentException: Not a simple identifier : 'com.sun.jna.Pointer'<br>
+	 * SKIPPED:<br>
+	 * <i>native declaration : ..\voice\local\headers\\usr\include\libio.h:306</i><br>
+	 * _IO_2_1_stderr_
+	 */
+	/**
+	 * Standard streams.<br>
+	 * Standard input stream.
+	 */
+	public static final GlobalStruct<_IO_FILE > stdin = new GlobalStruct<_IO_FILE >(CLibrary.JNA_NATIVE_LIB, _IO_FILE.class, "stdin");
+	/** Standard output stream. */
+	public static final GlobalStruct<_IO_FILE > stdout = new GlobalStruct<_IO_FILE >(CLibrary.JNA_NATIVE_LIB, _IO_FILE.class, "stdout");
+	/** Standard error output stream. */
+	public static final GlobalStruct<_IO_FILE > stderr = new GlobalStruct<_IO_FILE >(CLibrary.JNA_NATIVE_LIB, _IO_FILE.class, "stderr");
+	/** sys_errlist and sys_nerr are deprecated.  Use strerror instead. */
+	public static final GlobalInt sys_nerr = new GlobalInt(CLibrary.JNA_NATIVE_LIB, "sys_nerr");
+	public static final GlobalInt _sys_nerr = new GlobalInt(CLibrary.JNA_NATIVE_LIB, "_sys_nerr");
 	public static class in_addr extends PointerType {
 		public in_addr(Pointer address) {
 			super(address);
@@ -6030,6 +6092,14 @@ public interface CLibrary extends Library {
 			super(address);
 		}
 		public obstack() {
+			super();
+		}
+	};
+	public static class _IO_FILE_plus extends PointerType {
+		public _IO_FILE_plus(Pointer address) {
+			super(address);
+		}
+		public _IO_FILE_plus() {
 			super();
 		}
 	};

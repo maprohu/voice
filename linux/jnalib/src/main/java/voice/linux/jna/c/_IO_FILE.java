@@ -1,7 +1,7 @@
 package voice.linux.jna.c;
 import com.ochafik.lang.jnaerator.runtime.NativeSize;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 import voice.linux.jna.c.CLibrary._IO_lock_t;
@@ -11,7 +11,7 @@ import voice.linux.jna.c.CLibrary._IO_lock_t;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class _IO_FILE extends Structure {
+public class _IO_FILE extends Structure<_IO_FILE, _IO_FILE.ByValue, _IO_FILE.ByReference > {
 	/** High-order word is _IO_MAGIC; rest is flags. */
 	public int _flags;
 	/**
@@ -106,6 +106,12 @@ public class _IO_FILE extends Structure {
 	}
 	public _IO_FILE(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected _IO_FILE newInstance() { return new _IO_FILE(); }
+	public static _IO_FILE[] newArray(int arrayLength) {
+		return Structure.newArray(_IO_FILE.class, arrayLength);
 	}
 	public static class ByReference extends _IO_FILE implements Structure.ByReference {
 		

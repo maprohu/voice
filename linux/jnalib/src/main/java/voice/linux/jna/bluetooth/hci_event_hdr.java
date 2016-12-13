@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class hci_event_hdr extends Structure {
+public class hci_event_hdr extends Structure<hci_event_hdr, hci_event_hdr.ByValue, hci_event_hdr.ByReference > {
 	public byte evt;
 	public byte plen;
 	public hci_event_hdr() {
@@ -25,6 +25,12 @@ public class hci_event_hdr extends Structure {
 	}
 	public hci_event_hdr(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected hci_event_hdr newInstance() { return new hci_event_hdr(); }
+	public static hci_event_hdr[] newArray(int arrayLength) {
+		return Structure.newArray(hci_event_hdr.class, arrayLength);
 	}
 	public static class ByReference extends hci_event_hdr implements Structure.ByReference {
 		

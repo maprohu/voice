@@ -1,6 +1,6 @@
 package voice.linux.jna.c;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -10,7 +10,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class sockaddr extends Structure {
+public class sockaddr extends Structure<sockaddr, sockaddr.ByValue, sockaddr.ByReference > {
 	/**
 	 * Common data: address family and length.<br>
 	 * C type : sa_family_t
@@ -42,6 +42,12 @@ public class sockaddr extends Structure {
 	}
 	public sockaddr(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected sockaddr newInstance() { return new sockaddr(); }
+	public static sockaddr[] newArray(int arrayLength) {
+		return Structure.newArray(sockaddr.class, arrayLength);
 	}
 	public static class ByReference extends sockaddr implements Structure.ByReference {
 		

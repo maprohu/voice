@@ -1,6 +1,6 @@
 package voice.linux.jna.c;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 import voice.linux.jna.c.CLibrary.in_addr;
@@ -13,7 +13,7 @@ import voice.linux.jna.c.CLibrary.in_addr;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class ip_opts extends Structure {
+public class ip_opts extends Structure<ip_opts, ip_opts.ByValue, ip_opts.ByReference > {
 	/**
 	 * First hop; zero without source route.<br>
 	 * C type : in_addr
@@ -45,6 +45,12 @@ public class ip_opts extends Structure {
 	}
 	public ip_opts(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected ip_opts newInstance() { return new ip_opts(); }
+	public static ip_opts[] newArray(int arrayLength) {
+		return Structure.newArray(ip_opts.class, arrayLength);
 	}
 	public static class ByReference extends ip_opts implements Structure.ByReference {
 		

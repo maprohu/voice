@@ -49,6 +49,7 @@ object RunVoice {
     VoiceRequestModules.CompileRpi,
     VoiceRequestModules.Common,
     VoiceRequestModules.JnaRequests,
+    LinuxModules.Common,
     LinuxModules.Generator,
     LinuxModules.JnaLib,
     LinuxModules.Testing

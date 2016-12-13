@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
+import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class le_start_encryption_cp extends Structure {
+public class le_start_encryption_cp extends Structure<le_start_encryption_cp, le_start_encryption_cp.ByValue, le_start_encryption_cp.ByReference > {
 	public short handle;
 	public long random;
 	public short diversifier;
@@ -33,6 +33,12 @@ public class le_start_encryption_cp extends Structure {
 	}
 	public le_start_encryption_cp(Pointer peer) {
 		super(peer);
+	}
+	protected ByReference newByReference() { return new ByReference(); }
+	protected ByValue newByValue() { return new ByValue(); }
+	protected le_start_encryption_cp newInstance() { return new le_start_encryption_cp(); }
+	public static le_start_encryption_cp[] newArray(int arrayLength) {
+		return Structure.newArray(le_start_encryption_cp.class, arrayLength);
 	}
 	public static class ByReference extends le_start_encryption_cp implements Structure.ByReference {
 		
