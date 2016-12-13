@@ -15,6 +15,7 @@
     </build>
     <modules>
         <module>generator</module>
+        <module>jnalib</module>
         <module>testing</module>
     </modules>
 </project>

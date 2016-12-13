@@ -30,6 +30,12 @@ object VoiceRequestModules {
     mvn.`org.scala-lang.modules:scala-xml_2.11:jar:1.0.6`
   )
 
+  object JnaRequests extends ScalaModule(
+    "jnarequests",
+    JarTree8Modules.StreamApp,
+    LinuxModules.JnaLib
+  )
+
 
 
 

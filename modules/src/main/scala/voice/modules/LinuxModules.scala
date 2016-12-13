@@ -20,15 +20,15 @@ object LinuxModules {
     mvn.`com.nativelibs4java:jnaerator:jar:0.12`
   )
 
+  object JnaLib extends ScalaModule(
+    "jnalib",
+    mvn.`com.nativelibs4java:bridj:jar:0.7.0`,
+    mvn.`com.nativelibs4java:jnaerator-runtime:jar:0.12`
+  )
+
   object Testing extends ScalaModule(
     "testing",
-    new MavenCentralModule(
-      VoiceModules.Root.groupId,
-      "voice-linux-jnalib",
-      "1.0-SNAPSHOT"
-    )
-
-
+    JnaLib
   )
 
 

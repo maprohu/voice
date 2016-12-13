@@ -19,16 +19,20 @@ class LinuxLibraries(
     Lib(
       "c",
       Seq(
+        s"${IncludeDir}/unistd.h",
         s"${IncludeDir}/net/if.h",
-        s"${LibIncludeDir}/sys/cdefs.h",
-        s"${LibIncludeDir}/sys/uio.h",
-        s"${LibIncludeDir}/sys/socket.h"
+//        s"${LibIncludeDir}/sys/cdefs.h",
+//        s"${LibIncludeDir}/sys/uio.h",
+        s"${LibIncludeDir}/sys/socket.h",
+//        s"${LibIncludeDir}/bits/socket.h",
+        s"${LibIncludeDir}/bits/socket_type.h"
       )
     ),
     Lib(
       "bluetooth",
       Seq(
         s"${IncludeDir}/bluetooth/bluetooth.h",
+        s"${IncludeDir}/bluetooth/rfcomm.h",
         s"${IncludeDir}/bluetooth/hci.h",
         s"${IncludeDir}/bluetooth/hci_lib.h"
       )

@@ -17,5 +17,6 @@
         <module>central</module>
         <module>compilerpi</module>
         <module>common</module>
+        <module>jnarequests</module>
     </modules>
 </project>

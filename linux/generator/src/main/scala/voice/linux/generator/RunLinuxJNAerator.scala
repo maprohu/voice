@@ -11,6 +11,7 @@ import sbt.io.IO
 object RunLinuxJNAerator {
 
   val TargetMavenDir = "../voice/linux/jnalib"
+  val TargetSourceDir = s"${TargetMavenDir}/src/main/java"
 
   def main(args: Array[String]): Unit = {
     run(
@@ -24,25 +25,39 @@ object RunLinuxJNAerator {
     targetDir: String
   ) = {
     val tf = new File(TargetMavenDir)
+    val targetSourceDir = new File(TargetSourceDir)
 
-    IO.delete(tf)
-    tf.mkdirs()
+    IO.delete(targetSourceDir)
+    targetSourceDir.mkdirs()
+
+    val skipFunctions = Seq(
+      "__bswap_16",
+      "__bswap_32",
+      "__bswap_64",
+      "_IO_cookie_init",
+      "crypt",
+      "encrypt"
+    )
 
     JNAerator
       .main(
         Array[String](
+          "-runtime", "JNA",
           "-noLibBundle",
           "-mavenGroupId", "voice",
           "-mavenArtifactId", "voice-linux-jnalib",
           "-mavenVersion", "2-SNAPSHOT",
           "-D_GNU_SOURCE=1",
           "-D__ARM_PCS_VFP=1",
+          "-skipFunctions", skipFunctions.mkString("|"),
           "-I", s"${targetDir}/usr/lib/gcc/arm-linux-gnueabihf/4.9.2/include",
           "-I", s"${targetDir}${libs.IncludeDir}",
           "-I", s"${targetDir}${libs.IncludeDir}/linux",
           "-I", s"${targetDir}${libs.LibIncludeDir}",
-          "-o", "../voice/linux/jnalib",
-          "-mode", "Maven",
+          "-o", TargetSourceDir,
+          "-mode", "Directory",
+//          "-o", TargetMavenDir,
+//          "-mode", "Maven",
           "-rootPackage", "voice.linux.jna"
         ) ++
         libs
@@ -84,6 +99,17 @@ object RunJNALocalPi {
 
 /*
 
+
+--- libio.h
+  /* Make sure we don't get into trouble again.  */
+//  char _unused2[15 * sizeof (int) - 4 * sizeof (void *) - sizeof (size_t)];
+
+
+--- bluetooth.h
+//#ifndef AF_BLUETOOTH
+#define AF_BLUETOOTH	31
+#define PF_BLUETOOTH	AF_BLUETOOTH
+//#endif
 
 /* Bluetooth unaligned access */
 #define bt_get_unaligned(ptr)			0

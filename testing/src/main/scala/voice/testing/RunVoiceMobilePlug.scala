@@ -12,7 +12,8 @@ import voice.modules.VoiceRpiModules
   */
 object RunVoiceMobilePlug {
 
-  val Target = Rpis.Mobile.cable
+//  val Target = Rpis.Mobile.cable
+  val Target = Rpis.Mobile.tunneled
 
   def main(args: Array[String]): Unit = {
     MavenTools

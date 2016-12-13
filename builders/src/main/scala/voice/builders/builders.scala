@@ -120,9 +120,19 @@ object build_voice_requests_common extends mvnmod.builder.ModuleBuilder(
   "./requests/common"
 )
            
+object build_voice_requests_jnarequests extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./requests/jnarequests"
+)
+           
 object build_voice_linux_generator extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./linux/generator"
+)
+           
+object build_voice_linux_jnalib extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./linux/jnalib"
 )
            
 object build_voice_linux_testing extends mvnmod.builder.ModuleBuilder(
