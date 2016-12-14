@@ -23,6 +23,7 @@ class LinuxLibraries(
         s"${IncludeDir}/net/if.h",
 //        s"${LibIncludeDir}/sys/cdefs.h",
 //        s"${LibIncludeDir}/sys/uio.h",
+        s"${LibIncludeDir}/sys/ioctl.h",
         s"${LibIncludeDir}/sys/socket.h",
 //        s"${LibIncludeDir}/bits/socket.h",
         s"${LibIncludeDir}/bits/socket_type.h"

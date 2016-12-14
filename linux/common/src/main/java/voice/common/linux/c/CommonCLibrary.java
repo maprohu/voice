@@ -2,11 +2,9 @@ package voice.common.linux.c;
 
 import com.ochafik.lang.jnaerator.runtime.LibraryExtractor;
 import com.ochafik.lang.jnaerator.runtime.MangledFunctionMapper;
-import com.sun.jna.Library;
-import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
-import com.sun.jna.Pointer;
-import com.sun.jna.ptr.PointerByReference;
+import com.sun.jna.*;
+
+import java.nio.IntBuffer;
 
 /**
  * Created by pappmar on 13/12/2016.
@@ -16,10 +14,29 @@ public interface CommonCLibrary extends Library {
     public static final NativeLibrary JNA_NATIVE_LIB = NativeLibrary.getInstance(CommonCLibrary.JNA_LIBRARY_NAME, MangledFunctionMapper.DEFAULT_OPTIONS);
     public static final CommonCLibrary INSTANCE = (CommonCLibrary) Native.loadLibrary(CommonCLibrary.JNA_LIBRARY_NAME, CommonCLibrary.class, MangledFunctionMapper.DEFAULT_OPTIONS);
 
+
     /**
      * Give the socket FD the local address ADDR (which is LEN bytes long).<br>
      * Original signature : <code>int bind(int, sockaddr*, socklen_t)</code><br>
      * <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\socket.h:118</i>
      */
-    int bind(int __fd, Pointer __addr, int __len);
+    int bind(int __fd, Structure.ByReference __addr, int __len);
+    /**
+     * Await a connection on socket FD.<br>
+     * When a connection arrives, open a new socket to communicate with it,<br>
+     * set *ADDR (which is *ADDR_LEN bytes long) to the address of the connecting<br>
+     * peer and *ADDR_LEN to the address's actual length, and return the<br>
+     * new socket's descriptor, or -1 for errors.<br>
+     * This function is a cancellation point and therefore not marked with<br>
+     * __THROW.<br>
+     * Original signature : <code>int accept(int, sockaddr*, socklen_t*)</code><br>
+     * <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\socket.h:238</i>
+     */
+    int accept(int __fd, Structure.ByReference __addr, IntBuffer __addr_len);
+    /**
+     * Put the local address of FD into *ADDR and its length in *LEN.<br>
+     * Original signature : <code>int getsockname(int, sockaddr*, socklen_t*)</code><br>
+     * <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\socket.h:122</i>
+     */
+    int getsockname(int __fd, Structure.ByReference __addr, IntBuffer __len);
 }

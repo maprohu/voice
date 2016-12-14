@@ -1860,6 +1860,214 @@ public interface CLibrary extends Library {
 	public static final int IFHWADDRLEN = (int)6;
 	/** <i>native declaration : net\if.h</i> */
 	public static final int IFNAMSIZ = (int)16;
+	/** <i>native declaration : arm-linux-gnueabihf\sys\ioctl.h</i> */
+	public static final int _SYS_IOCTL_H = (int)1;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCADDRT = (int)0x890B;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCDELRT = (int)0x890C;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCRTMSG = (int)0x890D;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFNAME = (int)0x8910;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFLINK = (int)0x8911;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFCONF = (int)0x8912;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFFLAGS = (int)0x8913;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFFLAGS = (int)0x8914;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFADDR = (int)0x8915;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFADDR = (int)0x8916;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFDSTADDR = (int)0x8917;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFDSTADDR = (int)0x8918;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFBRDADDR = (int)0x8919;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFBRDADDR = (int)0x891a;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFNETMASK = (int)0x891b;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFNETMASK = (int)0x891c;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFMETRIC = (int)0x891d;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFMETRIC = (int)0x891e;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFMEM = (int)0x891f;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFMEM = (int)0x8920;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFMTU = (int)0x8921;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFMTU = (int)0x8922;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFNAME = (int)0x8923;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFHWADDR = (int)0x8924;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFENCAP = (int)0x8925;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFENCAP = (int)0x8926;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFHWADDR = (int)0x8927;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFSLAVE = (int)0x8929;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFSLAVE = (int)0x8930;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCADDMULTI = (int)0x8931;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCDELMULTI = (int)0x8932;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFINDEX = (int)0x8933;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOGIFINDEX = (int)0x8933;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFPFLAGS = (int)0x8934;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFPFLAGS = (int)0x8935;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCDIFADDR = (int)0x8936;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFHWBROADCAST = (int)0x8937;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFCOUNT = (int)0x8938;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFBR = (int)0x8940;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFBR = (int)0x8941;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFTXQLEN = (int)0x8942;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFTXQLEN = (int)0x8943;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCDARP = (int)0x8953;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGARP = (int)0x8954;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSARP = (int)0x8955;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCDRARP = (int)0x8960;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGRARP = (int)0x8961;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSRARP = (int)0x8962;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCGIFMAP = (int)0x8970;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCSIFMAP = (int)0x8971;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCADDDLCI = (int)0x8980;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCDELDLCI = (int)0x8981;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCDEVPRIVATE = (int)0x89F0;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctls.h</i> */
+	public static final int SIOCPROTOPRIVATE = (int)0x89E0;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int NCC = (int)8;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int TIOCM_LE = (int)0x001;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int TIOCM_DTR = (int)0x002;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int TIOCM_RTS = (int)0x004;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int TIOCM_ST = (int)0x008;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int TIOCM_SR = (int)0x010;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int TIOCM_CTS = (int)0x020;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int TIOCM_CAR = (int)0x040;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int TIOCM_RNG = (int)0x080;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int TIOCM_DSR = (int)0x100;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int TIOCM_CD = (int)0x040;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int TIOCM_RI = (int)0x080;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_TTY = (int)0;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_SLIP = (int)1;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_MOUSE = (int)2;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_PPP = (int)3;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_STRIP = (int)4;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_AX25 = (int)5;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_X25 = (int)6;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_6PACK = (int)7;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_MASC = (int)8;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_R3964 = (int)9;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_PROFIBUS_FDL = (int)10;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_IRDA = (int)11;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_SMSBLOCK = (int)12;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_HDLC = (int)13;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_SYNC_PPP = (int)14;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\ioctl-types.h</i> */
+	public static final int N_HCI = (int)15;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CEOF = (int)('d' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final char CEOL = (char)'\0';
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CERASE = (int)177;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CINTR = (int)('c' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final char CSTATUS = (char)'\0';
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CKILL = (int)('u' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CMIN = (int)1;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CQUIT = (int)34;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CSUSP = (int)('z' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CTIME = (int)0;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CDSUSP = (int)('y' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CSTART = (int)('q' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CSTOP = (int)('s' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CLNEXT = (int)('v' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CDISCARD = (int)('o' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CWERASE = (int)('w' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CREPRINT = (int)('r' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CEOT = (int)('d' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final char CBRK = (char)'\0';
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CRPRNT = (int)('r' & 37);
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\ttydefaults.h</i> */
+	public static final int CFLUSH = (int)('o' & 37);
 	/** <i>native declaration : ..\voice\local\headers\\usr\include\stdio.h</i> */
 	public static final int _STDIO_H = (int)1;
 	/** <i>native declaration : ..\voice\local\headers\\usr\include\stdio.h</i> */
@@ -4030,6 +4238,14 @@ public interface CLibrary extends Library {
 	 * <i>native declaration : net\if.h:198</i>
 	 */
 	void if_freenameindex(if_nameindex __ptr);
+	/**
+	 * Perform the I/O control operation specified by REQUEST on FD.<br>
+	 * One argument may follow; its presence and type depend on REQUEST.<br>
+	 * Return value depends on REQUEST.  Usually -1 indicates error.<br>
+	 * Original signature : <code>int ioctl(int, unsigned long long, null)</code><br>
+	 * <i>native declaration : arm-linux-gnueabihf\sys\ioctl.h:39</i>
+	 */
+	int ioctl(int __fd, long __request, Object... varArgs1);
 	/**
 	 * Original signature : <code>int __underflow(_IO_FILE*)</code><br>
 	 * <i>native declaration : ..\voice\local\headers\\usr\include\libio.h:374</i>

@@ -6,7 +6,7 @@ import java.nio.IntBuffer
 import com.typesafe.scalalogging.StrictLogging
 import toolbox8.jartree.streamapp.{Requestable, RootContext}
 import voice.common.linux.c.CommonCLibrary
-import voice.linux.jna.bluetooth.{BluetoothLibrary, sockaddr_rc}
+import voice.linux.jna.bluetooth.{BluetoothLibrary, bdaddr_t, rfcomm_dev_req, sockaddr_rc}
 import voice.linux.jna.c.{CLibrary, sockaddr}
 
 /**
@@ -24,6 +24,7 @@ class RfcommListen extends Requestable with StrictLogging {
     import BluetoothLibrary._
     import c._
     import __socket_type._
+    import voice.linux.common.bluetooth.CommonBluetoothTools._
 
     logger.info("reading index")
     val idx = if_nametoindex(
@@ -52,59 +53,83 @@ class RfcommListen extends Requestable with StrictLogging {
           BTPROTO_RFCOMM
         )
 
-      val laddr = new sockaddr_rc()
-      laddr.rc_family = AF_BLUETOOTH.toShort
-      laddr.rc_channel = 1
+      try {
+        val laddr = new sockaddr_rc.ByReference()
+        laddr.rc_family = AF_BLUETOOTH.toShort
+        laddr.rc_bdaddr = new bdaddr_t(Array.fill[Byte](6)(0))
+        laddr.rc_channel = 1
 
-      logger.info("binding")
-      if (
-        CommonCLibrary.INSTANCE.bind(
+        logger.info("binding")
+        if (
+          CommonCLibrary.INSTANCE.bind(
+            sk,
+            laddr,
+            laddr.size()
+          ) < 0
+        ) {
+          perror("binding error")
+          throw new Exception
+        }
+
+        logger.info("listening")
+        listen(
           sk,
-          laddr.getPointer,
-          laddr.size()
-        ) < 0
-      ) {
-        perror("binding error")
-        throw new Exception
-      }
-
-      logger.info("listening")
-      listen(
-        sk,
-        10
-      )
-
-      val raddr = new sockaddr_rc()
-
-      logger.info("accepting")
-      val nsk = accept(
-        sk,
-        new sockaddr(raddr.getPointer),
-        IntBuffer.wrap(
-          Array(
-            raddr.size()
-          )
+          10
         )
-      )
 
-      logger.info("getsockname")
-      require(
-        getsockname(
-          nsk,
-          new sockaddr(laddr.getPointer),
+        val raddr = new sockaddr_rc.ByReference()
+
+        logger.info("accepting")
+        val nsk = CommonCLibrary.INSTANCE.accept(
+          sk,
+          raddr,
           IntBuffer.wrap(
             Array(
-              laddr.size()
+              raddr.size()
             )
           )
-        ) >= 0
-      )
+        )
 
-      logger.info("closing sk")
-      close(sk)
-      logger.info("closing nsk")
-      close(nsk)
+        try {
+          logger.info("getsockname")
+          require(
+            CommonCLibrary.INSTANCE.getsockname(
+              nsk,
+              laddr,
+              IntBuffer.wrap(
+                Array(
+                  laddr.size()
+                )
+              )
+            ) >= 0
+          )
 
+          val dev_id : Short = 0
+          val req = new rfcomm_dev_req.ByReference()
+          req.dev_id = dev_id
+          req.flags = (1 << RFCOMM_REUSE_DLC) | (1 << RFCOMM_RELEASE_ONHUP)
+          req.src = laddr.rc_bdaddr.clone()
+          req.dst = raddr.rc_bdaddr.clone()
+          req.channel = raddr.rc_channel
+
+          val dev = ioctl(
+            nsk,
+            RFCOMMCREATEDEV,
+            req
+          )
+
+          require(dev >= 0)
+
+        } finally {
+          logger.info("closing nsk")
+          close(nsk)
+        }
+
+      } finally {
+        logger.info("closing sk")
+        close(sk)
+
+      }
 
     } finally {
       close(
