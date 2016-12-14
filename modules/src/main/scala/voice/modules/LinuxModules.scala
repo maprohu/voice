@@ -1,6 +1,7 @@
 package voice.modules
 
 import mvnmod.builder.{MavenCentralModule, Module, ScalaModule, SubModuleContainer}
+import toolbox6.modules.Toolbox6Modules
 import toolbox8.modules._
 
 /**
@@ -27,7 +28,8 @@ object LinuxModules {
 
   object JnaLib extends ScalaModule(
     "jnalib",
-    Common
+    Common,
+    Toolbox6Modules.Tools
   )
 
   object Testing extends ScalaModule(

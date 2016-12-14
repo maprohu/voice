@@ -1,17 +1,19 @@
 package voice.requests.jnarequests
 
-import java.io.{DataOutputStream, InputStream, OutputStream, PrintWriter}
+import java.io.{FileInputStream, InputStream, OutputStream}
 import java.nio.IntBuffer
 
 import com.typesafe.scalalogging.StrictLogging
 import toolbox8.jartree.streamapp.{Requestable, RootContext}
 import voice.common.linux.c.CommonCLibrary
 import voice.linux.jna.bluetooth.{BluetoothLibrary, bdaddr_t, rfcomm_dev_req, sockaddr_rc}
-import voice.linux.jna.c.{CLibrary, sockaddr}
+import voice.linux.jna.c.CLibrary
 
 /**
   * Created by pappmar on 13/12/2016.
   */
+
+
 class RfcommListen extends Requestable with StrictLogging {
 
   override def request(ctx: RootContext, in: InputStream, out: OutputStream): Unit = {
