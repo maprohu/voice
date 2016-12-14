@@ -37,7 +37,7 @@ class RfcommConnect extends Requestable with StrictLogging {
     import bt._
     import voice.linux.common.bluetooth.CommonBluetoothTools._
 
-    val laddr = new sockaddr_rc()
+    val laddr = new sockaddr_rc.ByReference()
     laddr.rc_family = AF_BLUETOOTH.toShort
     laddr.rc_bdaddr = new bdaddr_t(Array.fill[Byte](6)(0))
     laddr.rc_channel = 0
@@ -58,7 +58,9 @@ class RfcommConnect extends Requestable with StrictLogging {
     for {
       ctl <- rfcommRaw
       sk <- rfcommStream
-      dev = TF.from({
+      dev <- TF.from({
+        logger.info(s"sk: ${sk}")
+        logger.info("binding")
         ensureSuccess(
           CommonCLibrary.INSTANCE.bind(
             sk,
@@ -66,6 +68,7 @@ class RfcommConnect extends Requestable with StrictLogging {
             laddr.size()
           )
         )
+        logger.info("connecting")
         ensureSuccess(
           CommonCLibrary.INSTANCE.connect(
             sk,
@@ -73,11 +76,12 @@ class RfcommConnect extends Requestable with StrictLogging {
             raddr.size()
           )
         )
+        logger.info("getsockname")
         ensureSuccess(
           CommonCLibrary.INSTANCE.getsockname(
             sk,
             laddr,
-            IntBuffer.allocate(1)
+            IntBuffer.wrap(Array(laddr.size()))
           )
         )
 
@@ -88,6 +92,7 @@ class RfcommConnect extends Requestable with StrictLogging {
         req.dst = raddr.rc_bdaddr.clone()
         req.channel = raddr.rc_channel
 
+        logger.info("create dev")
         ensureSuccess(
           ioctl(
             sk,
@@ -111,6 +116,7 @@ class RfcommConnect extends Requestable with StrictLogging {
       })
 
     } {
+      logger.info("connected")
       // open /dev/rfcomm0
       // write stuff
 

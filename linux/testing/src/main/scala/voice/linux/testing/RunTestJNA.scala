@@ -1,6 +1,6 @@
 package voice.linux.testing
 
-import org.bridj.Pointer
+import com.sun.jna.Pointer
 import voice.linux.jna.bluetooth.BluetoothLibrary
 import voice.linux.jna.c.CLibrary
 
@@ -11,22 +11,12 @@ object RunTestJNA {
 
   def main(args: Array[String]): Unit = {
     println(
-      CLibrary.if_nametoindex(
-        Pointer.pointerToCString("eno1")
-      )
-    )
-    println(
-      CLibrary.if_nametoindex(
-        Pointer.pointerToCString("lo")
-      )
-    )
-    println(
-      CLibrary.if_nametoindex(
-        Pointer.pointerToCString("wlo1")
+      CLibrary.INSTANCE.if_nametoindex(
+        "eno1"
       )
     )
 
-    BluetoothLibrary.hci_open_dev(0)
+    BluetoothLibrary.INSTANCE.hci_open_dev(0)
 
 
 

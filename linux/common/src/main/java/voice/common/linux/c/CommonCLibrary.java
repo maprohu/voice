@@ -20,7 +20,7 @@ public interface CommonCLibrary extends Library {
      * Original signature : <code>int bind(int, sockaddr*, socklen_t)</code><br>
      * <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\socket.h:118</i>
      */
-    int bind(int __fd, Structure __addr, int __len);
+    int bind(int __fd, Structure.ByReference __addr, int __len);
     /**
      * Await a connection on socket FD.<br>
      * When a connection arrives, open a new socket to communicate with it,<br>

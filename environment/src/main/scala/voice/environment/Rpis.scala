@@ -153,10 +153,26 @@ object Rpis {
     RpiInstances.Mobile,
     "0.0.0.0"
   ) {
-    def cable = this.copy(
+    lazy val ssh =
+      SshConnectionDetails.local(name.toLowerCase())
+
+    val base = copy(
+      processUser = "root"
+    )
+
+    lazy val withKey = {
+      base.copy(
+        hostKey = ssh.hostKey
+      )
+    }
+
+    def cable = withKey.copy(
       host = "10.1.1.49"
     )
-    def home = this.copy(
+    def homeCable = withKey.copy(
+      host = "192.168.1.37"
+    )
+    def home = withKey.copy(
       host = "192.168.10.215"
     )
   }

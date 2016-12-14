@@ -25,121 +25,86 @@ class RfcommListen extends Requestable with StrictLogging {
     import CLibrary._
     import BluetoothLibrary._
     import c._
-    import __socket_type._
     import voice.linux.common.bluetooth.CommonBluetoothTools._
 
-    logger.info("reading index")
-    val idx = if_nametoindex(
-      "eth0"
-    )
-    logger.info(s"index: ${idx}")
+    import BTCommon._
 
-    logger.info("opening rfcomm raw")
-    val ctl =
-      socket(
-        AF_BLUETOOTH,
-        SOCK_RAW,
-        BTPROTO_RFCOMM
-      )
+    val laddr = new sockaddr_rc.ByReference()
+    laddr.rc_family = AF_BLUETOOTH.toShort
+    laddr.rc_bdaddr = new bdaddr_t(Array.fill[Byte](6)(0))
+    laddr.rc_channel = 1
 
-    require(ctl >= 0)
+    val raddr = new sockaddr_rc()
 
-    try {
-      logger.info(s"opened: ${ctl}")
-
-      logger.info("opening stream socket")
-      val sk =
-        socket(
-          AF_BLUETOOTH,
-          SOCK_STREAM,
-          BTPROTO_RFCOMM
-        )
-
-      try {
-        val laddr = new sockaddr_rc.ByReference()
-        laddr.rc_family = AF_BLUETOOTH.toShort
-        laddr.rc_bdaddr = new bdaddr_t(Array.fill[Byte](6)(0))
-        laddr.rc_channel = 1
-
-        logger.info("binding")
-        if (
+    for {
+      ctl <- rfcommRaw
+      sk <- rfcommStream
+      nsk <- {
+        logger.info(s"sk: ${sk}")
+        ensureSuccess(
           CommonCLibrary.INSTANCE.bind(
             sk,
             laddr,
             laddr.size()
-          ) < 0
-        ) {
-          perror("binding error")
-          throw new Exception
-        }
-
-        logger.info("listening")
-        listen(
-          sk,
-          10
+          )
         )
 
-        val raddr = new sockaddr_rc.ByReference()
+        ensureSuccess(
+          listen(
+            sk,
+            10
+          )
+        )
 
         logger.info("accepting")
-        val nsk = CommonCLibrary.INSTANCE.accept(
-          sk,
-          raddr,
-          IntBuffer.wrap(
-            Array(
-              raddr.size()
+        tfSocket(
+         CommonCLibrary.INSTANCE.accept(
+            sk,
+            raddr,
+            IntBuffer.wrap(
+              Array(
+                raddr.size()
+              )
+            )
+          )
+        )
+      }
+      dev = {
+        ensureSuccess(
+          CommonCLibrary.INSTANCE.getsockname(
+            nsk,
+            laddr,
+            IntBuffer.wrap(
+              Array(
+                laddr.size()
+              )
             )
           )
         )
 
-        try {
-          logger.info("getsockname")
-          require(
-            CommonCLibrary.INSTANCE.getsockname(
-              nsk,
-              laddr,
-              IntBuffer.wrap(
-                Array(
-                  laddr.size()
-                )
-              )
-            ) >= 0
-          )
+        val dev_id : Short = 0
+        val req = new rfcomm_dev_req()
+        req.dev_id = dev_id
+        req.flags = (1 << RFCOMM_REUSE_DLC) | (1 << RFCOMM_RELEASE_ONHUP)
+        req.src = laddr.rc_bdaddr.clone()
+        req.dst = raddr.rc_bdaddr.clone()
+        req.channel = raddr.rc_channel
 
-          val dev_id : Short = 0
-          val req = new rfcomm_dev_req.ByReference()
-          req.dev_id = dev_id
-          req.flags = (1 << RFCOMM_REUSE_DLC) | (1 << RFCOMM_RELEASE_ONHUP)
-          req.src = laddr.rc_bdaddr.clone()
-          req.dst = raddr.rc_bdaddr.clone()
-          req.channel = raddr.rc_channel
-
-          val dev = ioctl(
-            nsk,
-            RFCOMMCREATEDEV,
-            req
-          )
-
-          require(dev >= 0)
-
-        } finally {
-          logger.info("closing nsk")
-          close(nsk)
-        }
-
-      } finally {
-        logger.info("closing sk")
-        close(sk)
+        ioctl(
+          nsk,
+          RFCOMMCREATEDEV,
+          req
+        )
 
       }
 
-    } finally {
-      close(
-        ctl
-      )
+    } {
+      logger.info("accepted")
+      // probably raw
+      // open dev
 
-      logger.info("closed")
     }
+
 
   }
 

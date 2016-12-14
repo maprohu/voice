@@ -11,7 +11,8 @@ object RunStreamServiceInstaller {
 
 //  val Target = Rpis.Home.remote("85.247.194.46")
 //  val Target = Rpis.Home.wlan
-  val Target = Rpis.Home.direct
+  val Target = Rpis.Mobile.homeCable
+//  val Target = Rpis.Home.direct
 //  val Target = Rpis.MobileCable
 //  val Target = Rpis.Central.remote
 
