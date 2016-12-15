@@ -42,8 +42,6 @@ class RfcommConnect extends Requestable with StrictLogging {
     laddr.rc_bdaddr = new bdaddr_t(Array.fill[Byte](6)(0))
     laddr.rc_channel = 0
 
-
-
     val raddr = new sockaddr_rc()
     raddr.rc_family = AF_BLUETOOTH.toShort
     raddr.rc_bdaddr = new bdaddr_t()
