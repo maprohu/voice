@@ -1,6 +1,4 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.LibraryExtractor;
-import com.ochafik.lang.jnaerator.runtime.MangledFunctionMapper;
 import com.ochafik.lang.jnaerator.runtime.NativeSize;
 import com.sun.jna.Callback;
 import com.sun.jna.Library;
@@ -24,9 +22,9 @@ import voice.linux.jna.c._IO_FILE;
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
 public interface BluetoothLibrary extends Library {
-	public static final String JNA_LIBRARY_NAME = LibraryExtractor.getLibraryPath("bluetooth", true, BluetoothLibrary.class);
-	public static final NativeLibrary JNA_NATIVE_LIB = NativeLibrary.getInstance(BluetoothLibrary.JNA_LIBRARY_NAME, MangledFunctionMapper.DEFAULT_OPTIONS);
-	public static final BluetoothLibrary INSTANCE = (BluetoothLibrary)Native.loadLibrary(BluetoothLibrary.JNA_LIBRARY_NAME, BluetoothLibrary.class, MangledFunctionMapper.DEFAULT_OPTIONS);
+	public static final String JNA_LIBRARY_NAME = "bluetooth";
+	public static final NativeLibrary JNA_NATIVE_LIB = NativeLibrary.getInstance(BluetoothLibrary.JNA_LIBRARY_NAME);
+	public static final BluetoothLibrary INSTANCE = (BluetoothLibrary)Native.loadLibrary(BluetoothLibrary.JNA_LIBRARY_NAME, BluetoothLibrary.class);
 	/** Equal to TCP_ESTABLISHED to make net code happy */
 	public static final int BT_CONNECTED = 1;
 	public static final int BT_OPEN = 2;

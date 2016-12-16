@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class set_afh_classification_rp extends Structure<set_afh_classification_rp, set_afh_classification_rp.ByValue, set_afh_classification_rp.ByReference > {
+public class set_afh_classification_rp extends Structure {
 	public byte status;
 	public set_afh_classification_rp() {
 		super();
@@ -23,12 +23,6 @@ public class set_afh_classification_rp extends Structure<set_afh_classification_
 	}
 	public set_afh_classification_rp(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected set_afh_classification_rp newInstance() { return new set_afh_classification_rp(); }
-	public static set_afh_classification_rp[] newArray(int arrayLength) {
-		return Structure.newArray(set_afh_classification_rp.class, arrayLength);
 	}
 	public static class ByReference extends set_afh_classification_rp implements Structure.ByReference {
 		

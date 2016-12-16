@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class evt_io_capability_response extends Structure<evt_io_capability_response, evt_io_capability_response.ByValue, evt_io_capability_response.ByReference > {
+public class evt_io_capability_response extends Structure {
 	/** C type : bdaddr_t */
 	public bdaddr_t bdaddr;
 	public byte capability;
@@ -31,12 +31,6 @@ public class evt_io_capability_response extends Structure<evt_io_capability_resp
 	}
 	public evt_io_capability_response(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected evt_io_capability_response newInstance() { return new evt_io_capability_response(); }
-	public static evt_io_capability_response[] newArray(int arrayLength) {
-		return Structure.newArray(evt_io_capability_response.class, arrayLength);
 	}
 	public static class ByReference extends evt_io_capability_response implements Structure.ByReference {
 		

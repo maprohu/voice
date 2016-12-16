@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class send_keypress_notify_rp extends Structure<send_keypress_notify_rp, send_keypress_notify_rp.ByValue, send_keypress_notify_rp.ByReference > {
+public class send_keypress_notify_rp extends Structure {
 	public byte status;
 	public send_keypress_notify_rp() {
 		super();
@@ -23,12 +23,6 @@ public class send_keypress_notify_rp extends Structure<send_keypress_notify_rp, 
 	}
 	public send_keypress_notify_rp(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected send_keypress_notify_rp newInstance() { return new send_keypress_notify_rp(); }
-	public static send_keypress_notify_rp[] newArray(int arrayLength) {
-		return Structure.newArray(send_keypress_notify_rp.class, arrayLength);
 	}
 	public static class ByReference extends send_keypress_notify_rp implements Structure.ByReference {
 		

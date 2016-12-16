@@ -1,7 +1,7 @@
 package voice.linux.jna.c;
-import com.ochafik.lang.jnaerator.runtime.Structure;
-import com.ochafik.lang.jnaerator.runtime.Union;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
+import com.sun.jna.Union;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -10,12 +10,12 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class __mbstate_t extends Structure<__mbstate_t, __mbstate_t.ByValue, __mbstate_t.ByReference > {
+public class __mbstate_t extends Structure {
 	public int __count;
 	/** C type : __value_union */
 	public __value_union __value;
 	/** <i>native declaration : ..\voice\local\headers\\usr\include\wchar.h:34</i> */
-	public static class __value_union extends Union<__value_union, __value_union.ByValue, __value_union.ByReference > {
+	public static class __value_union extends Union {
 		/** C type : wint_t */
 		public int __wch;
 		/** C type : char[4] */
@@ -40,12 +40,6 @@ public class __mbstate_t extends Structure<__mbstate_t, __mbstate_t.ByValue, __m
 		public __value_union(Pointer peer) {
 			super(peer);
 		}
-		protected ByReference newByReference() { return new ByReference(); }
-		protected ByValue newByValue() { return new ByValue(); }
-		protected __value_union newInstance() { return new __value_union(); }
-		public static __value_union[] newArray(int arrayLength) {
-			return Union.newArray(__value_union.class, arrayLength);
-		}
 		public static class ByReference extends __value_union implements Structure.ByReference {
 			
 		};
@@ -67,12 +61,6 @@ public class __mbstate_t extends Structure<__mbstate_t, __mbstate_t.ByValue, __m
 	}
 	public __mbstate_t(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected __mbstate_t newInstance() { return new __mbstate_t(); }
-	public static __mbstate_t[] newArray(int arrayLength) {
-		return Structure.newArray(__mbstate_t.class, arrayLength);
 	}
 	public static class ByReference extends __mbstate_t implements Structure.ByReference {
 		

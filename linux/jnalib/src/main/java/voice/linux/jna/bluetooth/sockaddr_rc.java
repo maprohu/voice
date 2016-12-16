@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -10,7 +10,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class sockaddr_rc extends Structure<sockaddr_rc, sockaddr_rc.ByValue, sockaddr_rc.ByReference > {
+public class sockaddr_rc extends Structure {
 	/** C type : sa_family_t */
 	public short rc_family;
 	/** C type : bdaddr_t */
@@ -34,12 +34,6 @@ public class sockaddr_rc extends Structure<sockaddr_rc, sockaddr_rc.ByValue, soc
 	}
 	public sockaddr_rc(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected sockaddr_rc newInstance() { return new sockaddr_rc(); }
-	public static sockaddr_rc[] newArray(int arrayLength) {
-		return Structure.newArray(sockaddr_rc.class, arrayLength);
 	}
 	public static class ByReference extends sockaddr_rc implements Structure.ByReference {
 		

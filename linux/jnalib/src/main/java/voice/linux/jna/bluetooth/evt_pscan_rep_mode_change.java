@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class evt_pscan_rep_mode_change extends Structure<evt_pscan_rep_mode_change, evt_pscan_rep_mode_change.ByValue, evt_pscan_rep_mode_change.ByReference > {
+public class evt_pscan_rep_mode_change extends Structure {
 	/** C type : bdaddr_t */
 	public bdaddr_t bdaddr;
 	public byte pscan_rep_mode;
@@ -27,12 +27,6 @@ public class evt_pscan_rep_mode_change extends Structure<evt_pscan_rep_mode_chan
 	}
 	public evt_pscan_rep_mode_change(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected evt_pscan_rep_mode_change newInstance() { return new evt_pscan_rep_mode_change(); }
-	public static evt_pscan_rep_mode_change[] newArray(int arrayLength) {
-		return Structure.newArray(evt_pscan_rep_mode_change.class, arrayLength);
 	}
 	public static class ByReference extends evt_pscan_rep_mode_change implements Structure.ByReference {
 		

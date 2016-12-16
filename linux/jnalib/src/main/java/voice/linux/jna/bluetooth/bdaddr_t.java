@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class bdaddr_t extends Structure<bdaddr_t, bdaddr_t.ByValue, bdaddr_t.ByReference > {
+public class bdaddr_t extends Structure {
 	/** C type : uint8_t[6] */
 	public byte[] b = new byte[6];
 	public bdaddr_t() {
@@ -27,12 +27,6 @@ public class bdaddr_t extends Structure<bdaddr_t, bdaddr_t.ByValue, bdaddr_t.ByR
 	}
 	public bdaddr_t(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected bdaddr_t newInstance() { return new bdaddr_t(); }
-	public static bdaddr_t[] newArray(int arrayLength) {
-		return Structure.newArray(bdaddr_t.class, arrayLength);
 	}
 	public static class ByReference extends bdaddr_t implements Structure.ByReference {
 		

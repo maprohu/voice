@@ -1,6 +1,6 @@
 package voice.linux.jna.c;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.ShortByReference;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ import voice.linux.jna.c.CLibrary.__locale_data;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class __locale_struct extends Structure<__locale_struct, __locale_struct.ByValue, __locale_struct.ByReference > {
+public class __locale_struct extends Structure {
 	/**
 	 * 13 = __LC_LAST.<br>
 	 * C type : __locale_data*[13]
@@ -54,12 +54,6 @@ public class __locale_struct extends Structure<__locale_struct, __locale_struct.
 	}
 	public __locale_struct(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected __locale_struct newInstance() { return new __locale_struct(); }
-	public static __locale_struct[] newArray(int arrayLength) {
-		return Structure.newArray(__locale_struct.class, arrayLength);
 	}
 	public static class ByReference extends __locale_struct implements Structure.ByReference {
 		

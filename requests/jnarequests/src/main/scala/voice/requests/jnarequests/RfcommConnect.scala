@@ -3,10 +3,12 @@ package voice.requests.jnarequests
 import java.io.{InputStream, ObjectInputStream, OutputStream}
 import java.nio.IntBuffer
 
+import com.ochafik.lang.jnaerator.runtime.NativeSize
+import com.sun.jna.Memory
 import com.typesafe.scalalogging.StrictLogging
 import toolbox6.tools.TF
 import toolbox8.jartree.streamapp.{Requestable, RootContext}
-import voice.common.linux.c.CommonCLibrary
+import voice.linux.common.c.CommonCLibrary
 import voice.linux.jna.bluetooth.{BluetoothLibrary, bdaddr_t, rfcomm_dev_req, sockaddr_rc}
 import voice.linux.jna.c.CLibrary
 
@@ -56,7 +58,7 @@ class RfcommConnect extends Requestable with StrictLogging {
     for {
       ctl <- rfcommRaw
       sk <- rfcommStream
-      dev <- TF.from({
+      _ = {
         logger.info(s"sk: ${sk}")
         logger.info("binding")
         ensureSuccess(
@@ -74,50 +76,21 @@ class RfcommConnect extends Requestable with StrictLogging {
             raddr.size()
           )
         )
-        logger.info("getsockname")
-        ensureSuccess(
-          CommonCLibrary.INSTANCE.getsockname(
-            sk,
-            laddr,
-            IntBuffer.wrap(Array(laddr.size()))
-          )
-        )
-
-        val req = new rfcomm_dev_req()
-        req.dev_id = dev_id
-        req.flags = (1 << RFCOMM_REUSE_DLC) | (1 << RFCOMM_RELEASE_ONHUP)
-        req.src = laddr.rc_bdaddr.clone()
-        req.dst = raddr.rc_bdaddr.clone()
-        req.channel = raddr.rc_channel
-
-        logger.info("create dev")
-        ensureSuccess(
-          CommonCLibrary.INSTANCE.ioctl(
-            sk,
-            RFCOMMCREATEDEV,
-            req.getPointer
-          )
-        )
-
-
-        // probably raw stuff is needed
-
-      })({ dev =>
-        val req = new rfcomm_dev_req()
-        req.dev_id = dev_id
-        req.flags = (1 << RFCOMM_HANGUP_NOW)
-        CommonCLibrary.INSTANCE.ioctl(
-          ctl,
-          RFCOMMRELEASEDEV,
-          req.getPointer
-        )
-      })
+      }
 
     } {
       logger.info("connected")
-      // open /dev/rfcomm0
-      // write stuff
 
+      logger.info("reading")
+
+      val d = new Memory(1)
+      read(
+        sk,
+        d,
+        new NativeSize(1)
+      )
+
+      logger.info(s"read: ${d.getByte(0).toChar}")
     }
 
 

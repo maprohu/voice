@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class hci_version extends Structure<hci_version, hci_version.ByValue, hci_version.ByReference > {
+public class hci_version extends Structure {
 	public short manufacturer;
 	public byte hci_ver;
 	public short hci_rev;
@@ -31,12 +31,6 @@ public class hci_version extends Structure<hci_version, hci_version.ByValue, hci
 	}
 	public hci_version(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected hci_version newInstance() { return new hci_version(); }
-	public static hci_version[] newArray(int arrayLength) {
-		return Structure.newArray(hci_version.class, arrayLength);
 	}
 	public static class ByReference extends hci_version implements Structure.ByReference {
 		

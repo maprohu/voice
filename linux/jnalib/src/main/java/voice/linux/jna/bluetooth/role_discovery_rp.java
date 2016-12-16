@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class role_discovery_rp extends Structure<role_discovery_rp, role_discovery_rp.ByValue, role_discovery_rp.ByReference > {
+public class role_discovery_rp extends Structure {
 	public byte status;
 	public short handle;
 	public byte role;
@@ -27,12 +27,6 @@ public class role_discovery_rp extends Structure<role_discovery_rp, role_discove
 	}
 	public role_discovery_rp(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected role_discovery_rp newInstance() { return new role_discovery_rp(); }
-	public static role_discovery_rp[] newArray(int arrayLength) {
-		return Structure.newArray(role_discovery_rp.class, arrayLength);
 	}
 	public static class ByReference extends role_discovery_rp implements Structure.ByReference {
 		

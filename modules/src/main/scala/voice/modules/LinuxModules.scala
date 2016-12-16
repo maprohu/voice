@@ -34,7 +34,9 @@ object LinuxModules {
 
   object Testing extends ScalaModule(
     "testing",
-    JnaLib
+    JnaLib,
+    mvn.`uk.co.caprica:juds:jar:0.94.1`,
+    mvn.`com.kohlschutter.junixsocket:junixsocket-demo:jar:2.0.4`
   )
 
 

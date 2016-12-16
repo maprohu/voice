@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class evt_physical_link_loss_warning extends Structure<evt_physical_link_loss_warning, evt_physical_link_loss_warning.ByValue, evt_physical_link_loss_warning.ByReference > {
+public class evt_physical_link_loss_warning extends Structure {
 	public byte handle;
 	public byte reason;
 	public evt_physical_link_loss_warning() {
@@ -25,12 +25,6 @@ public class evt_physical_link_loss_warning extends Structure<evt_physical_link_
 	}
 	public evt_physical_link_loss_warning(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected evt_physical_link_loss_warning newInstance() { return new evt_physical_link_loss_warning(); }
-	public static evt_physical_link_loss_warning[] newArray(int arrayLength) {
-		return Structure.newArray(evt_physical_link_loss_warning.class, arrayLength);
 	}
 	public static class ByReference extends evt_physical_link_loss_warning implements Structure.ByReference {
 		

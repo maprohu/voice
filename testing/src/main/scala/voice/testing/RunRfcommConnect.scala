@@ -21,7 +21,7 @@ object RunRfcommConnect {
 
   def main(args: Array[String]): Unit = {
 
-    voice.builders.build_voice_requests_compilerpi.main(args)
+//    voice.builders.build_voice_requests_compilerpi.main(args)
 
     StreamAppClient
       .requestPlugged(

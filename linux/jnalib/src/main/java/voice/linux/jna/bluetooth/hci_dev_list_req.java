@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class hci_dev_list_req extends Structure<hci_dev_list_req, hci_dev_list_req.ByValue, hci_dev_list_req.ByReference > {
+public class hci_dev_list_req extends Structure {
 	public short dev_num;
 	/**
 	 * hci_dev_req structures<br>
@@ -35,12 +35,6 @@ public class hci_dev_list_req extends Structure<hci_dev_list_req, hci_dev_list_r
 	}
 	public hci_dev_list_req(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected hci_dev_list_req newInstance() { return new hci_dev_list_req(); }
-	public static hci_dev_list_req[] newArray(int arrayLength) {
-		return Structure.newArray(hci_dev_list_req.class, arrayLength);
 	}
 	public static class ByReference extends hci_dev_list_req implements Structure.ByReference {
 		

@@ -1,4 +1,4 @@
-package voice.common.linux.c;
+package voice.linux.common.c;
 
 import com.ochafik.lang.jnaerator.runtime.LibraryExtractor;
 import com.ochafik.lang.jnaerator.runtime.MangledFunctionMapper;

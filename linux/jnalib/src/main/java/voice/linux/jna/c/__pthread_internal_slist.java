@@ -1,6 +1,6 @@
 package voice.linux.jna.c;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class __pthread_internal_slist extends Structure<__pthread_internal_slist, __pthread_internal_slist.ByValue, __pthread_internal_slist.ByReference > {
+public class __pthread_internal_slist extends Structure {
 	/** C type : __pthread_internal_slist* */
 	public __pthread_internal_slist.ByReference __next;
 	public __pthread_internal_slist() {
@@ -25,12 +25,6 @@ public class __pthread_internal_slist extends Structure<__pthread_internal_slist
 	}
 	public __pthread_internal_slist(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected __pthread_internal_slist newInstance() { return new __pthread_internal_slist(); }
-	public static __pthread_internal_slist[] newArray(int arrayLength) {
-		return Structure.newArray(__pthread_internal_slist.class, arrayLength);
 	}
 	public static class ByReference extends __pthread_internal_slist implements Structure.ByReference {
 		

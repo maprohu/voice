@@ -1,7 +1,7 @@
 package voice.linux.jna.c;
-import com.ochafik.lang.jnaerator.runtime.Structure;
-import com.ochafik.lang.jnaerator.runtime.Union;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
+import com.sun.jna.Union;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -13,13 +13,13 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class ifreq extends Structure<ifreq, ifreq.ByValue, ifreq.ByReference > {
+public class ifreq extends Structure {
 	/** C type : ifr_ifrn_union */
 	public ifr_ifrn_union ifr_ifrn;
 	/** C type : ifr_ifru_union */
 	public ifr_ifru_union ifr_ifru;
 	/** <i>native declaration : net\if.h:128</i> */
-	public static class ifr_ifrn_union extends Union<ifr_ifrn_union, ifr_ifrn_union.ByValue, ifr_ifrn_union.ByReference > {
+	public static class ifr_ifrn_union extends Union {
 		/**
 		 * Interface name, e.g. "en0".<br>
 		 * C type : char[16]
@@ -42,12 +42,6 @@ public class ifreq extends Structure<ifreq, ifreq.ByValue, ifreq.ByReference > {
 		public ifr_ifrn_union(Pointer peer) {
 			super(peer);
 		}
-		protected ByReference newByReference() { return new ByReference(); }
-		protected ByValue newByValue() { return new ByValue(); }
-		protected ifr_ifrn_union newInstance() { return new ifr_ifrn_union(); }
-		public static ifr_ifrn_union[] newArray(int arrayLength) {
-			return Union.newArray(ifr_ifrn_union.class, arrayLength);
-		}
 		public static class ByReference extends ifr_ifrn_union implements Structure.ByReference {
 			
 		};
@@ -56,7 +50,7 @@ public class ifreq extends Structure<ifreq, ifreq.ByValue, ifreq.ByReference > {
 		};
 	};
 	/** <i>native declaration : net\if.h:133</i> */
-	public static class ifr_ifru_union extends Union<ifr_ifru_union, ifr_ifru_union.ByValue, ifr_ifru_union.ByReference > {
+	public static class ifr_ifru_union extends Union {
 		/** C type : sockaddr */
 		public sockaddr ifru_addr;
 		/** C type : sockaddr */
@@ -127,12 +121,6 @@ public class ifreq extends Structure<ifreq, ifreq.ByValue, ifreq.ByReference > {
 			this.ifru_data = ifru_data;
 			setType(Pointer.class);
 		}
-		protected ByReference newByReference() { return new ByReference(); }
-		protected ByValue newByValue() { return new ByValue(); }
-		protected ifr_ifru_union newInstance() { return new ifr_ifru_union(); }
-		public static ifr_ifru_union[] newArray(int arrayLength) {
-			return Union.newArray(ifr_ifru_union.class, arrayLength);
-		}
 		public static class ByReference extends ifr_ifru_union implements Structure.ByReference {
 			
 		};
@@ -157,12 +145,6 @@ public class ifreq extends Structure<ifreq, ifreq.ByValue, ifreq.ByReference > {
 	}
 	public ifreq(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected ifreq newInstance() { return new ifreq(); }
-	public static ifreq[] newArray(int arrayLength) {
-		return Structure.newArray(ifreq.class, arrayLength);
 	}
 	public static class ByReference extends ifreq implements Structure.ByReference {
 		

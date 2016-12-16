@@ -3,11 +3,12 @@ package voice.requests.jnarequests
 import java.io.{FileInputStream, InputStream, OutputStream}
 import java.nio.IntBuffer
 
-import com.sun.jna.Native
+import com.ochafik.lang.jnaerator.runtime.NativeSize
+import com.sun.jna.{Memory, Native, Pointer}
 import com.typesafe.scalalogging.StrictLogging
 import toolbox6.tools.TF
 import toolbox8.jartree.streamapp.{Requestable, RootContext}
-import voice.common.linux.c.CommonCLibrary
+import voice.linux.common.c.CommonCLibrary
 import voice.linux.jna.bluetooth.{BluetoothLibrary, bdaddr_t, rfcomm_dev_req, sockaddr_rc}
 import voice.linux.jna.c.CLibrary
 
@@ -72,7 +73,10 @@ class RfcommListen extends Requestable with StrictLogging {
           )
         )
       }
-      dev <- {
+      _ = {
+        logger.info(s"nsk: ${nsk}")
+        logger.info(s"raddr: ${raddr.rc_bdaddr.b.toSeq}")
+
         ensureSuccess(
           CommonCLibrary.INSTANCE.getsockname(
             nsk,
@@ -85,43 +89,27 @@ class RfcommListen extends Requestable with StrictLogging {
           )
         )
 
-        val dev_id : Short = 0
-
-        TF.from({
-          val req = new rfcomm_dev_req()
-          req.dev_id = dev_id
-          req.flags = (1 << RFCOMM_REUSE_DLC) | (1 << RFCOMM_RELEASE_ONHUP)
-          req.src = laddr.rc_bdaddr.clone()
-          req.dst = raddr.rc_bdaddr.clone()
-          req.channel = raddr.rc_channel
-
-          ensureSuccess {
-            CommonCLibrary.INSTANCE.ioctl(
-              nsk,
-              RFCOMMCREATEDEV,
-              req.getPointer
-            )
-          }
-        })({ dev =>
-          val req = new rfcomm_dev_req()
-          req.dev_id = dev_id
-          req.flags = (1 << RFCOMM_HANGUP_NOW)
-
-          ensureSuccess {
-            CommonCLibrary.INSTANCE.ioctl(
-              ctl,
-              RFCOMMRELEASEDEV,
-              req.getPointer
-            )
-          }
-        })
+        logger.info(s"laddr: ${laddr.rc_bdaddr.b.toSeq}")
 
       }
 
     } {
       logger.info("accepted")
-      // probably raw
-      // open dev
+
+      val c = 'X'.toByte
+
+      logger.info(s"writing: ${c.toChar}")
+
+      val d = new Memory(1)
+      d.write(0, Array(c), 0, 1)
+      write(
+        nsk,
+        d,
+        new NativeSize(1)
+      )
+
+      logger.info("written")
+
 
     }
 

@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class qos_setup_cp extends Structure<qos_setup_cp, qos_setup_cp.ByValue, qos_setup_cp.ByReference > {
+public class qos_setup_cp extends Structure {
 	public short handle;
 	/** Reserved */
 	public byte flags;
@@ -33,12 +33,6 @@ public class qos_setup_cp extends Structure<qos_setup_cp, qos_setup_cp.ByValue, 
 	}
 	public qos_setup_cp(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected qos_setup_cp newInstance() { return new qos_setup_cp(); }
-	public static qos_setup_cp[] newArray(int arrayLength) {
-		return Structure.newArray(qos_setup_cp.class, arrayLength);
 	}
 	public static class ByReference extends qos_setup_cp implements Structure.ByReference {
 		

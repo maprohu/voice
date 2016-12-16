@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class disconnect_cp extends Structure<disconnect_cp, disconnect_cp.ByValue, disconnect_cp.ByReference > {
+public class disconnect_cp extends Structure {
 	public short handle;
 	public byte reason;
 	public disconnect_cp() {
@@ -25,12 +25,6 @@ public class disconnect_cp extends Structure<disconnect_cp, disconnect_cp.ByValu
 	}
 	public disconnect_cp(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected disconnect_cp newInstance() { return new disconnect_cp(); }
-	public static disconnect_cp[] newArray(int arrayLength) {
-		return Structure.newArray(disconnect_cp.class, arrayLength);
 	}
 	public static class ByReference extends disconnect_cp implements Structure.ByReference {
 		

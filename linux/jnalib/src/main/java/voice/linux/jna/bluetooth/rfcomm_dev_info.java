@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class rfcomm_dev_info extends Structure<rfcomm_dev_info, rfcomm_dev_info.ByValue, rfcomm_dev_info.ByReference > {
+public class rfcomm_dev_info extends Structure {
 	public short id;
 	public int flags;
 	public short state;
@@ -39,12 +39,6 @@ public class rfcomm_dev_info extends Structure<rfcomm_dev_info, rfcomm_dev_info.
 	}
 	public rfcomm_dev_info(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected rfcomm_dev_info newInstance() { return new rfcomm_dev_info(); }
-	public static rfcomm_dev_info[] newArray(int arrayLength) {
-		return Structure.newArray(rfcomm_dev_info.class, arrayLength);
 	}
 	public static class ByReference extends rfcomm_dev_info implements Structure.ByReference {
 		

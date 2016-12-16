@@ -42,8 +42,8 @@ object RunLinuxJNAerator {
     JNAerator
       .main(
         Array[String](
-          "-runtime", "JNAerator",
-//          "-runtime", "JNA",
+//          "-runtime", "JNAerator",
+          "-runtime", "JNA",
           "-noLibBundle",
           "-mavenGroupId", "voice",
           "-mavenArtifactId", "voice-linux-jnalib",

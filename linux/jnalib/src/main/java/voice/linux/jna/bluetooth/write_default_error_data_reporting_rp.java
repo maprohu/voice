@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class write_default_error_data_reporting_rp extends Structure<write_default_error_data_reporting_rp, write_default_error_data_reporting_rp.ByValue, write_default_error_data_reporting_rp.ByReference > {
+public class write_default_error_data_reporting_rp extends Structure {
 	public byte status;
 	public write_default_error_data_reporting_rp() {
 		super();
@@ -23,12 +23,6 @@ public class write_default_error_data_reporting_rp extends Structure<write_defau
 	}
 	public write_default_error_data_reporting_rp(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected write_default_error_data_reporting_rp newInstance() { return new write_default_error_data_reporting_rp(); }
-	public static write_default_error_data_reporting_rp[] newArray(int arrayLength) {
-		return Structure.newArray(write_default_error_data_reporting_rp.class, arrayLength);
 	}
 	public static class ByReference extends write_default_error_data_reporting_rp implements Structure.ByReference {
 		

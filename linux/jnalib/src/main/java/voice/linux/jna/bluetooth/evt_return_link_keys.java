@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class evt_return_link_keys extends Structure<evt_return_link_keys, evt_return_link_keys.ByValue, evt_return_link_keys.ByReference > {
+public class evt_return_link_keys extends Structure {
 	public byte num_keys;
 	public evt_return_link_keys() {
 		super();
@@ -23,12 +23,6 @@ public class evt_return_link_keys extends Structure<evt_return_link_keys, evt_re
 	}
 	public evt_return_link_keys(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected evt_return_link_keys newInstance() { return new evt_return_link_keys(); }
-	public static evt_return_link_keys[] newArray(int arrayLength) {
-		return Structure.newArray(evt_return_link_keys.class, arrayLength);
 	}
 	public static class ByReference extends evt_return_link_keys implements Structure.ByReference {
 		

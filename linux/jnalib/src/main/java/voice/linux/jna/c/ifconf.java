@@ -1,7 +1,7 @@
 package voice.linux.jna.c;
-import com.ochafik.lang.jnaerator.runtime.Structure;
-import com.ochafik.lang.jnaerator.runtime.Union;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
+import com.sun.jna.Union;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -13,13 +13,13 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class ifconf extends Structure<ifconf, ifconf.ByValue, ifconf.ByReference > {
+public class ifconf extends Structure {
 	/** Size of buffer. */
 	public int ifc_len;
 	/** C type : ifc_ifcu_union */
 	public ifc_ifcu_union ifc_ifcu;
 	/** <i>native declaration : net\if.h:177</i> */
-	public static class ifc_ifcu_union extends Union<ifc_ifcu_union, ifc_ifcu_union.ByValue, ifc_ifcu_union.ByReference > {
+	public static class ifc_ifcu_union extends Union {
 		/** C type : __caddr_t */
 		public Pointer ifcu_buf;
 		/** C type : ifreq* */
@@ -38,12 +38,6 @@ public class ifconf extends Structure<ifconf, ifconf.ByValue, ifconf.ByReference
 			super();
 			this.ifcu_req = ifcu_req;
 			setType(voice.linux.jna.c.ifreq.ByReference.class);
-		}
-		protected ByReference newByReference() { return new ByReference(); }
-		protected ByValue newByValue() { return new ByValue(); }
-		protected ifc_ifcu_union newInstance() { return new ifc_ifcu_union(); }
-		public static ifc_ifcu_union[] newArray(int arrayLength) {
-			return Union.newArray(ifc_ifcu_union.class, arrayLength);
 		}
 		public static class ByReference extends ifc_ifcu_union implements Structure.ByReference {
 			
@@ -69,12 +63,6 @@ public class ifconf extends Structure<ifconf, ifconf.ByValue, ifconf.ByReference
 	}
 	public ifconf(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected ifconf newInstance() { return new ifconf(); }
-	public static ifconf[] newArray(int arrayLength) {
-		return Structure.newArray(ifconf.class, arrayLength);
 	}
 	public static class ByReference extends ifconf implements Structure.ByReference {
 		

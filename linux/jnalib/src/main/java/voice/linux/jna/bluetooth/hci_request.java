@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class hci_request extends Structure<hci_request, hci_request.ByValue, hci_request.ByReference > {
+public class hci_request extends Structure {
 	public short ogf;
 	public short ocf;
 	public int event;
@@ -41,12 +41,6 @@ public class hci_request extends Structure<hci_request, hci_request.ByValue, hci
 	}
 	public hci_request(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected hci_request newInstance() { return new hci_request(); }
-	public static hci_request[] newArray(int arrayLength) {
-		return Structure.newArray(hci_request.class, arrayLength);
 	}
 	public static class ByReference extends hci_request implements Structure.ByReference {
 		

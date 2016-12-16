@@ -1,6 +1,6 @@
 package voice.linux.jna.bluetooth;
-import com.ochafik.lang.jnaerator.runtime.Structure;
 import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -9,7 +9,7 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class enhanced_flush_cp extends Structure<enhanced_flush_cp, enhanced_flush_cp.ByValue, enhanced_flush_cp.ByReference > {
+public class enhanced_flush_cp extends Structure {
 	public short handle;
 	public byte type;
 	public enhanced_flush_cp() {
@@ -25,12 +25,6 @@ public class enhanced_flush_cp extends Structure<enhanced_flush_cp, enhanced_flu
 	}
 	public enhanced_flush_cp(Pointer peer) {
 		super(peer);
-	}
-	protected ByReference newByReference() { return new ByReference(); }
-	protected ByValue newByValue() { return new ByValue(); }
-	protected enhanced_flush_cp newInstance() { return new enhanced_flush_cp(); }
-	public static enhanced_flush_cp[] newArray(int arrayLength) {
-		return Structure.newArray(enhanced_flush_cp.class, arrayLength);
 	}
 	public static class ByReference extends enhanced_flush_cp implements Structure.ByReference {
 		
