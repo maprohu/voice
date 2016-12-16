@@ -1,5 +1,6 @@
 package voice.requests.jnarequests
 
+import com.sun.jna.Native
 import toolbox6.tools.TF
 import voice.linux.jna.bluetooth.BluetoothLibrary._
 import voice.linux.jna.c.CLibrary
@@ -43,7 +44,13 @@ object BTCommon {
 
   def ensureSuccess(what: => Int) : Int = {
     val res = what
-    require(res >= 0)
+    if (res < 0) {
+      throw new Exception(
+        s"failure: ${
+          synchronized { CLibrary.INSTANCE.strerror(Native.getLastError).getString(0) }
+        }"
+      )
+    }
     res
   }
 

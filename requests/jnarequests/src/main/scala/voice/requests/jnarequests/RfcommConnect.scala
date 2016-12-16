@@ -92,10 +92,10 @@ class RfcommConnect extends Requestable with StrictLogging {
 
         logger.info("create dev")
         ensureSuccess(
-          ioctl(
+          CommonCLibrary.INSTANCE.ioctl(
             sk,
             RFCOMMCREATEDEV,
-            req
+            req.getPointer
           )
         )
 
@@ -106,10 +106,10 @@ class RfcommConnect extends Requestable with StrictLogging {
         val req = new rfcomm_dev_req()
         req.dev_id = dev_id
         req.flags = (1 << RFCOMM_HANGUP_NOW)
-        ioctl(
+        CommonCLibrary.INSTANCE.ioctl(
           ctl,
           RFCOMMRELEASEDEV,
-          req
+          req.getPointer
         )
       })
 

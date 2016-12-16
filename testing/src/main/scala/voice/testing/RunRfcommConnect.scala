@@ -15,7 +15,8 @@ object RunRfcommConnect {
 
 //  val Target = Rpis.Home.tunneled
 //    val Target = Rpis.Home.wlan
-  val Target = Rpis.Mobile.homeCable
+//val Target = Rpis.Mobile.homeCable
+  val Target = Rpis.Mobile.tunneled
   //  val Target = Rpis.Localhost
 
   def main(args: Array[String]): Unit = {

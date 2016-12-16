@@ -50,4 +50,12 @@ public interface CommonCLibrary extends Library {
      * <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\socket.h:132</i>
      */
     int connect(int __fd, Structure __addr, int __len);
+    /**
+     * Perform the I/O control operation specified by REQUEST on FD.<br>
+     * One argument may follow; its presence and type depend on REQUEST.<br>
+     * Return value depends on REQUEST.  Usually -1 indicates error.<br>
+     * Original signature : <code>int ioctl(int, unsigned long long, null)</code><br>
+     * <i>native declaration : arm-linux-gnueabihf\sys\ioctl.h:39</i>
+     */
+    int ioctl(int __fd, long __request, Pointer __data);
 }

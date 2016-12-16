@@ -1582,6 +1582,16 @@ public interface CLibrary extends Library {
 	public static final int F_TLOCK = (int)2;
 	/** <i>native declaration : unistd.h</i> */
 	public static final int F_TEST = (int)3;
+	/** <i>native declaration : string.h</i> */
+	public static final int _STRING_H = (int)1;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\xlocale.h</i> */
+	public static final int _XLOCALE_H = (int)1;
+	/** <i>native declaration : errno.h</i> */
+	public static final int _ERRNO_H = (int)1;
+	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\errno.h</i> */
+	public static final int ENOTSUP = (int)95;
+	/** <i>native declaration : errno.h</i> */
+	public static final int __error_t_defined = (int)1;
 	/** <i>native declaration : net\if.h</i> */
 	public static final int _NET_IF_H = (int)1;
 	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\sys\types.h</i> */
@@ -2208,10 +2218,6 @@ public interface CLibrary extends Library {
 	public static final int L_cuserid = (int)9;
 	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\stdio_lim.h</i> */
 	public static final int FOPEN_MAX = (int)16;
-	/** <i>native declaration : ..\voice\local\headers\\usr\include\string.h</i> */
-	public static final int _STRING_H = (int)1;
-	/** <i>native declaration : ..\voice\local\headers\\usr\include\xlocale.h</i> */
-	public static final int _XLOCALE_H = (int)1;
 	/** <i>native declaration : ..\voice\local\headers\\usr\include\byteswap.h</i> */
 	public static final int _BYTESWAP_H = (int)1;
 	/** <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\in.h</i> */
@@ -3805,6 +3811,732 @@ public interface CLibrary extends Library {
 	 * <i>native declaration : unistd.h:964</i>
 	 */
 	void swab(Pointer __from, Pointer __to, int __n);
+	/**
+	 * Copy N bytes of SRC to DEST.<br>
+	 * Original signature : <code>void* memcpy(void*, const void*, size_t)</code><br>
+	 * <i>native declaration : string.h:14</i>
+	 */
+	Pointer memcpy(Pointer __dest, Pointer __src, NativeSize __n);
+	/**
+	 * Copy N bytes of SRC to DEST, guaranteeing<br>
+	 * correct behavior for overlapping strings.<br>
+	 * Original signature : <code>void* memmove(void*, const void*, size_t)</code><br>
+	 * <i>native declaration : string.h:18</i>
+	 */
+	Pointer memmove(Pointer __dest, Pointer __src, NativeSize __n);
+	/**
+	 * Copy no more than N bytes of SRC to DEST, stopping when C is found.<br>
+	 * Return the position in DEST one byte past where C was copied,<br>
+	 * or NULL if C was not found in the first N bytes of SRC.<br>
+	 * Original signature : <code>void* memccpy(void*, const void*, int, size_t)</code><br>
+	 * <i>native declaration : string.h:26</i>
+	 */
+	Pointer memccpy(Pointer __dest, Pointer __src, int __c, NativeSize __n);
+	/**
+	 * Set N bytes of S to C.<br>
+	 * Original signature : <code>void* memset(void*, int, size_t)</code><br>
+	 * <i>native declaration : string.h:34</i>
+	 */
+	Pointer memset(Pointer __s, int __c, NativeSize __n);
+	/**
+	 * Compare N bytes of S1 and S2.<br>
+	 * Original signature : <code>int memcmp(const void*, const void*, size_t)</code><br>
+	 * <i>native declaration : string.h:37</i>
+	 */
+	int memcmp(Pointer __s1, Pointer __s2, NativeSize __n);
+	/**
+	 * Search N bytes of S for C.<br>
+	 * Original signature : <code>void* memchr(const void*, int, size_t)</code><br>
+	 * <i>native declaration : string.h:64</i>
+	 */
+	Pointer memchr(Pointer __s, int __c, NativeSize __n);
+	/**
+	 * Search in S for C.  This is similar to `memchr' but there is no<br>
+	 * length limit.<br>
+	 * Original signature : <code>void* rawmemchr(const void*, int)</code><br>
+	 * <i>native declaration : string.h:78</i>
+	 */
+	Pointer rawmemchr(Pointer __s, int __c);
+	/**
+	 * Search N bytes of S for the final occurrence of C.<br>
+	 * Original signature : <code>void* memrchr(const void*, int, size_t)</code><br>
+	 * <i>native declaration : string.h:89</i>
+	 */
+	Pointer memrchr(Pointer __s, int __c, NativeSize __n);
+	/**
+	 * Copy SRC to DEST.<br>
+	 * Original signature : <code>char* strcpy(char*, const char*)</code><br>
+	 * <i>native declaration : string.h:97</i><br>
+	 * @deprecated use the safer methods {@link #strcpy(java.nio.ByteBuffer, java.lang.String)} and {@link #strcpy(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer strcpy(Pointer __dest, Pointer __src);
+	/**
+	 * Copy SRC to DEST.<br>
+	 * Original signature : <code>char* strcpy(char*, const char*)</code><br>
+	 * <i>native declaration : string.h:97</i>
+	 */
+	Pointer strcpy(ByteBuffer __dest, String __src);
+	/**
+	 * Copy no more than N characters of SRC to DEST.<br>
+	 * Original signature : <code>char* strncpy(char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:100</i><br>
+	 * @deprecated use the safer methods {@link #strncpy(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strncpy(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
+	 */
+	@Deprecated 
+	Pointer strncpy(Pointer __dest, Pointer __src, NativeSize __n);
+	/**
+	 * Copy no more than N characters of SRC to DEST.<br>
+	 * Original signature : <code>char* strncpy(char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:100</i>
+	 */
+	Pointer strncpy(ByteBuffer __dest, String __src, NativeSize __n);
+	/**
+	 * Append SRC onto DEST.<br>
+	 * Original signature : <code>char* strcat(char*, const char*)</code><br>
+	 * <i>native declaration : string.h:105</i><br>
+	 * @deprecated use the safer methods {@link #strcat(java.nio.ByteBuffer, java.lang.String)} and {@link #strcat(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer strcat(Pointer __dest, Pointer __src);
+	/**
+	 * Append SRC onto DEST.<br>
+	 * Original signature : <code>char* strcat(char*, const char*)</code><br>
+	 * <i>native declaration : string.h:105</i>
+	 */
+	Pointer strcat(ByteBuffer __dest, String __src);
+	/**
+	 * Append no more than N characters from SRC onto DEST.<br>
+	 * Original signature : <code>char* strncat(char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:108</i><br>
+	 * @deprecated use the safer methods {@link #strncat(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strncat(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
+	 */
+	@Deprecated 
+	Pointer strncat(Pointer __dest, Pointer __src, NativeSize __n);
+	/**
+	 * Append no more than N characters from SRC onto DEST.<br>
+	 * Original signature : <code>char* strncat(char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:108</i>
+	 */
+	Pointer strncat(ByteBuffer __dest, String __src, NativeSize __n);
+	/**
+	 * Compare S1 and S2.<br>
+	 * Original signature : <code>int strcmp(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:112</i><br>
+	 * @deprecated use the safer methods {@link #strcmp(java.lang.String, java.lang.String)} and {@link #strcmp(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	int strcmp(Pointer __s1, Pointer __s2);
+	/**
+	 * Compare S1 and S2.<br>
+	 * Original signature : <code>int strcmp(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:112</i>
+	 */
+	int strcmp(String __s1, String __s2);
+	/**
+	 * Compare N characters of S1 and S2.<br>
+	 * Original signature : <code>int strncmp(const char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:115</i><br>
+	 * @deprecated use the safer methods {@link #strncmp(java.lang.String, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strncmp(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
+	 */
+	@Deprecated 
+	int strncmp(Pointer __s1, Pointer __s2, NativeSize __n);
+	/**
+	 * Compare N characters of S1 and S2.<br>
+	 * Original signature : <code>int strncmp(const char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:115</i>
+	 */
+	int strncmp(String __s1, String __s2, NativeSize __n);
+	/**
+	 * Compare the collated forms of S1 and S2.<br>
+	 * Original signature : <code>int strcoll(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:119</i><br>
+	 * @deprecated use the safer methods {@link #strcoll(java.lang.String, java.lang.String)} and {@link #strcoll(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	int strcoll(Pointer __s1, Pointer __s2);
+	/**
+	 * Compare the collated forms of S1 and S2.<br>
+	 * Original signature : <code>int strcoll(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:119</i>
+	 */
+	int strcoll(String __s1, String __s2);
+	/**
+	 * Put a transformation of SRC into no more than N bytes of DEST.<br>
+	 * Original signature : <code>size_t strxfrm(char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:122</i><br>
+	 * @deprecated use the safer methods {@link #strxfrm(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strxfrm(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
+	 */
+	@Deprecated 
+	NativeSize strxfrm(Pointer __dest, Pointer __src, NativeSize __n);
+	/**
+	 * Put a transformation of SRC into no more than N bytes of DEST.<br>
+	 * Original signature : <code>size_t strxfrm(char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:122</i>
+	 */
+	NativeSize strxfrm(ByteBuffer __dest, String __src, NativeSize __n);
+	/**
+	 * Compare the collated forms of S1 and S2 using rules from L.<br>
+	 * Original signature : <code>int strcoll_l(const char*, const char*, __locale_t)</code><br>
+	 * <i>native declaration : string.h:135</i><br>
+	 * @deprecated use the safer methods {@link #strcoll_l(java.lang.String, java.lang.String, voice.linux.jna.c.__locale_struct)} and {@link #strcoll_l(com.sun.jna.Pointer, com.sun.jna.Pointer, voice.linux.jna.c.__locale_struct)} instead
+	 */
+	@Deprecated 
+	int strcoll_l(Pointer __s1, Pointer __s2, __locale_struct __l);
+	/**
+	 * Compare the collated forms of S1 and S2 using rules from L.<br>
+	 * Original signature : <code>int strcoll_l(const char*, const char*, __locale_t)</code><br>
+	 * <i>native declaration : string.h:135</i>
+	 */
+	int strcoll_l(String __s1, String __s2, __locale_struct __l);
+	/**
+	 * Put a transformation of SRC into no more than N bytes of DEST.<br>
+	 * Original signature : <code>size_t strxfrm_l(char*, const char*, size_t, __locale_t)</code><br>
+	 * <i>native declaration : string.h:138</i><br>
+	 * @deprecated use the safer methods {@link #strxfrm_l(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize, voice.linux.jna.c.__locale_struct)} and {@link #strxfrm_l(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize, voice.linux.jna.c.__locale_struct)} instead
+	 */
+	@Deprecated 
+	NativeSize strxfrm_l(Pointer __dest, Pointer __src, NativeSize __n, __locale_struct __l);
+	/**
+	 * Put a transformation of SRC into no more than N bytes of DEST.<br>
+	 * Original signature : <code>size_t strxfrm_l(char*, const char*, size_t, __locale_t)</code><br>
+	 * <i>native declaration : string.h:138</i>
+	 */
+	NativeSize strxfrm_l(ByteBuffer __dest, String __src, NativeSize __n, __locale_struct __l);
+	/**
+	 * Duplicate S, returning an identical malloc'd string.<br>
+	 * Original signature : <code>char* strdup(const char*)</code><br>
+	 * <i>native declaration : string.h:145</i><br>
+	 * @deprecated use the safer methods {@link #strdup(java.lang.String)} and {@link #strdup(com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer strdup(Pointer __s);
+	/**
+	 * Duplicate S, returning an identical malloc'd string.<br>
+	 * Original signature : <code>char* strdup(const char*)</code><br>
+	 * <i>native declaration : string.h:145</i>
+	 */
+	Pointer strdup(String __s);
+	/**
+	 * Return a malloc'd copy of at most N bytes of STRING.  The<br>
+	 * resultant string is terminated even if no null terminator<br>
+	 * appears before STRING[N].<br>
+	 * Original signature : <code>char* strndup(const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:153</i><br>
+	 * @deprecated use the safer methods {@link #strndup(java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strndup(com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
+	 */
+	@Deprecated 
+	Pointer strndup(Pointer __string, NativeSize __n);
+	/**
+	 * Return a malloc'd copy of at most N bytes of STRING.  The<br>
+	 * resultant string is terminated even if no null terminator<br>
+	 * appears before STRING[N].<br>
+	 * Original signature : <code>char* strndup(const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:153</i>
+	 */
+	Pointer strndup(String __string, NativeSize __n);
+	/**
+	 * Find the first occurrence of C in S.<br>
+	 * Original signature : <code>char* strchr(const char*, int)</code><br>
+	 * <i>native declaration : string.h:205</i><br>
+	 * @deprecated use the safer methods {@link #strchr(java.lang.String, int)} and {@link #strchr(com.sun.jna.Pointer, int)} instead
+	 */
+	@Deprecated 
+	Pointer strchr(Pointer __s, int __c);
+	/**
+	 * Find the first occurrence of C in S.<br>
+	 * Original signature : <code>char* strchr(const char*, int)</code><br>
+	 * <i>native declaration : string.h:205</i>
+	 */
+	Pointer strchr(String __s, int __c);
+	/**
+	 * Find the last occurrence of C in S.<br>
+	 * Original signature : <code>char* strrchr(const char*, int)</code><br>
+	 * <i>native declaration : string.h:232</i><br>
+	 * @deprecated use the safer methods {@link #strrchr(java.lang.String, int)} and {@link #strrchr(com.sun.jna.Pointer, int)} instead
+	 */
+	@Deprecated 
+	Pointer strrchr(Pointer __s, int __c);
+	/**
+	 * Find the last occurrence of C in S.<br>
+	 * Original signature : <code>char* strrchr(const char*, int)</code><br>
+	 * <i>native declaration : string.h:232</i>
+	 */
+	Pointer strrchr(String __s, int __c);
+	/**
+	 * This function is similar to `strchr'.  But it returns a pointer to<br>
+	 * the closing NUL byte in case C is not found in S.<br>
+	 * Original signature : <code>char* strchrnul(const char*, int)</code><br>
+	 * <i>native declaration : string.h:246</i><br>
+	 * @deprecated use the safer methods {@link #strchrnul(java.lang.String, int)} and {@link #strchrnul(com.sun.jna.Pointer, int)} instead
+	 */
+	@Deprecated 
+	Pointer strchrnul(Pointer __s, int __c);
+	/**
+	 * This function is similar to `strchr'.  But it returns a pointer to<br>
+	 * the closing NUL byte in case C is not found in S.<br>
+	 * Original signature : <code>char* strchrnul(const char*, int)</code><br>
+	 * <i>native declaration : string.h:246</i>
+	 */
+	Pointer strchrnul(String __s, int __c);
+	/**
+	 * Return the length of the initial segment of S which<br>
+	 * consists entirely of characters not in REJECT.<br>
+	 * Original signature : <code>size_t strcspn(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:254</i><br>
+	 * @deprecated use the safer methods {@link #strcspn(java.lang.String, java.lang.String)} and {@link #strcspn(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	NativeSize strcspn(Pointer __s, Pointer __reject);
+	/**
+	 * Return the length of the initial segment of S which<br>
+	 * consists entirely of characters not in REJECT.<br>
+	 * Original signature : <code>size_t strcspn(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:254</i>
+	 */
+	NativeSize strcspn(String __s, String __reject);
+	/**
+	 * Return the length of the initial segment of S which<br>
+	 * consists entirely of characters in ACCEPT.<br>
+	 * Original signature : <code>size_t strspn(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:258</i><br>
+	 * @deprecated use the safer methods {@link #strspn(java.lang.String, java.lang.String)} and {@link #strspn(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	NativeSize strspn(Pointer __s, Pointer __accept);
+	/**
+	 * Return the length of the initial segment of S which<br>
+	 * consists entirely of characters in ACCEPT.<br>
+	 * Original signature : <code>size_t strspn(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:258</i>
+	 */
+	NativeSize strspn(String __s, String __accept);
+	/**
+	 * Find the first occurrence in S of any character in ACCEPT.<br>
+	 * Original signature : <code>char* strpbrk(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:284</i><br>
+	 * @deprecated use the safer methods {@link #strpbrk(java.lang.String, java.lang.String)} and {@link #strpbrk(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer strpbrk(Pointer __s, Pointer __accept);
+	/**
+	 * Find the first occurrence in S of any character in ACCEPT.<br>
+	 * Original signature : <code>char* strpbrk(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:284</i>
+	 */
+	Pointer strpbrk(String __s, String __accept);
+	/**
+	 * Find the first occurrence of NEEDLE in HAYSTACK.<br>
+	 * Original signature : <code>char* strstr(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:311</i><br>
+	 * @deprecated use the safer methods {@link #strstr(java.lang.String, java.lang.String)} and {@link #strstr(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer strstr(Pointer __haystack, Pointer __needle);
+	/**
+	 * Find the first occurrence of NEEDLE in HAYSTACK.<br>
+	 * Original signature : <code>char* strstr(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:311</i>
+	 */
+	Pointer strstr(String __haystack, String __needle);
+	/**
+	 * Divide S into tokens separated by characters in DELIM.<br>
+	 * Original signature : <code>char* strtok(char*, const char*)</code><br>
+	 * <i>native declaration : string.h:317</i><br>
+	 * @deprecated use the safer methods {@link #strtok(java.nio.ByteBuffer, java.lang.String)} and {@link #strtok(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer strtok(Pointer __s, Pointer __delim);
+	/**
+	 * Divide S into tokens separated by characters in DELIM.<br>
+	 * Original signature : <code>char* strtok(char*, const char*)</code><br>
+	 * <i>native declaration : string.h:317</i>
+	 */
+	Pointer strtok(ByteBuffer __s, String __delim);
+	/**
+	 * Divide S into tokens separated by characters in DELIM.  Information<br>
+	 * passed between calls are stored in SAVE_PTR.<br>
+	 * Original signature : <code>char* __strtok_r(char*, const char*, char**)</code><br>
+	 * <i>native declaration : string.h:323</i><br>
+	 * @deprecated use the safer methods {@link #__strtok_r(java.nio.ByteBuffer, java.lang.String, com.sun.jna.ptr.PointerByReference)} and {@link #__strtok_r(com.sun.jna.Pointer, com.sun.jna.Pointer, com.sun.jna.ptr.PointerByReference)} instead
+	 */
+	@Deprecated 
+	Pointer __strtok_r(Pointer __s, Pointer __delim, PointerByReference __save_ptr);
+	/**
+	 * Divide S into tokens separated by characters in DELIM.  Information<br>
+	 * passed between calls are stored in SAVE_PTR.<br>
+	 * Original signature : <code>char* __strtok_r(char*, const char*, char**)</code><br>
+	 * <i>native declaration : string.h:323</i>
+	 */
+	Pointer __strtok_r(ByteBuffer __s, String __delim, PointerByReference __save_ptr);
+	/**
+	 * Original signature : <code>char* strtok_r(char*, const char*, char**)</code><br>
+	 * <i>native declaration : string.h:328</i><br>
+	 * @deprecated use the safer methods {@link #strtok_r(java.nio.ByteBuffer, java.lang.String, com.sun.jna.ptr.PointerByReference)} and {@link #strtok_r(com.sun.jna.Pointer, com.sun.jna.Pointer, com.sun.jna.ptr.PointerByReference)} instead
+	 */
+	@Deprecated 
+	Pointer strtok_r(Pointer __s, Pointer __delim, PointerByReference __save_ptr);
+	/**
+	 * Original signature : <code>char* strtok_r(char*, const char*, char**)</code><br>
+	 * <i>native declaration : string.h:328</i>
+	 */
+	Pointer strtok_r(ByteBuffer __s, String __delim, PointerByReference __save_ptr);
+	/**
+	 * Similar to `strstr' but this function ignores the case of both strings.<br>
+	 * Original signature : <code>char* strcasestr(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:342</i><br>
+	 * @deprecated use the safer methods {@link #strcasestr(java.lang.String, java.lang.String)} and {@link #strcasestr(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer strcasestr(Pointer __haystack, Pointer __needle);
+	/**
+	 * Similar to `strstr' but this function ignores the case of both strings.<br>
+	 * Original signature : <code>char* strcasestr(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:342</i>
+	 */
+	Pointer strcasestr(String __haystack, String __needle);
+	/**
+	 * Find the first occurrence of NEEDLE in HAYSTACK.<br>
+	 * NEEDLE is NEEDLELEN bytes long;<br>
+	 * HAYSTACK is HAYSTACKLEN bytes long.<br>
+	 * Original signature : <code>void* memmem(const void*, size_t, const void*, size_t)</code><br>
+	 * <i>native declaration : string.h:351</i>
+	 */
+	Pointer memmem(Pointer __haystack, NativeSize __haystacklen, Pointer __needle, NativeSize __needlelen);
+	/**
+	 * Copy N bytes of SRC to DEST, return pointer to bytes after the<br>
+	 * last written byte.<br>
+	 * Original signature : <code>void* __mempcpy(void*, const void*, size_t)</code><br>
+	 * <i>native declaration : string.h:357</i>
+	 */
+	Pointer __mempcpy(Pointer __dest, Pointer __src, NativeSize __n);
+	/**
+	 * Original signature : <code>void* mempcpy(void*, const void*, size_t)</code><br>
+	 * <i>native declaration : string.h:360</i>
+	 */
+	Pointer mempcpy(Pointer __dest, Pointer __src, NativeSize __n);
+	/**
+	 * Return the length of S.<br>
+	 * Original signature : <code>size_t strlen(const char*)</code><br>
+	 * <i>native declaration : string.h:368</i><br>
+	 * @deprecated use the safer methods {@link #strlen(java.lang.String)} and {@link #strlen(com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	NativeSize strlen(Pointer __s);
+	/**
+	 * Return the length of S.<br>
+	 * Original signature : <code>size_t strlen(const char*)</code><br>
+	 * <i>native declaration : string.h:368</i>
+	 */
+	NativeSize strlen(String __s);
+	/**
+	 * Find the length of STRING, but scan at most MAXLEN characters.<br>
+	 * If no '\0' terminator is found in that many characters, return MAXLEN.<br>
+	 * Original signature : <code>size_t strnlen(const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:375</i><br>
+	 * @deprecated use the safer methods {@link #strnlen(java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strnlen(com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
+	 */
+	@Deprecated 
+	NativeSize strnlen(Pointer __string, NativeSize __maxlen);
+	/**
+	 * Find the length of STRING, but scan at most MAXLEN characters.<br>
+	 * If no '\0' terminator is found in that many characters, return MAXLEN.<br>
+	 * Original signature : <code>size_t strnlen(const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:375</i>
+	 */
+	NativeSize strnlen(String __string, NativeSize __maxlen);
+	/**
+	 * Return a string describing the meaning of the `errno' code in ERRNUM.<br>
+	 * Original signature : <code>char* strerror(int)</code><br>
+	 * <i>native declaration : string.h:382</i>
+	 */
+	Pointer strerror(int __errnum);
+	/**
+	 * If a temporary buffer is required, at most BUFLEN bytes of BUF will be<br>
+	 * used.<br>
+	 * Original signature : <code>char* strerror_r(int, char*, size_t)</code><br>
+	 * <i>native declaration : string.h:407</i><br>
+	 * @deprecated use the safer methods {@link #strerror_r(int, java.nio.ByteBuffer, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strerror_r(int, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
+	 */
+	@Deprecated 
+	Pointer strerror_r(int __errnum, Pointer __buf, NativeSize __buflen);
+	/**
+	 * If a temporary buffer is required, at most BUFLEN bytes of BUF will be<br>
+	 * used.<br>
+	 * Original signature : <code>char* strerror_r(int, char*, size_t)</code><br>
+	 * <i>native declaration : string.h:407</i>
+	 */
+	Pointer strerror_r(int __errnum, ByteBuffer __buf, NativeSize __buflen);
+	/**
+	 * Translate error number to string according to the locale L.<br>
+	 * Original signature : <code>char* strerror_l(int, __locale_t)</code><br>
+	 * <i>native declaration : string.h:414</i>
+	 */
+	Pointer strerror_l(int __errnum, __locale_struct __l);
+	/**
+	 * We define this function always since `bzero' is sometimes needed when<br>
+	 * the namespace rules does not allow this.<br>
+	 * Original signature : <code>void __bzero(void*, size_t)</code><br>
+	 * <i>native declaration : string.h:420</i>
+	 */
+	void __bzero(Pointer __s, NativeSize __n);
+	/**
+	 * Copy N bytes of SRC to DEST (like memmove, but args reversed).<br>
+	 * Original signature : <code>void bcopy(const void*, void*, size_t)</code><br>
+	 * <i>native declaration : string.h:424</i>
+	 */
+	void bcopy(Pointer __src, Pointer __dest, NativeSize __n);
+	/**
+	 * Set N bytes of S to 0.<br>
+	 * Original signature : <code>void bzero(void*, size_t)</code><br>
+	 * <i>native declaration : string.h:428</i>
+	 */
+	void bzero(Pointer __s, NativeSize __n);
+	/**
+	 * Compare N bytes of S1 and S2 (same as memcmp).<br>
+	 * Original signature : <code>int bcmp(const void*, const void*, size_t)</code><br>
+	 * <i>native declaration : string.h:431</i>
+	 */
+	int bcmp(Pointer __s1, Pointer __s2, NativeSize __n);
+	/**
+	 * Find the first occurrence of C in S (same as strchr).<br>
+	 * Original signature : <code>char* index(const char*, int)</code><br>
+	 * <i>native declaration : string.h:458</i><br>
+	 * @deprecated use the safer methods {@link #index(java.lang.String, int)} and {@link #index(com.sun.jna.Pointer, int)} instead
+	 */
+	@Deprecated 
+	Pointer index(Pointer __s, int __c);
+	/**
+	 * Find the first occurrence of C in S (same as strchr).<br>
+	 * Original signature : <code>char* index(const char*, int)</code><br>
+	 * <i>native declaration : string.h:458</i>
+	 */
+	Pointer index(String __s, int __c);
+	/**
+	 * Find the last occurrence of C in S (same as strrchr).<br>
+	 * Original signature : <code>char* rindex(const char*, int)</code><br>
+	 * <i>native declaration : string.h:486</i><br>
+	 * @deprecated use the safer methods {@link #rindex(java.lang.String, int)} and {@link #rindex(com.sun.jna.Pointer, int)} instead
+	 */
+	@Deprecated 
+	Pointer rindex(Pointer __s, int __c);
+	/**
+	 * Find the last occurrence of C in S (same as strrchr).<br>
+	 * Original signature : <code>char* rindex(const char*, int)</code><br>
+	 * <i>native declaration : string.h:486</i>
+	 */
+	Pointer rindex(String __s, int __c);
+	/**
+	 * Return the position of the first bit set in I, or 0 if none are set.<br>
+	 * The least-significant bit is position 1, the most-significant 32.<br>
+	 * Original signature : <code>int ffs(int)</code><br>
+	 * <i>native declaration : string.h:492</i>
+	 */
+	int ffs(int __i);
+	/**
+	 * The following two functions are non-standard but necessary for non-32 bit<br>
+	 * platforms.<br>
+	 * Original signature : <code>int ffsl(long long)</code><br>
+	 * <i>native declaration : string.h:497</i>
+	 */
+	int ffsl(long __l);
+	/**
+	 * Original signature : <code>int ffsll(long long long)</code><br>
+	 * <i>native declaration : string.h:498</i>
+	 */
+	int ffsll(long __ll);
+	/**
+	 * Compare S1 and S2, ignoring case.<br>
+	 * Original signature : <code>int strcasecmp(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:503</i><br>
+	 * @deprecated use the safer methods {@link #strcasecmp(java.lang.String, java.lang.String)} and {@link #strcasecmp(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	int strcasecmp(Pointer __s1, Pointer __s2);
+	/**
+	 * Compare S1 and S2, ignoring case.<br>
+	 * Original signature : <code>int strcasecmp(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:503</i>
+	 */
+	int strcasecmp(String __s1, String __s2);
+	/**
+	 * Compare no more than N chars of S1 and S2, ignoring case.<br>
+	 * Original signature : <code>int strncasecmp(const char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:507</i><br>
+	 * @deprecated use the safer methods {@link #strncasecmp(java.lang.String, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strncasecmp(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
+	 */
+	@Deprecated 
+	int strncasecmp(Pointer __s1, Pointer __s2, NativeSize __n);
+	/**
+	 * Compare no more than N chars of S1 and S2, ignoring case.<br>
+	 * Original signature : <code>int strncasecmp(const char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:507</i>
+	 */
+	int strncasecmp(String __s1, String __s2, NativeSize __n);
+	/**
+	 * Again versions of a few functions which use the given locale instead<br>
+	 * of the global one.<br>
+	 * Original signature : <code>int strcasecmp_l(const char*, const char*, __locale_t)</code><br>
+	 * <i>native declaration : string.h:514</i><br>
+	 * @deprecated use the safer methods {@link #strcasecmp_l(java.lang.String, java.lang.String, voice.linux.jna.c.__locale_struct)} and {@link #strcasecmp_l(com.sun.jna.Pointer, com.sun.jna.Pointer, voice.linux.jna.c.__locale_struct)} instead
+	 */
+	@Deprecated 
+	int strcasecmp_l(Pointer __s1, Pointer __s2, __locale_struct __loc);
+	/**
+	 * Again versions of a few functions which use the given locale instead<br>
+	 * of the global one.<br>
+	 * Original signature : <code>int strcasecmp_l(const char*, const char*, __locale_t)</code><br>
+	 * <i>native declaration : string.h:514</i>
+	 */
+	int strcasecmp_l(String __s1, String __s2, __locale_struct __loc);
+	/**
+	 * Original signature : <code>int strncasecmp_l(const char*, const char*, size_t, __locale_t)</code><br>
+	 * <i>native declaration : string.h:518</i><br>
+	 * @deprecated use the safer methods {@link #strncasecmp_l(java.lang.String, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize, voice.linux.jna.c.__locale_struct)} and {@link #strncasecmp_l(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize, voice.linux.jna.c.__locale_struct)} instead
+	 */
+	@Deprecated 
+	int strncasecmp_l(Pointer __s1, Pointer __s2, NativeSize __n, __locale_struct __loc);
+	/**
+	 * Original signature : <code>int strncasecmp_l(const char*, const char*, size_t, __locale_t)</code><br>
+	 * <i>native declaration : string.h:518</i>
+	 */
+	int strncasecmp_l(String __s1, String __s2, NativeSize __n, __locale_struct __loc);
+	/**
+	 * Return the next DELIM-delimited token from *STRINGP,<br>
+	 * terminating it with a '\0', and update *STRINGP to point past it.<br>
+	 * Original signature : <code>char* strsep(char**, const char*)</code><br>
+	 * <i>native declaration : string.h:526</i><br>
+	 * @deprecated use the safer methods {@link #strsep(com.sun.jna.ptr.PointerByReference, java.lang.String)} and {@link #strsep(com.sun.jna.ptr.PointerByReference, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer strsep(PointerByReference __stringp, Pointer __delim);
+	/**
+	 * Return the next DELIM-delimited token from *STRINGP,<br>
+	 * terminating it with a '\0', and update *STRINGP to point past it.<br>
+	 * Original signature : <code>char* strsep(char**, const char*)</code><br>
+	 * <i>native declaration : string.h:526</i>
+	 */
+	Pointer strsep(PointerByReference __stringp, String __delim);
+	/**
+	 * Return a string describing the meaning of the signal number in SIG.<br>
+	 * Original signature : <code>char* strsignal(int)</code><br>
+	 * <i>native declaration : string.h:533</i>
+	 */
+	Pointer strsignal(int __sig);
+	/**
+	 * Copy SRC to DEST, returning the address of the terminating '\0' in DEST.<br>
+	 * Original signature : <code>char* __stpcpy(char*, const char*)</code><br>
+	 * <i>native declaration : string.h:536</i><br>
+	 * @deprecated use the safer methods {@link #__stpcpy(java.nio.ByteBuffer, java.lang.String)} and {@link #__stpcpy(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer __stpcpy(Pointer __dest, Pointer __src);
+	/**
+	 * Copy SRC to DEST, returning the address of the terminating '\0' in DEST.<br>
+	 * Original signature : <code>char* __stpcpy(char*, const char*)</code><br>
+	 * <i>native declaration : string.h:536</i>
+	 */
+	Pointer __stpcpy(ByteBuffer __dest, String __src);
+	/**
+	 * Original signature : <code>char* stpcpy(char*, const char*)</code><br>
+	 * <i>native declaration : string.h:538</i><br>
+	 * @deprecated use the safer methods {@link #stpcpy(java.nio.ByteBuffer, java.lang.String)} and {@link #stpcpy(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer stpcpy(Pointer __dest, Pointer __src);
+	/**
+	 * Original signature : <code>char* stpcpy(char*, const char*)</code><br>
+	 * <i>native declaration : string.h:538</i>
+	 */
+	Pointer stpcpy(ByteBuffer __dest, String __src);
+	/**
+	 * Copy no more than N characters of SRC to DEST, returning the address of<br>
+	 * the last character written into DEST.<br>
+	 * Original signature : <code>char* __stpncpy(char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:543</i><br>
+	 * @deprecated use the safer methods {@link #__stpncpy(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #__stpncpy(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
+	 */
+	@Deprecated 
+	Pointer __stpncpy(Pointer __dest, Pointer __src, NativeSize __n);
+	/**
+	 * Copy no more than N characters of SRC to DEST, returning the address of<br>
+	 * the last character written into DEST.<br>
+	 * Original signature : <code>char* __stpncpy(char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:543</i>
+	 */
+	Pointer __stpncpy(ByteBuffer __dest, String __src, NativeSize __n);
+	/**
+	 * Original signature : <code>char* stpncpy(char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:546</i><br>
+	 * @deprecated use the safer methods {@link #stpncpy(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #stpncpy(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
+	 */
+	@Deprecated 
+	Pointer stpncpy(Pointer __dest, Pointer __src, NativeSize __n);
+	/**
+	 * Original signature : <code>char* stpncpy(char*, const char*, size_t)</code><br>
+	 * <i>native declaration : string.h:546</i>
+	 */
+	Pointer stpncpy(ByteBuffer __dest, String __src, NativeSize __n);
+	/**
+	 * Compare S1 and S2 as strings holding name & indices/version numbers.<br>
+	 * Original signature : <code>int strverscmp(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:553</i><br>
+	 * @deprecated use the safer methods {@link #strverscmp(java.lang.String, java.lang.String)} and {@link #strverscmp(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	int strverscmp(Pointer __s1, Pointer __s2);
+	/**
+	 * Compare S1 and S2 as strings holding name & indices/version numbers.<br>
+	 * Original signature : <code>int strverscmp(const char*, const char*)</code><br>
+	 * <i>native declaration : string.h:553</i>
+	 */
+	int strverscmp(String __s1, String __s2);
+	/**
+	 * Sautee STRING briskly.<br>
+	 * Original signature : <code>char* strfry(char*)</code><br>
+	 * <i>native declaration : string.h:557</i><br>
+	 * @deprecated use the safer methods {@link #strfry(java.nio.ByteBuffer)} and {@link #strfry(com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer strfry(Pointer __string);
+	/**
+	 * Sautee STRING briskly.<br>
+	 * Original signature : <code>char* strfry(char*)</code><br>
+	 * <i>native declaration : string.h:557</i>
+	 */
+	Pointer strfry(ByteBuffer __string);
+	/**
+	 * Frobnicate N bytes of S.<br>
+	 * Original signature : <code>void* memfrob(void*, size_t)</code><br>
+	 * <i>native declaration : string.h:560</i>
+	 */
+	Pointer memfrob(Pointer __s, NativeSize __n);
+	/**
+	 * Return the file name within directory of FILENAME.  We don't<br>
+	 * declare the function if the `basename' macro is available (defined<br>
+	 * in <libgen.h>) which makes the XPG version of this function<br>
+	 * available.<br>
+	 * Original signature : <code>char* basename(const char*)</code><br>
+	 * <i>native declaration : string.h:573</i><br>
+	 * @deprecated use the safer methods {@link #basename(java.lang.String)} and {@link #basename(com.sun.jna.Pointer)} instead
+	 */
+	@Deprecated 
+	Pointer basename(Pointer __filename);
+	/**
+	 * Return the file name within directory of FILENAME.  We don't<br>
+	 * declare the function if the `basename' macro is available (defined<br>
+	 * in <libgen.h>) which makes the XPG version of this function<br>
+	 * available.<br>
+	 * Original signature : <code>char* basename(const char*)</code><br>
+	 * <i>native declaration : string.h:573</i>
+	 */
+	Pointer basename(String __filename);
+	/**
+	 * Function to get address of global `errno' variable.<br>
+	 * Original signature : <code>int* __errno_location()</code><br>
+	 * <i>native declaration : ..\voice\local\headers\\usr\include\arm-linux-gnueabihf\bits\errno.h:47</i>
+	 */
+	IntByReference __errno_location();
 	/**
 	 * Check the first NFDS descriptors each in READFDS (if not NULL) for read<br>
 	 * readiness, in WRITEFDS (if not NULL) for write readiness, and in EXCEPTFDS<br>
@@ -5496,726 +6228,6 @@ public interface CLibrary extends Library {
 	 */
 	void funlockfile(_IO_FILE __stream);
 	/**
-	 * Copy N bytes of SRC to DEST.<br>
-	 * Original signature : <code>void* memcpy(void*, const void*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:14</i>
-	 */
-	Pointer memcpy(Pointer __dest, Pointer __src, NativeSize __n);
-	/**
-	 * Copy N bytes of SRC to DEST, guaranteeing<br>
-	 * correct behavior for overlapping strings.<br>
-	 * Original signature : <code>void* memmove(void*, const void*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:18</i>
-	 */
-	Pointer memmove(Pointer __dest, Pointer __src, NativeSize __n);
-	/**
-	 * Copy no more than N bytes of SRC to DEST, stopping when C is found.<br>
-	 * Return the position in DEST one byte past where C was copied,<br>
-	 * or NULL if C was not found in the first N bytes of SRC.<br>
-	 * Original signature : <code>void* memccpy(void*, const void*, int, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:26</i>
-	 */
-	Pointer memccpy(Pointer __dest, Pointer __src, int __c, NativeSize __n);
-	/**
-	 * Set N bytes of S to C.<br>
-	 * Original signature : <code>void* memset(void*, int, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:34</i>
-	 */
-	Pointer memset(Pointer __s, int __c, NativeSize __n);
-	/**
-	 * Compare N bytes of S1 and S2.<br>
-	 * Original signature : <code>int memcmp(const void*, const void*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:37</i>
-	 */
-	int memcmp(Pointer __s1, Pointer __s2, NativeSize __n);
-	/**
-	 * Search N bytes of S for C.<br>
-	 * Original signature : <code>void* memchr(const void*, int, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:64</i>
-	 */
-	Pointer memchr(Pointer __s, int __c, NativeSize __n);
-	/**
-	 * Search in S for C.  This is similar to `memchr' but there is no<br>
-	 * length limit.<br>
-	 * Original signature : <code>void* rawmemchr(const void*, int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:78</i>
-	 */
-	Pointer rawmemchr(Pointer __s, int __c);
-	/**
-	 * Search N bytes of S for the final occurrence of C.<br>
-	 * Original signature : <code>void* memrchr(const void*, int, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:89</i>
-	 */
-	Pointer memrchr(Pointer __s, int __c, NativeSize __n);
-	/**
-	 * Copy SRC to DEST.<br>
-	 * Original signature : <code>char* strcpy(char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:97</i><br>
-	 * @deprecated use the safer methods {@link #strcpy(java.nio.ByteBuffer, java.lang.String)} and {@link #strcpy(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer strcpy(Pointer __dest, Pointer __src);
-	/**
-	 * Copy SRC to DEST.<br>
-	 * Original signature : <code>char* strcpy(char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:97</i>
-	 */
-	Pointer strcpy(ByteBuffer __dest, String __src);
-	/**
-	 * Copy no more than N characters of SRC to DEST.<br>
-	 * Original signature : <code>char* strncpy(char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:100</i><br>
-	 * @deprecated use the safer methods {@link #strncpy(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strncpy(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
-	 */
-	@Deprecated 
-	Pointer strncpy(Pointer __dest, Pointer __src, NativeSize __n);
-	/**
-	 * Copy no more than N characters of SRC to DEST.<br>
-	 * Original signature : <code>char* strncpy(char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:100</i>
-	 */
-	Pointer strncpy(ByteBuffer __dest, String __src, NativeSize __n);
-	/**
-	 * Append SRC onto DEST.<br>
-	 * Original signature : <code>char* strcat(char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:105</i><br>
-	 * @deprecated use the safer methods {@link #strcat(java.nio.ByteBuffer, java.lang.String)} and {@link #strcat(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer strcat(Pointer __dest, Pointer __src);
-	/**
-	 * Append SRC onto DEST.<br>
-	 * Original signature : <code>char* strcat(char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:105</i>
-	 */
-	Pointer strcat(ByteBuffer __dest, String __src);
-	/**
-	 * Append no more than N characters from SRC onto DEST.<br>
-	 * Original signature : <code>char* strncat(char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:108</i><br>
-	 * @deprecated use the safer methods {@link #strncat(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strncat(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
-	 */
-	@Deprecated 
-	Pointer strncat(Pointer __dest, Pointer __src, NativeSize __n);
-	/**
-	 * Append no more than N characters from SRC onto DEST.<br>
-	 * Original signature : <code>char* strncat(char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:108</i>
-	 */
-	Pointer strncat(ByteBuffer __dest, String __src, NativeSize __n);
-	/**
-	 * Compare S1 and S2.<br>
-	 * Original signature : <code>int strcmp(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:112</i><br>
-	 * @deprecated use the safer methods {@link #strcmp(java.lang.String, java.lang.String)} and {@link #strcmp(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	int strcmp(Pointer __s1, Pointer __s2);
-	/**
-	 * Compare S1 and S2.<br>
-	 * Original signature : <code>int strcmp(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:112</i>
-	 */
-	int strcmp(String __s1, String __s2);
-	/**
-	 * Compare N characters of S1 and S2.<br>
-	 * Original signature : <code>int strncmp(const char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:115</i><br>
-	 * @deprecated use the safer methods {@link #strncmp(java.lang.String, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strncmp(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
-	 */
-	@Deprecated 
-	int strncmp(Pointer __s1, Pointer __s2, NativeSize __n);
-	/**
-	 * Compare N characters of S1 and S2.<br>
-	 * Original signature : <code>int strncmp(const char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:115</i>
-	 */
-	int strncmp(String __s1, String __s2, NativeSize __n);
-	/**
-	 * Compare the collated forms of S1 and S2.<br>
-	 * Original signature : <code>int strcoll(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:119</i><br>
-	 * @deprecated use the safer methods {@link #strcoll(java.lang.String, java.lang.String)} and {@link #strcoll(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	int strcoll(Pointer __s1, Pointer __s2);
-	/**
-	 * Compare the collated forms of S1 and S2.<br>
-	 * Original signature : <code>int strcoll(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:119</i>
-	 */
-	int strcoll(String __s1, String __s2);
-	/**
-	 * Put a transformation of SRC into no more than N bytes of DEST.<br>
-	 * Original signature : <code>size_t strxfrm(char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:122</i><br>
-	 * @deprecated use the safer methods {@link #strxfrm(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strxfrm(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
-	 */
-	@Deprecated 
-	NativeSize strxfrm(Pointer __dest, Pointer __src, NativeSize __n);
-	/**
-	 * Put a transformation of SRC into no more than N bytes of DEST.<br>
-	 * Original signature : <code>size_t strxfrm(char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:122</i>
-	 */
-	NativeSize strxfrm(ByteBuffer __dest, String __src, NativeSize __n);
-	/**
-	 * Compare the collated forms of S1 and S2 using rules from L.<br>
-	 * Original signature : <code>int strcoll_l(const char*, const char*, __locale_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:135</i><br>
-	 * @deprecated use the safer methods {@link #strcoll_l(java.lang.String, java.lang.String, voice.linux.jna.c.__locale_struct)} and {@link #strcoll_l(com.sun.jna.Pointer, com.sun.jna.Pointer, voice.linux.jna.c.__locale_struct)} instead
-	 */
-	@Deprecated 
-	int strcoll_l(Pointer __s1, Pointer __s2, __locale_struct __l);
-	/**
-	 * Compare the collated forms of S1 and S2 using rules from L.<br>
-	 * Original signature : <code>int strcoll_l(const char*, const char*, __locale_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:135</i>
-	 */
-	int strcoll_l(String __s1, String __s2, __locale_struct __l);
-	/**
-	 * Put a transformation of SRC into no more than N bytes of DEST.<br>
-	 * Original signature : <code>size_t strxfrm_l(char*, const char*, size_t, __locale_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:138</i><br>
-	 * @deprecated use the safer methods {@link #strxfrm_l(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize, voice.linux.jna.c.__locale_struct)} and {@link #strxfrm_l(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize, voice.linux.jna.c.__locale_struct)} instead
-	 */
-	@Deprecated 
-	NativeSize strxfrm_l(Pointer __dest, Pointer __src, NativeSize __n, __locale_struct __l);
-	/**
-	 * Put a transformation of SRC into no more than N bytes of DEST.<br>
-	 * Original signature : <code>size_t strxfrm_l(char*, const char*, size_t, __locale_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:138</i>
-	 */
-	NativeSize strxfrm_l(ByteBuffer __dest, String __src, NativeSize __n, __locale_struct __l);
-	/**
-	 * Duplicate S, returning an identical malloc'd string.<br>
-	 * Original signature : <code>char* strdup(const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:145</i><br>
-	 * @deprecated use the safer methods {@link #strdup(java.lang.String)} and {@link #strdup(com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer strdup(Pointer __s);
-	/**
-	 * Duplicate S, returning an identical malloc'd string.<br>
-	 * Original signature : <code>char* strdup(const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:145</i>
-	 */
-	Pointer strdup(String __s);
-	/**
-	 * Return a malloc'd copy of at most N bytes of STRING.  The<br>
-	 * resultant string is terminated even if no null terminator<br>
-	 * appears before STRING[N].<br>
-	 * Original signature : <code>char* strndup(const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:153</i><br>
-	 * @deprecated use the safer methods {@link #strndup(java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strndup(com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
-	 */
-	@Deprecated 
-	Pointer strndup(Pointer __string, NativeSize __n);
-	/**
-	 * Return a malloc'd copy of at most N bytes of STRING.  The<br>
-	 * resultant string is terminated even if no null terminator<br>
-	 * appears before STRING[N].<br>
-	 * Original signature : <code>char* strndup(const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:153</i>
-	 */
-	Pointer strndup(String __string, NativeSize __n);
-	/**
-	 * Find the first occurrence of C in S.<br>
-	 * Original signature : <code>char* strchr(const char*, int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:205</i><br>
-	 * @deprecated use the safer methods {@link #strchr(java.lang.String, int)} and {@link #strchr(com.sun.jna.Pointer, int)} instead
-	 */
-	@Deprecated 
-	Pointer strchr(Pointer __s, int __c);
-	/**
-	 * Find the first occurrence of C in S.<br>
-	 * Original signature : <code>char* strchr(const char*, int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:205</i>
-	 */
-	Pointer strchr(String __s, int __c);
-	/**
-	 * Find the last occurrence of C in S.<br>
-	 * Original signature : <code>char* strrchr(const char*, int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:232</i><br>
-	 * @deprecated use the safer methods {@link #strrchr(java.lang.String, int)} and {@link #strrchr(com.sun.jna.Pointer, int)} instead
-	 */
-	@Deprecated 
-	Pointer strrchr(Pointer __s, int __c);
-	/**
-	 * Find the last occurrence of C in S.<br>
-	 * Original signature : <code>char* strrchr(const char*, int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:232</i>
-	 */
-	Pointer strrchr(String __s, int __c);
-	/**
-	 * This function is similar to `strchr'.  But it returns a pointer to<br>
-	 * the closing NUL byte in case C is not found in S.<br>
-	 * Original signature : <code>char* strchrnul(const char*, int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:246</i><br>
-	 * @deprecated use the safer methods {@link #strchrnul(java.lang.String, int)} and {@link #strchrnul(com.sun.jna.Pointer, int)} instead
-	 */
-	@Deprecated 
-	Pointer strchrnul(Pointer __s, int __c);
-	/**
-	 * This function is similar to `strchr'.  But it returns a pointer to<br>
-	 * the closing NUL byte in case C is not found in S.<br>
-	 * Original signature : <code>char* strchrnul(const char*, int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:246</i>
-	 */
-	Pointer strchrnul(String __s, int __c);
-	/**
-	 * Return the length of the initial segment of S which<br>
-	 * consists entirely of characters not in REJECT.<br>
-	 * Original signature : <code>size_t strcspn(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:254</i><br>
-	 * @deprecated use the safer methods {@link #strcspn(java.lang.String, java.lang.String)} and {@link #strcspn(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	NativeSize strcspn(Pointer __s, Pointer __reject);
-	/**
-	 * Return the length of the initial segment of S which<br>
-	 * consists entirely of characters not in REJECT.<br>
-	 * Original signature : <code>size_t strcspn(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:254</i>
-	 */
-	NativeSize strcspn(String __s, String __reject);
-	/**
-	 * Return the length of the initial segment of S which<br>
-	 * consists entirely of characters in ACCEPT.<br>
-	 * Original signature : <code>size_t strspn(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:258</i><br>
-	 * @deprecated use the safer methods {@link #strspn(java.lang.String, java.lang.String)} and {@link #strspn(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	NativeSize strspn(Pointer __s, Pointer __accept);
-	/**
-	 * Return the length of the initial segment of S which<br>
-	 * consists entirely of characters in ACCEPT.<br>
-	 * Original signature : <code>size_t strspn(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:258</i>
-	 */
-	NativeSize strspn(String __s, String __accept);
-	/**
-	 * Find the first occurrence in S of any character in ACCEPT.<br>
-	 * Original signature : <code>char* strpbrk(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:284</i><br>
-	 * @deprecated use the safer methods {@link #strpbrk(java.lang.String, java.lang.String)} and {@link #strpbrk(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer strpbrk(Pointer __s, Pointer __accept);
-	/**
-	 * Find the first occurrence in S of any character in ACCEPT.<br>
-	 * Original signature : <code>char* strpbrk(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:284</i>
-	 */
-	Pointer strpbrk(String __s, String __accept);
-	/**
-	 * Find the first occurrence of NEEDLE in HAYSTACK.<br>
-	 * Original signature : <code>char* strstr(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:311</i><br>
-	 * @deprecated use the safer methods {@link #strstr(java.lang.String, java.lang.String)} and {@link #strstr(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer strstr(Pointer __haystack, Pointer __needle);
-	/**
-	 * Find the first occurrence of NEEDLE in HAYSTACK.<br>
-	 * Original signature : <code>char* strstr(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:311</i>
-	 */
-	Pointer strstr(String __haystack, String __needle);
-	/**
-	 * Divide S into tokens separated by characters in DELIM.<br>
-	 * Original signature : <code>char* strtok(char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:317</i><br>
-	 * @deprecated use the safer methods {@link #strtok(java.nio.ByteBuffer, java.lang.String)} and {@link #strtok(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer strtok(Pointer __s, Pointer __delim);
-	/**
-	 * Divide S into tokens separated by characters in DELIM.<br>
-	 * Original signature : <code>char* strtok(char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:317</i>
-	 */
-	Pointer strtok(ByteBuffer __s, String __delim);
-	/**
-	 * Divide S into tokens separated by characters in DELIM.  Information<br>
-	 * passed between calls are stored in SAVE_PTR.<br>
-	 * Original signature : <code>char* __strtok_r(char*, const char*, char**)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:323</i><br>
-	 * @deprecated use the safer methods {@link #__strtok_r(java.nio.ByteBuffer, java.lang.String, com.sun.jna.ptr.PointerByReference)} and {@link #__strtok_r(com.sun.jna.Pointer, com.sun.jna.Pointer, com.sun.jna.ptr.PointerByReference)} instead
-	 */
-	@Deprecated 
-	Pointer __strtok_r(Pointer __s, Pointer __delim, PointerByReference __save_ptr);
-	/**
-	 * Divide S into tokens separated by characters in DELIM.  Information<br>
-	 * passed between calls are stored in SAVE_PTR.<br>
-	 * Original signature : <code>char* __strtok_r(char*, const char*, char**)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:323</i>
-	 */
-	Pointer __strtok_r(ByteBuffer __s, String __delim, PointerByReference __save_ptr);
-	/**
-	 * Original signature : <code>char* strtok_r(char*, const char*, char**)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:328</i><br>
-	 * @deprecated use the safer methods {@link #strtok_r(java.nio.ByteBuffer, java.lang.String, com.sun.jna.ptr.PointerByReference)} and {@link #strtok_r(com.sun.jna.Pointer, com.sun.jna.Pointer, com.sun.jna.ptr.PointerByReference)} instead
-	 */
-	@Deprecated 
-	Pointer strtok_r(Pointer __s, Pointer __delim, PointerByReference __save_ptr);
-	/**
-	 * Original signature : <code>char* strtok_r(char*, const char*, char**)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:328</i>
-	 */
-	Pointer strtok_r(ByteBuffer __s, String __delim, PointerByReference __save_ptr);
-	/**
-	 * Similar to `strstr' but this function ignores the case of both strings.<br>
-	 * Original signature : <code>char* strcasestr(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:342</i><br>
-	 * @deprecated use the safer methods {@link #strcasestr(java.lang.String, java.lang.String)} and {@link #strcasestr(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer strcasestr(Pointer __haystack, Pointer __needle);
-	/**
-	 * Similar to `strstr' but this function ignores the case of both strings.<br>
-	 * Original signature : <code>char* strcasestr(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:342</i>
-	 */
-	Pointer strcasestr(String __haystack, String __needle);
-	/**
-	 * Find the first occurrence of NEEDLE in HAYSTACK.<br>
-	 * NEEDLE is NEEDLELEN bytes long;<br>
-	 * HAYSTACK is HAYSTACKLEN bytes long.<br>
-	 * Original signature : <code>void* memmem(const void*, size_t, const void*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:351</i>
-	 */
-	Pointer memmem(Pointer __haystack, NativeSize __haystacklen, Pointer __needle, NativeSize __needlelen);
-	/**
-	 * Copy N bytes of SRC to DEST, return pointer to bytes after the<br>
-	 * last written byte.<br>
-	 * Original signature : <code>void* __mempcpy(void*, const void*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:357</i>
-	 */
-	Pointer __mempcpy(Pointer __dest, Pointer __src, NativeSize __n);
-	/**
-	 * Original signature : <code>void* mempcpy(void*, const void*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:360</i>
-	 */
-	Pointer mempcpy(Pointer __dest, Pointer __src, NativeSize __n);
-	/**
-	 * Return the length of S.<br>
-	 * Original signature : <code>size_t strlen(const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:368</i><br>
-	 * @deprecated use the safer methods {@link #strlen(java.lang.String)} and {@link #strlen(com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	NativeSize strlen(Pointer __s);
-	/**
-	 * Return the length of S.<br>
-	 * Original signature : <code>size_t strlen(const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:368</i>
-	 */
-	NativeSize strlen(String __s);
-	/**
-	 * Find the length of STRING, but scan at most MAXLEN characters.<br>
-	 * If no '\0' terminator is found in that many characters, return MAXLEN.<br>
-	 * Original signature : <code>size_t strnlen(const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:375</i><br>
-	 * @deprecated use the safer methods {@link #strnlen(java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strnlen(com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
-	 */
-	@Deprecated 
-	NativeSize strnlen(Pointer __string, NativeSize __maxlen);
-	/**
-	 * Find the length of STRING, but scan at most MAXLEN characters.<br>
-	 * If no '\0' terminator is found in that many characters, return MAXLEN.<br>
-	 * Original signature : <code>size_t strnlen(const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:375</i>
-	 */
-	NativeSize strnlen(String __string, NativeSize __maxlen);
-	/**
-	 * Return a string describing the meaning of the `errno' code in ERRNUM.<br>
-	 * Original signature : <code>char* strerror(int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:382</i>
-	 */
-	Pointer strerror(int __errnum);
-	/**
-	 * If a temporary buffer is required, at most BUFLEN bytes of BUF will be<br>
-	 * used.<br>
-	 * Original signature : <code>char* strerror_r(int, char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:407</i><br>
-	 * @deprecated use the safer methods {@link #strerror_r(int, java.nio.ByteBuffer, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strerror_r(int, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
-	 */
-	@Deprecated 
-	Pointer strerror_r(int __errnum, Pointer __buf, NativeSize __buflen);
-	/**
-	 * If a temporary buffer is required, at most BUFLEN bytes of BUF will be<br>
-	 * used.<br>
-	 * Original signature : <code>char* strerror_r(int, char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:407</i>
-	 */
-	Pointer strerror_r(int __errnum, ByteBuffer __buf, NativeSize __buflen);
-	/**
-	 * Translate error number to string according to the locale L.<br>
-	 * Original signature : <code>char* strerror_l(int, __locale_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:414</i>
-	 */
-	Pointer strerror_l(int __errnum, __locale_struct __l);
-	/**
-	 * We define this function always since `bzero' is sometimes needed when<br>
-	 * the namespace rules does not allow this.<br>
-	 * Original signature : <code>void __bzero(void*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:420</i>
-	 */
-	void __bzero(Pointer __s, NativeSize __n);
-	/**
-	 * Copy N bytes of SRC to DEST (like memmove, but args reversed).<br>
-	 * Original signature : <code>void bcopy(const void*, void*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:424</i>
-	 */
-	void bcopy(Pointer __src, Pointer __dest, NativeSize __n);
-	/**
-	 * Set N bytes of S to 0.<br>
-	 * Original signature : <code>void bzero(void*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:428</i>
-	 */
-	void bzero(Pointer __s, NativeSize __n);
-	/**
-	 * Compare N bytes of S1 and S2 (same as memcmp).<br>
-	 * Original signature : <code>int bcmp(const void*, const void*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:431</i>
-	 */
-	int bcmp(Pointer __s1, Pointer __s2, NativeSize __n);
-	/**
-	 * Find the first occurrence of C in S (same as strchr).<br>
-	 * Original signature : <code>char* index(const char*, int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:458</i><br>
-	 * @deprecated use the safer methods {@link #index(java.lang.String, int)} and {@link #index(com.sun.jna.Pointer, int)} instead
-	 */
-	@Deprecated 
-	Pointer index(Pointer __s, int __c);
-	/**
-	 * Find the first occurrence of C in S (same as strchr).<br>
-	 * Original signature : <code>char* index(const char*, int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:458</i>
-	 */
-	Pointer index(String __s, int __c);
-	/**
-	 * Find the last occurrence of C in S (same as strrchr).<br>
-	 * Original signature : <code>char* rindex(const char*, int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:486</i><br>
-	 * @deprecated use the safer methods {@link #rindex(java.lang.String, int)} and {@link #rindex(com.sun.jna.Pointer, int)} instead
-	 */
-	@Deprecated 
-	Pointer rindex(Pointer __s, int __c);
-	/**
-	 * Find the last occurrence of C in S (same as strrchr).<br>
-	 * Original signature : <code>char* rindex(const char*, int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:486</i>
-	 */
-	Pointer rindex(String __s, int __c);
-	/**
-	 * Return the position of the first bit set in I, or 0 if none are set.<br>
-	 * The least-significant bit is position 1, the most-significant 32.<br>
-	 * Original signature : <code>int ffs(int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:492</i>
-	 */
-	int ffs(int __i);
-	/**
-	 * The following two functions are non-standard but necessary for non-32 bit<br>
-	 * platforms.<br>
-	 * Original signature : <code>int ffsl(long long)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:497</i>
-	 */
-	int ffsl(long __l);
-	/**
-	 * Original signature : <code>int ffsll(long long long)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:498</i>
-	 */
-	int ffsll(long __ll);
-	/**
-	 * Compare S1 and S2, ignoring case.<br>
-	 * Original signature : <code>int strcasecmp(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:503</i><br>
-	 * @deprecated use the safer methods {@link #strcasecmp(java.lang.String, java.lang.String)} and {@link #strcasecmp(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	int strcasecmp(Pointer __s1, Pointer __s2);
-	/**
-	 * Compare S1 and S2, ignoring case.<br>
-	 * Original signature : <code>int strcasecmp(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:503</i>
-	 */
-	int strcasecmp(String __s1, String __s2);
-	/**
-	 * Compare no more than N chars of S1 and S2, ignoring case.<br>
-	 * Original signature : <code>int strncasecmp(const char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:507</i><br>
-	 * @deprecated use the safer methods {@link #strncasecmp(java.lang.String, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #strncasecmp(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
-	 */
-	@Deprecated 
-	int strncasecmp(Pointer __s1, Pointer __s2, NativeSize __n);
-	/**
-	 * Compare no more than N chars of S1 and S2, ignoring case.<br>
-	 * Original signature : <code>int strncasecmp(const char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:507</i>
-	 */
-	int strncasecmp(String __s1, String __s2, NativeSize __n);
-	/**
-	 * Again versions of a few functions which use the given locale instead<br>
-	 * of the global one.<br>
-	 * Original signature : <code>int strcasecmp_l(const char*, const char*, __locale_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:514</i><br>
-	 * @deprecated use the safer methods {@link #strcasecmp_l(java.lang.String, java.lang.String, voice.linux.jna.c.__locale_struct)} and {@link #strcasecmp_l(com.sun.jna.Pointer, com.sun.jna.Pointer, voice.linux.jna.c.__locale_struct)} instead
-	 */
-	@Deprecated 
-	int strcasecmp_l(Pointer __s1, Pointer __s2, __locale_struct __loc);
-	/**
-	 * Again versions of a few functions which use the given locale instead<br>
-	 * of the global one.<br>
-	 * Original signature : <code>int strcasecmp_l(const char*, const char*, __locale_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:514</i>
-	 */
-	int strcasecmp_l(String __s1, String __s2, __locale_struct __loc);
-	/**
-	 * Original signature : <code>int strncasecmp_l(const char*, const char*, size_t, __locale_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:518</i><br>
-	 * @deprecated use the safer methods {@link #strncasecmp_l(java.lang.String, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize, voice.linux.jna.c.__locale_struct)} and {@link #strncasecmp_l(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize, voice.linux.jna.c.__locale_struct)} instead
-	 */
-	@Deprecated 
-	int strncasecmp_l(Pointer __s1, Pointer __s2, NativeSize __n, __locale_struct __loc);
-	/**
-	 * Original signature : <code>int strncasecmp_l(const char*, const char*, size_t, __locale_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:518</i>
-	 */
-	int strncasecmp_l(String __s1, String __s2, NativeSize __n, __locale_struct __loc);
-	/**
-	 * Return the next DELIM-delimited token from *STRINGP,<br>
-	 * terminating it with a '\0', and update *STRINGP to point past it.<br>
-	 * Original signature : <code>char* strsep(char**, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:526</i><br>
-	 * @deprecated use the safer methods {@link #strsep(com.sun.jna.ptr.PointerByReference, java.lang.String)} and {@link #strsep(com.sun.jna.ptr.PointerByReference, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer strsep(PointerByReference __stringp, Pointer __delim);
-	/**
-	 * Return the next DELIM-delimited token from *STRINGP,<br>
-	 * terminating it with a '\0', and update *STRINGP to point past it.<br>
-	 * Original signature : <code>char* strsep(char**, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:526</i>
-	 */
-	Pointer strsep(PointerByReference __stringp, String __delim);
-	/**
-	 * Return a string describing the meaning of the signal number in SIG.<br>
-	 * Original signature : <code>char* strsignal(int)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:533</i>
-	 */
-	Pointer strsignal(int __sig);
-	/**
-	 * Copy SRC to DEST, returning the address of the terminating '\0' in DEST.<br>
-	 * Original signature : <code>char* __stpcpy(char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:536</i><br>
-	 * @deprecated use the safer methods {@link #__stpcpy(java.nio.ByteBuffer, java.lang.String)} and {@link #__stpcpy(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer __stpcpy(Pointer __dest, Pointer __src);
-	/**
-	 * Copy SRC to DEST, returning the address of the terminating '\0' in DEST.<br>
-	 * Original signature : <code>char* __stpcpy(char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:536</i>
-	 */
-	Pointer __stpcpy(ByteBuffer __dest, String __src);
-	/**
-	 * Original signature : <code>char* stpcpy(char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:538</i><br>
-	 * @deprecated use the safer methods {@link #stpcpy(java.nio.ByteBuffer, java.lang.String)} and {@link #stpcpy(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer stpcpy(Pointer __dest, Pointer __src);
-	/**
-	 * Original signature : <code>char* stpcpy(char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:538</i>
-	 */
-	Pointer stpcpy(ByteBuffer __dest, String __src);
-	/**
-	 * Copy no more than N characters of SRC to DEST, returning the address of<br>
-	 * the last character written into DEST.<br>
-	 * Original signature : <code>char* __stpncpy(char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:543</i><br>
-	 * @deprecated use the safer methods {@link #__stpncpy(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #__stpncpy(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
-	 */
-	@Deprecated 
-	Pointer __stpncpy(Pointer __dest, Pointer __src, NativeSize __n);
-	/**
-	 * Copy no more than N characters of SRC to DEST, returning the address of<br>
-	 * the last character written into DEST.<br>
-	 * Original signature : <code>char* __stpncpy(char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:543</i>
-	 */
-	Pointer __stpncpy(ByteBuffer __dest, String __src, NativeSize __n);
-	/**
-	 * Original signature : <code>char* stpncpy(char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:546</i><br>
-	 * @deprecated use the safer methods {@link #stpncpy(java.nio.ByteBuffer, java.lang.String, com.ochafik.lang.jnaerator.runtime.NativeSize)} and {@link #stpncpy(com.sun.jna.Pointer, com.sun.jna.Pointer, com.ochafik.lang.jnaerator.runtime.NativeSize)} instead
-	 */
-	@Deprecated 
-	Pointer stpncpy(Pointer __dest, Pointer __src, NativeSize __n);
-	/**
-	 * Original signature : <code>char* stpncpy(char*, const char*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:546</i>
-	 */
-	Pointer stpncpy(ByteBuffer __dest, String __src, NativeSize __n);
-	/**
-	 * Compare S1 and S2 as strings holding name & indices/version numbers.<br>
-	 * Original signature : <code>int strverscmp(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:553</i><br>
-	 * @deprecated use the safer methods {@link #strverscmp(java.lang.String, java.lang.String)} and {@link #strverscmp(com.sun.jna.Pointer, com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	int strverscmp(Pointer __s1, Pointer __s2);
-	/**
-	 * Compare S1 and S2 as strings holding name & indices/version numbers.<br>
-	 * Original signature : <code>int strverscmp(const char*, const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:553</i>
-	 */
-	int strverscmp(String __s1, String __s2);
-	/**
-	 * Sautee STRING briskly.<br>
-	 * Original signature : <code>char* strfry(char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:557</i><br>
-	 * @deprecated use the safer methods {@link #strfry(java.nio.ByteBuffer)} and {@link #strfry(com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer strfry(Pointer __string);
-	/**
-	 * Sautee STRING briskly.<br>
-	 * Original signature : <code>char* strfry(char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:557</i>
-	 */
-	Pointer strfry(ByteBuffer __string);
-	/**
-	 * Frobnicate N bytes of S.<br>
-	 * Original signature : <code>void* memfrob(void*, size_t)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:560</i>
-	 */
-	Pointer memfrob(Pointer __s, NativeSize __n);
-	/**
-	 * Return the file name within directory of FILENAME.  We don't<br>
-	 * declare the function if the `basename' macro is available (defined<br>
-	 * in <libgen.h>) which makes the XPG version of this function<br>
-	 * available.<br>
-	 * Original signature : <code>char* basename(const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:573</i><br>
-	 * @deprecated use the safer methods {@link #basename(java.lang.String)} and {@link #basename(com.sun.jna.Pointer)} instead
-	 */
-	@Deprecated 
-	Pointer basename(Pointer __filename);
-	/**
-	 * Return the file name within directory of FILENAME.  We don't<br>
-	 * declare the function if the `basename' macro is available (defined<br>
-	 * in <libgen.h>) which makes the XPG version of this function<br>
-	 * available.<br>
-	 * Original signature : <code>char* basename(const char*)</code><br>
-	 * <i>native declaration : ..\voice\local\headers\\usr\include\string.h:573</i>
-	 */
-	Pointer basename(String __filename);
-	/**
 	 * For communication from `getopt' to the caller.<br>
 	 * When `getopt' finds an option that takes an argument,<br>
 	 * the argument value is returned here.<br>
@@ -6241,6 +6253,18 @@ public interface CLibrary extends Library {
 	public static final GlobalInt opterr = new GlobalInt(CLibrary.JNA_NATIVE_LIB, "opterr");
 	/** Set to an option character which was unrecognized. */
 	public static final GlobalInt optopt = new GlobalInt(CLibrary.JNA_NATIVE_LIB, "optopt");
+	/**
+	 * The full and simple forms of the name with which the program was<br>
+	 * invoked.  These variables are set up automatically at startup based on<br>
+	 * the value of ARGV[0] (this works only if you use GNU ld).
+	 */
+	public static final GlobalPointerType<ByteByReference > program_invocation_name = new GlobalPointerType<ByteByReference >(CLibrary.JNA_NATIVE_LIB, ByteByReference.class, "program_invocation_name");
+	/**
+	 * The full and simple forms of the name with which the program was<br>
+	 * invoked.  These variables are set up automatically at startup based on<br>
+	 * the value of ARGV[0] (this works only if you use GNU ld).
+	 */
+	public static final GlobalPointerType<ByteByReference > program_invocation_short_name = new GlobalPointerType<ByteByReference >(CLibrary.JNA_NATIVE_LIB, ByteByReference.class, "program_invocation_short_name");
 	/**
 	 * java.lang.IllegalArgumentException: Not a simple identifier : 'com.sun.jna.Pointer'<br>
 	 * SKIPPED:<br>

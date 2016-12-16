@@ -3,7 +3,9 @@ package voice.requests.jnarequests
 import java.io.{FileInputStream, InputStream, OutputStream}
 import java.nio.IntBuffer
 
+import com.sun.jna.Native
 import com.typesafe.scalalogging.StrictLogging
+import toolbox6.tools.TF
 import toolbox8.jartree.streamapp.{Requestable, RootContext}
 import voice.common.linux.c.CommonCLibrary
 import voice.linux.jna.bluetooth.{BluetoothLibrary, bdaddr_t, rfcomm_dev_req, sockaddr_rc}
@@ -15,6 +17,7 @@ import voice.linux.jna.c.CLibrary
 
 
 class RfcommListen extends Requestable with StrictLogging {
+
 
   override def request(ctx: RootContext, in: InputStream, out: OutputStream): Unit = {
     Thread.currentThread().setContextClassLoader(
@@ -69,7 +72,7 @@ class RfcommListen extends Requestable with StrictLogging {
           )
         )
       }
-      dev = {
+      dev <- {
         ensureSuccess(
           CommonCLibrary.INSTANCE.getsockname(
             nsk,
@@ -83,18 +86,35 @@ class RfcommListen extends Requestable with StrictLogging {
         )
 
         val dev_id : Short = 0
-        val req = new rfcomm_dev_req()
-        req.dev_id = dev_id
-        req.flags = (1 << RFCOMM_REUSE_DLC) | (1 << RFCOMM_RELEASE_ONHUP)
-        req.src = laddr.rc_bdaddr.clone()
-        req.dst = raddr.rc_bdaddr.clone()
-        req.channel = raddr.rc_channel
 
-        ioctl(
-          nsk,
-          RFCOMMCREATEDEV,
-          req
-        )
+        TF.from({
+          val req = new rfcomm_dev_req()
+          req.dev_id = dev_id
+          req.flags = (1 << RFCOMM_REUSE_DLC) | (1 << RFCOMM_RELEASE_ONHUP)
+          req.src = laddr.rc_bdaddr.clone()
+          req.dst = raddr.rc_bdaddr.clone()
+          req.channel = raddr.rc_channel
+
+          ensureSuccess {
+            CommonCLibrary.INSTANCE.ioctl(
+              nsk,
+              RFCOMMCREATEDEV,
+              req.getPointer
+            )
+          }
+        })({ dev =>
+          val req = new rfcomm_dev_req()
+          req.dev_id = dev_id
+          req.flags = (1 << RFCOMM_HANGUP_NOW)
+
+          ensureSuccess {
+            CommonCLibrary.INSTANCE.ioctl(
+              ctl,
+              RFCOMMRELEASEDEV,
+              req.getPointer
+            )
+          }
+        })
 
       }
 

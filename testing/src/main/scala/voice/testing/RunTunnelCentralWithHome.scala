@@ -4,6 +4,7 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Tcp
 import toolbox6.ssh.SshTools
+import toolbox6.ssh.SshTools.ForwardTunnel
 import toolbox8.jartree.request.StreamAppRequest
 import voice.api.updateclientinfo.ClientInfo
 import voice.environment.Rpis
@@ -43,7 +44,12 @@ object RunTunnelCentralWithHome {
       .tunnels(
         forward = Seq(
           Rpis.Home.servicePort,
-          7272
+          7272,
+          ForwardTunnel(
+            Rpis.Mobile.servicePort,
+            Rpis.Mobile.homeCable.host,
+            Rpis.Mobile.servicePort
+          )
         )
       )(
         homeRemote

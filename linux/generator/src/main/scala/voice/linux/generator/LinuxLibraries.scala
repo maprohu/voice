@@ -20,6 +20,8 @@ class LinuxLibraries(
       "c",
       Seq(
         s"${IncludeDir}/unistd.h",
+        s"${IncludeDir}/string.h",
+        s"${IncludeDir}/errno.h",
         s"${IncludeDir}/net/if.h",
 //        s"${LibIncludeDir}/sys/cdefs.h",
 //        s"${LibIncludeDir}/sys/uio.h",
