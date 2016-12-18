@@ -1,5 +1,7 @@
 package voice.android.packaging
 
+import java.io.File
+
 import toolbox8.android.packaging.Jackify
 import voice.modules.VoiceAndroidModules
 
@@ -8,10 +10,14 @@ import voice.modules.VoiceAndroidModules
   */
 object RunVoiceAndroidPackager {
 
+  val JackedFile = new File("../voice/android/app/target/jacked.out")
+
   def main(args: Array[String]): Unit = {
+
     Jackify
       .jack(
-        VoiceAndroidModules.App
+        VoiceAndroidModules.App,
+        JackedFile
       )
 
   }
