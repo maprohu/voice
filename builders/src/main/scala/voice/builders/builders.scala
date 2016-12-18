@@ -25,6 +25,11 @@ object build_voice_linux extends mvnmod.builder.ModuleBuilder(
   "./linux"
 )
            
+object build_voice_android extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./android"
+)
+           
 object build_voice_modules extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./modules"
@@ -143,6 +148,16 @@ object build_voice_linux_jnalib extends mvnmod.builder.ModuleBuilder(
 object build_voice_linux_testing extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./linux/testing"
+)
+           
+object build_voice_android_app extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./android/app"
+)
+           
+object build_voice_android_packaging extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./android/packaging"
 )
            
        
