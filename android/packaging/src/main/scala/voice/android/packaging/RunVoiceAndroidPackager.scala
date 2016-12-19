@@ -2,7 +2,7 @@ package voice.android.packaging
 
 import java.io.File
 
-import toolbox8.android.packaging.Jackify
+import toolbox8.android.packaging.{Aptify, Jackify}
 import voice.modules.VoiceAndroidModules
 
 /**
@@ -10,16 +10,25 @@ import voice.modules.VoiceAndroidModules
   */
 object RunVoiceAndroidPackager {
 
-  val JackedFile = new File("../voice/android/app/target/jacked.out")
+  // http://czak.pl/2016/05/31/handbuilt-android-project.html
 
   def main(args: Array[String]): Unit = {
-
-    Jackify
-      .jack(
-        VoiceAndroidModules.App,
-        JackedFile
+    Aptify
+      .run(
+        VoiceAndroidModules.App
       )
-
   }
+
+//  val JackedOutDir = new File("../voice/android/app/target/jackout")
+//
+//  def main(args: Array[String]): Unit = {
+//
+//    Jackify
+//      .jack(
+//        VoiceAndroidModules.App,
+//        JackedOutDir
+//      )
+//
+//  }
 
 }
