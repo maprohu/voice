@@ -1,5 +1,7 @@
 package voice.impl.threads
 
+import javax.sound.sampled.SourceDataLine
+
 /**
   * Created by pappmar on 19/12/2016.
   */
@@ -9,6 +11,9 @@ object VoiceThreads {
 
   ) = {
 
+    val sdl : SourceDataLine = ???
+
+    sdl.write()
 
 
 
