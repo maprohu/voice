@@ -19,6 +19,7 @@
         <module>requests</module>
         <module>linux</module>
         <module>android</module>
+        <module>impl</module>
         <module>modules</module>
         <module>core</module>
         <module>sandbox</module>

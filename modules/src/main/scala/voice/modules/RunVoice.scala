@@ -54,7 +54,10 @@ object RunVoice {
     LinuxModules.JnaLib,
     LinuxModules.Testing,
     VoiceAndroidModules.App,
-    VoiceAndroidModules.Packaging
+    VoiceAndroidModules.Packaging,
+    VoiceImplModules.Common,
+    VoiceImplModules.Threads,
+    VoiceImplModules.Testing
 //    VoiceRpiModules.Core
   )
 

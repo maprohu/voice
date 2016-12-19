@@ -30,6 +30,11 @@ object build_voice_android extends mvnmod.builder.ModuleBuilder(
   "./android"
 )
            
+object build_voice_impl extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./impl"
+)
+           
 object build_voice_modules extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./modules"
@@ -158,6 +163,21 @@ object build_voice_android_app extends mvnmod.builder.ModuleBuilder(
 object build_voice_android_packaging extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./android/packaging"
+)
+           
+object build_voice_impl_common extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./impl/common"
+)
+           
+object build_voice_impl_threads extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./impl/threads"
+)
+           
+object build_voice_impl_testing extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./impl/testing"
 )
            
        
