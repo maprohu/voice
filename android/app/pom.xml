@@ -109,7 +109,7 @@
     <dependencies>
         <dependency>
             <groupId>toolbox8</groupId>
-            <artifactId>toolbox8-android-runtime</artifactId>
+            <artifactId>toolbox8-android-common</artifactId>
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>

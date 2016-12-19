@@ -13,7 +13,7 @@ object VoiceAndroidModules {
 
   object App extends ScalaModule(
     "app",
-    AndroidModules.Runtime
+    AndroidModules.Common
   )
 
   object Packaging extends ScalaModule(
