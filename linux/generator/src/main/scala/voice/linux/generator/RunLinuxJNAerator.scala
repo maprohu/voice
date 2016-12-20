@@ -131,4 +131,8 @@ object RunJNALocalPi {
 //	__p->__v = (val);			\
 //} while(0)
 
+
+net/if.h
+//	char ifru_newname[IFNAMSIZ];
+
  */

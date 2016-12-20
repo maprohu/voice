@@ -10,14 +10,6 @@ import voice.linux.jna.asound.AsoundLibrary
 class AlsaCapture extends Thread {
   override def run(): Unit = {
 
-    val libasound = AsoundLibrary.INSTANCE
-    import libasound._
-
-    val pcm_handle = new PointerByReference
-    snd_pcm_open(
-      pcm_handle
-
-    )
 
 
   }

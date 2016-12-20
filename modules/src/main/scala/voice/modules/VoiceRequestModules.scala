@@ -37,6 +37,11 @@ object VoiceRequestModules {
   )
 
 
+  object Alsa extends ScalaModule(
+    "alsa",
+    JarTree8Modules.StreamApp,
+    LinuxModules.Alsa
+  )
 
 
 

@@ -130,6 +130,11 @@ object build_voice_requests_common extends mvnmod.builder.ModuleBuilder(
   "./requests/common"
 )
            
+object build_voice_requests_alsa extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./requests/alsa"
+)
+           
 object build_voice_requests_jnarequests extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./requests/jnarequests"

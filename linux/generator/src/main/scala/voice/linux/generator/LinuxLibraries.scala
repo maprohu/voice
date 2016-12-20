@@ -45,6 +45,7 @@ class LinuxLibraries(
       "asound",
       Seq(
         s"${IncludeDir}/alsa/asoundlib.h",
+        s"${IncludeDir}/alsa/error.h",
         s"${IncludeDir}/alsa/pcm.h"
       )
     )

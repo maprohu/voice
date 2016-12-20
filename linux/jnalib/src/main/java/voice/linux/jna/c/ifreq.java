@@ -71,9 +71,10 @@ public class ifreq extends Structure {
 		 * C type : char[16]
 		 */
 		public byte[] ifru_slave = new byte[16];
-		/** C type : char[16] */
-		public byte[] ifru_newname = new byte[16];
-		/** C type : __caddr_t */
+		/**
+		 * char ifru_newname[IFNAMSIZ];<br>
+		 * C type : __caddr_t
+		 */
 		public Pointer ifru_data;
 		public ifr_ifru_union() {
 			super();
@@ -101,17 +102,20 @@ public class ifreq extends Structure {
 			setType(ifmap.class);
 		}
 		/**
-		 * @param ifru_slave_or_ifru_newname Just fits the size<br>
-		 * C type : char[16], or C type : char[16]
+		 * @param ifru_slave Just fits the size<br>
+		 * C type : char[16]
 		 */
-		public ifr_ifru_union(byte ifru_slave_or_ifru_newname[]) {
+		public ifr_ifru_union(byte ifru_slave[]) {
 			super();
-			if ((ifru_slave_or_ifru_newname.length != this.ifru_slave_or_ifru_newname.length)) 
+			if ((ifru_slave.length != this.ifru_slave.length)) 
 				throw new IllegalArgumentException("Wrong array size !");
-			this.ifru_newname = this.ifru_slave = ifru_slave_or_ifru_newname;
+			this.ifru_slave = ifru_slave;
 			setType(byte[].class);
 		}
-		/** @param ifru_data C type : __caddr_t */
+		/**
+		 * @param ifru_data char ifru_newname[IFNAMSIZ];<br>
+		 * C type : __caddr_t
+		 */
 		public ifr_ifru_union(Pointer ifru_data) {
 			super();
 			this.ifru_data = ifru_data;

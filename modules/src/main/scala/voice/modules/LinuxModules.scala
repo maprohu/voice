@@ -39,7 +39,8 @@ object LinuxModules {
 
   object Alsa extends ScalaModule(
     "alsa",
-    Extra
+    Extra,
+    Toolbox6Modules.Logging.R3
   )
 
   object Testing extends ScalaModule(
