@@ -1,8 +1,11 @@
 package voice.linux.alsa
 
-import com.sun.jna.NativeLong
+import java.nio.Buffer
+
+import com.sun.jna.{NativeLong, Pointer}
 import com.sun.jna.ptr.{IntByReference, NativeLongByReference, PointerByReference}
 import com.typesafe.scalalogging.StrictLogging
+import monix.execution.Cancelable
 import toolbox6.logging.LogTools
 import voice.linux.extra.asound.AsoundTools
 import voice.linux.common.asound.AsoundLibrary
@@ -12,12 +15,10 @@ import voice.linux.common.asound.AsoundLibrary
   * Created by pappmar on 20/12/2016.
   */
 class AlsaPlayback(
-  config: AlsaPlaybackConfig = AlsaPlaybackConfig()
-) extends Thread with StrictLogging with LogTools {
+  config: AlsaPlaybackConfig
+) extends Thread with StrictLogging with LogTools with Cancelable {
 
   @volatile var stopped = false
-
-
 
   override def run(): Unit = {
     logger.info("alsa playback thread starting")
@@ -152,32 +153,42 @@ class AlsaPlayback(
       )
       logger.info(s"buffer: ${buffer.getValue.longValue()}")
 
-      val buff_size = period.getValue.longValue() * channels * 2
 
-      logger.info(s"buffer size: ${buff_size}")
 
-      //    snd_pcm_hw_params_get_period_time(
-      //      params,
-      //      tmp,
-      //      null
-      //    )
-      //
-      //    while (!stopped) {
-      //
-      //
-      //    }
+      val writeSize = new NativeLong(
+        config.audio.samplesPerPeriod
+      )
+
+      logger.info(s"start playing")
+
+      try {
+        while (!stopped) {
+
+          val written = snd_pcm_writei(
+            pcm_handle,
+            config.data(),
+            writeSize
+          )
+
+          require(written.intValue() == config.audio.samplesPerPeriod)
+
+        }
+
+        logger.info(s"drain")
+        snd_pcm_drain(pcm_handle)
+
+      } finally {
+        logger.info(s"close")
+        snd_pcm_close(pcm_handle)
+      }
 
     }
 
+    logger.info(s"alsa playback thread exiting")
+  }
 
-
-
-
-
-
-
-
-
+  override def cancel(): Unit = {
+    stopped = true
   }
 }
 
@@ -187,10 +198,12 @@ case class AlsaAudioConfig(
   samplesPerSecond: Int = 44100,
   samplesPerPeriod: Int = 1024 * 4,
   periodsPerBuffer: Int = 2
-)
+) {
+  def bytesPerPeriod = periodsPerBuffer * java.lang.Short.BYTES
+}
 
 case class AlsaPlaybackConfig(
   device: String = "default",
-  audio: AlsaAudioConfig = AlsaAudioConfig()
-
+  audio: AlsaAudioConfig = AlsaAudioConfig(),
+  data: () => Buffer
 )

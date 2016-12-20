@@ -6,6 +6,8 @@ import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.NativeLongByReference;
 import com.sun.jna.ptr.PointerByReference;
 
+import java.nio.Buffer;
+
 /**
  * Created by pappmar on 20/12/2016.
  */
@@ -267,4 +269,22 @@ public interface AsoundLibrary extends Library {
      * <i>native declaration : ..\voice\local\headers\\usr\include\alsa\error.h:45</i>
      */
     String snd_strerror(int errnum);
+
+    /**
+     * Original signature : <code>snd_pcm_sframes_t snd_pcm_writei(snd_pcm_t*, const void*, snd_pcm_uframes_t)</code><br>
+     * <i>native declaration : ..\voice\local\headers\\usr\include\alsa\pcm.h:483</i><br>
+     */
+    NativeLong snd_pcm_writei(Pointer pcm, Buffer buffer, NativeLong size);
+
+    /**
+     * Original signature : <code>int snd_pcm_drain(snd_pcm_t*)</code><br>
+     * <i>native declaration : ..\voice\local\headers\\usr\include\alsa\pcm.h:469</i><br>
+     */
+    int snd_pcm_drain(Pointer pcm);
+
+    /**
+     * Original signature : <code>int snd_pcm_close(snd_pcm_t*)</code><br>
+     * <i>native declaration : ..\voice\local\headers\\usr\include\alsa\pcm.h:446</i><br>
+     */
+    int snd_pcm_close(Pointer pcm);
 }

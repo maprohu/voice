@@ -40,7 +40,8 @@ object LinuxModules {
   object Alsa extends ScalaModule(
     "alsa",
     Extra,
-    Toolbox6Modules.Logging.R3
+    Toolbox6Modules.Logging.R3,
+    mvn.`io.monix:monix-execution_2.11:jar:2.1.2`
   )
 
   object Testing extends ScalaModule(
