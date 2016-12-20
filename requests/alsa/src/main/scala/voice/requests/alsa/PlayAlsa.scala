@@ -13,6 +13,13 @@ import voice.linux.alsa.{AlsaAudioConfig, AlsaPlayback, AlsaPlaybackConfig}
 class PlayAlsa extends Requestable with StrictLogging {
 
   override def request(ctx: RootContext, in: InputStream, out: OutputStream): Unit = {
+    run()
+  }
+
+  def run(
+    device : String = "default",
+    freq: Double = 440
+  ) = {
     logger.info("starting alsa playback")
     val audio = AlsaAudioConfig()
 
@@ -26,12 +33,23 @@ class PlayAlsa extends Requestable with StrictLogging {
     val shortBuff =
       buff.asShortBuffer()
 
-    (0 until audio.samplesPerPeriod).foreach { _ =>
-      shortBuff.put(0.toShort)
+    import audio._
+    val wavePeriodsPerSecond = freq
+    val secondsPerWavePeriod = 1 / wavePeriodsPerSecond
+    val samplesPerWavePeriod = secondsPerWavePeriod * samplesPerSecond
+    val wavePeriodsPerSample = 1 / samplesPerWavePeriod
+    println(samplesPerWavePeriod)
+
+    (0 until audio.samplesPerPeriod).foreach { i =>
+
+      val n = ( Math.sin(2 * Math.PI * wavePeriodsPerSample * i) * (Short.MaxValue / 2 - 1) ).toShort
+      println(n)
+      shortBuff.put(n)
     }
 
     val player = new AlsaPlayback(
       AlsaPlaybackConfig(
+        device = device,
         audio = audio,
         data = () => buff
       )

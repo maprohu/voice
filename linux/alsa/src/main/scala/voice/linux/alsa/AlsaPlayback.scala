@@ -1,6 +1,6 @@
 package voice.linux.alsa
 
-import java.nio.Buffer
+import java.nio.{Buffer, ShortBuffer}
 
 import com.sun.jna.{NativeLong, Pointer}
 import com.sun.jna.ptr.{IntByReference, NativeLongByReference, PointerByReference}
@@ -163,15 +163,13 @@ class AlsaPlayback(
 
       try {
         while (!stopped) {
-
           val written = snd_pcm_writei(
             pcm_handle,
-            config.data(),
+            config.data.next,
             writeSize
           )
 
           require(written.intValue() == config.audio.samplesPerPeriod)
-
         }
 
         logger.info(s"drain")
@@ -195,15 +193,56 @@ class AlsaPlayback(
 
 
 case class AlsaAudioConfig(
-  samplesPerSecond: Int = 44100,
+  samplesPerSecond: Sounds.SamplesPerSecond = 44100,
   samplesPerPeriod: Int = 1024 * 4,
   periodsPerBuffer: Int = 2
 ) {
-  def bytesPerPeriod = periodsPerBuffer * java.lang.Short.BYTES
+  def bytesPerPeriod = samplesPerPeriod * java.lang.Short.BYTES
 }
 
 case class AlsaPlaybackConfig(
   device: String = "default",
   audio: AlsaAudioConfig = AlsaAudioConfig(),
-  data: () => Buffer
+  data: Sound
 )
+
+trait Sound {
+  def next : Sounds.Period
+}
+trait SoundWithLength extends Sound {
+  def length : Long
+
+  def repeatInfinitely : Sound = {
+    var 
+
+  }
+}
+trait SoundWithEnd extends Sound {
+  def ended : Boolean
+}
+
+object Sounds {
+  type Period = Buffer
+  type SamplesPerSecond = Int
+
+  def sinePeriod(
+    wavePeriodsPerSecond: Double,
+    samplesPerSecond: Int
+  ) : SoundWithLength = {
+    val samplesPerWavePeriod = (samplesPerSecond / wavePeriodsPerSecond).toInt
+
+    val buffer = ShortBuffer.allocate(samplesPerWavePeriod)
+
+    (0 until samplesPerWavePeriod)
+      .foreach({ x =>
+        buffer.put(
+          ( Math.sin( 2 * Math.PI * x / samplesPerWavePeriod ) * (Short.MaxValue / 2 - 1) ).toShort
+        )
+      })
+
+    new SoundWithLength {
+      override def length: Long = samplesPerWavePeriod
+      override def next: Period = buffer
+    }
+  }
+}

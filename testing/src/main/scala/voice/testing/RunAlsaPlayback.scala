@@ -35,3 +35,11 @@ val Target = Rpis.Home.tunneled
   }
 
 }
+
+object RunAlsaPlaybackLocal {
+  def main(args: Array[String]): Unit = {
+
+    new PlayAlsa()
+      .run("plughw:0,0")
+  }
+}
