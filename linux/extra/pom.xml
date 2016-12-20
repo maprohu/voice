@@ -1,7 +1,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <groupId>voice</groupId>
-    <artifactId>voice-impl-threads</artifactId>
+    <artifactId>voice-linux-extra</artifactId>
     <version>2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <organization>
@@ -109,13 +109,8 @@
     <dependencies>
         <dependency>
             <groupId>voice</groupId>
-            <artifactId>voice-impl-common</artifactId>
+            <artifactId>voice-linux-jnalib</artifactId>
             <version>2-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>io.monix</groupId>
-            <artifactId>monix-execution_2.11</artifactId>
-            <version>2.1.2</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>

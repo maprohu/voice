@@ -94,7 +94,7 @@ object Rpis {
     }
   }
 
-  implicit val Localhost =
+  val Localhost =
     Config
       .apply(
         RpiInstances.LocalHost

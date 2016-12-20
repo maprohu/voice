@@ -19,7 +19,8 @@ object VoiceImplModules {
 
   object Threads extends ScalaModule(
     "threads",
-    Common
+    Common,
+    mvn.`io.monix:monix-execution_2.11:jar:2.1.2`
   )
 
   object Testing extends ScalaModule(

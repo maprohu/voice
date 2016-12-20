@@ -20,6 +20,7 @@ class LinuxLibraries(
       "c",
       Seq(
         s"${IncludeDir}/unistd.h",
+        s"${IncludeDir}/alloca.h",
         s"${IncludeDir}/string.h",
         s"${IncludeDir}/errno.h",
         s"${IncludeDir}/net/if.h",
@@ -38,6 +39,13 @@ class LinuxLibraries(
         s"${IncludeDir}/bluetooth/rfcomm.h",
         s"${IncludeDir}/bluetooth/hci.h",
         s"${IncludeDir}/bluetooth/hci_lib.h"
+      )
+    ),
+    Lib(
+      "asound",
+      Seq(
+        s"${IncludeDir}/alsa/asoundlib.h",
+        s"${IncludeDir}/alsa/pcm.h"
       )
     )
   )

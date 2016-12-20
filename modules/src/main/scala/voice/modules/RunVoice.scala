@@ -52,6 +52,8 @@ object RunVoice {
     LinuxModules.Common,
     LinuxModules.Generator,
     LinuxModules.JnaLib,
+    LinuxModules.Alsa,
+    LinuxModules.Extra,
     LinuxModules.Testing,
     VoiceAndroidModules.App,
     VoiceAndroidModules.Packaging,

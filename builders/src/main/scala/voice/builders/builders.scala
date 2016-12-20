@@ -150,6 +150,16 @@ object build_voice_linux_jnalib extends mvnmod.builder.ModuleBuilder(
   "./linux/jnalib"
 )
            
+object build_voice_linux_alsa extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./linux/alsa"
+)
+           
+object build_voice_linux_extra extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./linux/extra"
+)
+           
 object build_voice_linux_testing extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./linux/testing"

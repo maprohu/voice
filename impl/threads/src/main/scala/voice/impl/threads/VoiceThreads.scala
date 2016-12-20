@@ -11,9 +11,8 @@ object VoiceThreads {
 
   ) = {
 
-    val sdl : SourceDataLine = ???
+    val input = new VoiceInputThread
 
-    sdl.write()
 
 
 

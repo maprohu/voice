@@ -32,6 +32,16 @@ object LinuxModules {
     Toolbox6Modules.Tools
   )
 
+  object Extra extends ScalaModule(
+    "extra",
+    JnaLib
+  )
+
+  object Alsa extends ScalaModule(
+    "alsa",
+    Extra
+  )
+
   object Testing extends ScalaModule(
     "testing",
     JnaLib,
