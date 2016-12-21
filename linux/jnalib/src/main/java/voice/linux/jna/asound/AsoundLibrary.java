@@ -18,8 +18,8 @@ import java.nio.DoubleBuffer;
 import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
+import voice.linux.jna._IO_FILE;
 import voice.linux.jna.asound.snd_pcm_sync_id_t.ByValue;
-import voice.linux.jna.c._IO_FILE;
 import voice.linux.jna.c.pollfd;
 import voice.linux.jna.c.timeval;
 /**

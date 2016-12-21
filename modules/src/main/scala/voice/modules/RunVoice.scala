@@ -52,6 +52,7 @@ object RunVoice {
     VoiceRequestModules.JnaRequests,
     LinuxModules.Common,
     LinuxModules.Generator,
+    LinuxModules.Pico,
     LinuxModules.JnaLib,
     LinuxModules.Alsa,
     LinuxModules.Extra,

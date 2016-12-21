@@ -287,4 +287,9 @@ public interface AsoundLibrary extends Library {
      * <i>native declaration : ..\voice\local\headers\\usr\include\alsa\pcm.h:446</i><br>
      */
     int snd_pcm_close(Pointer pcm);
+    /**
+     * Original signature : <code>snd_pcm_sframes_t snd_pcm_readi(snd_pcm_t*, void*, snd_pcm_uframes_t)</code><br>
+     * <i>native declaration : ..\voice\local\headers\\usr\include\alsa\pcm.h:484</i><br>
+     */
+    NativeLong snd_pcm_readi(Pointer pcm, Buffer buffer, NativeLong size);
 }

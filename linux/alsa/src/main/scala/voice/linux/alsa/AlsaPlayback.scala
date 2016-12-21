@@ -1,6 +1,6 @@
 package voice.linux.alsa
 
-import java.nio.{Buffer, ShortBuffer}
+import java.nio.{Buffer, ByteBuffer, ByteOrder, ShortBuffer}
 
 import com.sun.jna.{NativeLong, Pointer}
 import com.sun.jna.ptr.{IntByReference, NativeLongByReference, PointerByReference}
@@ -17,6 +17,10 @@ import voice.linux.common.asound.AsoundLibrary
 class AlsaPlayback(
   config: AlsaPlaybackConfig
 ) extends Thread with StrictLogging with LogTools with Cancelable {
+  import config._
+  import buffered._
+  import periods._
+  import sampled._
 
   @volatile var stopped = false
 
@@ -94,7 +98,7 @@ class AlsaPlayback(
         snd_pcm_hw_params_set_period_size(
           pcm_handle,
           params,
-          new NativeLong(config.audio.samplesPerPeriod),
+          new NativeLong(samplesPerPeriod),
           0
         )
       }
@@ -104,7 +108,7 @@ class AlsaPlayback(
         snd_pcm_hw_params_set_buffer_size(
           pcm_handle,
           params,
-          new NativeLong(config.audio.samplesPerPeriod * config.audio.periodsPerBuffer)
+          new NativeLong(samplesPerPeriod * periodsPerBuffer)
         )
       }
 
@@ -113,7 +117,7 @@ class AlsaPlayback(
         snd_pcm_hw_params_set_rate_near(
           pcm_handle,
           params,
-          new IntByReference(config.audio.samplesPerSecond),
+          new IntByReference(samplesPerSecond),
           new IntByReference(0)
         )
       }
@@ -156,20 +160,34 @@ class AlsaPlayback(
 
 
       val writeSize = new NativeLong(
-        config.audio.samplesPerPeriod
+        samplesPerPeriod
       )
 
       logger.info(s"start playing")
 
+      val samplesPerWrite = samplesPerPeriod
+
+      val byteBuffer = ByteBuffer.allocateDirect(
+        config.buffered.periods.samplesPerPeriod * java.lang.Short.BYTES
+      )
+      byteBuffer.order(ByteOrder.LITTLE_ENDIAN)
+      val shortBuffer = byteBuffer.asShortBuffer()
+      val data = config.data
+      data.buffer = shortBuffer
+
       try {
         while (!stopped) {
+          shortBuffer.rewind()
+
+          data.next
+
           val written = snd_pcm_writei(
             pcm_handle,
-            config.data.next,
+            shortBuffer,
             writeSize
           )
 
-          require(written.intValue() == config.audio.samplesPerPeriod)
+          require(written.intValue() == samplesPerWrite)
         }
 
         logger.info(s"drain")
@@ -192,57 +210,26 @@ class AlsaPlayback(
 
 
 
-case class AlsaAudioConfig(
-  samplesPerSecond: Sounds.SamplesPerSecond = 44100,
-  samplesPerPeriod: Int = 1024 * 4,
-  periodsPerBuffer: Int = 2
+case class AlsaSampledAudioConfig(
+  samplesPerSecond: Sounds.SamplesPerSecond = 44100
+) {
+}
+
+case class AlsaPeriodsAudioConfig(
+  sampled: AlsaSampledAudioConfig = AlsaSampledAudioConfig(),
+  samplesPerPeriod: Int = 1024 * 4
 ) {
   def bytesPerPeriod = samplesPerPeriod * java.lang.Short.BYTES
 }
 
+case class AlsaBufferedAudioConfig(
+  periods: AlsaPeriodsAudioConfig = AlsaPeriodsAudioConfig(),
+  periodsPerBuffer: Int = 2
+)
+
 case class AlsaPlaybackConfig(
   device: String = "default",
-  audio: AlsaAudioConfig = AlsaAudioConfig(),
+  buffered: AlsaBufferedAudioConfig,
   data: Sound
 )
 
-trait Sound {
-  def next : Sounds.Period
-}
-trait SoundWithLength extends Sound {
-  def length : Long
-
-  def repeatInfinitely : Sound = {
-    var 
-
-  }
-}
-trait SoundWithEnd extends Sound {
-  def ended : Boolean
-}
-
-object Sounds {
-  type Period = Buffer
-  type SamplesPerSecond = Int
-
-  def sinePeriod(
-    wavePeriodsPerSecond: Double,
-    samplesPerSecond: Int
-  ) : SoundWithLength = {
-    val samplesPerWavePeriod = (samplesPerSecond / wavePeriodsPerSecond).toInt
-
-    val buffer = ShortBuffer.allocate(samplesPerWavePeriod)
-
-    (0 until samplesPerWavePeriod)
-      .foreach({ x =>
-        buffer.put(
-          ( Math.sin( 2 * Math.PI * x / samplesPerWavePeriod ) * (Short.MaxValue / 2 - 1) ).toShort
-        )
-      })
-
-    new SoundWithLength {
-      override def length: Long = samplesPerWavePeriod
-      override def next: Period = buffer
-    }
-  }
-}

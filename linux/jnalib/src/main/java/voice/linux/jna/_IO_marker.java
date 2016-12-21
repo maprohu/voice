@@ -1,4 +1,4 @@
-package voice.linux.jna.c;
+package voice.linux.jna;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import java.util.Arrays;
@@ -14,7 +14,7 @@ public class _IO_marker extends Structure {
 	/** C type : _IO_marker* */
 	public _IO_marker.ByReference _next;
 	/** C type : _IO_FILE* */
-	public voice.linux.jna.c._IO_FILE.ByReference _sbuf;
+	public voice.linux.jna._IO_FILE.ByReference _sbuf;
 	public int _pos;
 	public _IO_marker() {
 		super();
@@ -26,7 +26,7 @@ public class _IO_marker extends Structure {
 	 * @param _next C type : _IO_marker*<br>
 	 * @param _sbuf C type : _IO_FILE*
 	 */
-	public _IO_marker(_IO_marker.ByReference _next, voice.linux.jna.c._IO_FILE.ByReference _sbuf, int _pos) {
+	public _IO_marker(_IO_marker.ByReference _next, voice.linux.jna._IO_FILE.ByReference _sbuf, int _pos) {
 		super();
 		this._next = _next;
 		this._sbuf = _sbuf;

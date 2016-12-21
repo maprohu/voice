@@ -1,4 +1,4 @@
-package voice.linux.jna.c;
+package voice.linux.jna;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;

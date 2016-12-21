@@ -44,9 +44,17 @@ object LinuxModules {
     mvn.`io.monix:monix-execution_2.11:jar:2.1.2`
   )
 
+  object Pico extends ScalaModule(
+    "pico",
+    Extra,
+    Toolbox6Modules.Logging.R3,
+    mvn.`io.monix:monix-execution_2.11:jar:2.1.2`
+  )
+
   object Testing extends ScalaModule(
     "testing",
     JnaLib,
+    Alsa,
     mvn.`uk.co.caprica:juds:jar:0.94.1`,
     mvn.`com.kohlschutter.junixsocket:junixsocket-demo:jar:2.0.4`
   )

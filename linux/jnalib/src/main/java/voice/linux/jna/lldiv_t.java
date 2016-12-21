@@ -1,4 +1,4 @@
-package voice.linux.jna.c;
+package voice.linux.jna;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import java.util.Arrays;
@@ -9,12 +9,12 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class div_t extends Structure {
+public class lldiv_t extends Structure {
 	/** Quotient. */
-	public int quot;
+	public long quot;
 	/** Remainder. */
-	public int rem;
-	public div_t() {
+	public long rem;
+	public lldiv_t() {
 		super();
 	}
 	protected List<? > getFieldOrder() {
@@ -24,18 +24,18 @@ public class div_t extends Structure {
 	 * @param quot Quotient.<br>
 	 * @param rem Remainder.
 	 */
-	public div_t(int quot, int rem) {
+	public lldiv_t(long quot, long rem) {
 		super();
 		this.quot = quot;
 		this.rem = rem;
 	}
-	public div_t(Pointer peer) {
+	public lldiv_t(Pointer peer) {
 		super(peer);
 	}
-	public static class ByReference extends div_t implements Structure.ByReference {
+	public static class ByReference extends lldiv_t implements Structure.ByReference {
 		
 	};
-	public static class ByValue extends div_t implements Structure.ByValue {
+	public static class ByValue extends lldiv_t implements Structure.ByValue {
 		
 	};
 }

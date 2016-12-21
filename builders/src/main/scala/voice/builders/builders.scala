@@ -150,6 +150,11 @@ object build_voice_linux_generator extends mvnmod.builder.ModuleBuilder(
   "./linux/generator"
 )
            
+object build_voice_linux_pico extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./linux/pico"
+)
+           
 object build_voice_linux_jnalib extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./linux/jnalib"

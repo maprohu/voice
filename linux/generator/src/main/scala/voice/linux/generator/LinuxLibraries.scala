@@ -48,6 +48,13 @@ class LinuxLibraries(
         s"${IncludeDir}/alsa/error.h",
         s"${IncludeDir}/alsa/pcm.h"
       )
+    ),
+    Lib(
+      "ttspico",
+      Seq(
+        s"${IncludeDir}/picoapi.h",
+        s"${IncludeDir}/picodefs.h"
+      )
     )
   )
 
