@@ -170,26 +170,24 @@ class AlsaCapture(
 
       val samplesPerRead = samplesPerPeriod
 
-      val byteBuffer = ByteBuffer.allocateDirect(
-        config.buffered.periods.samplesPerPeriod * java.lang.Short.BYTES
-      )
-      byteBuffer.order(ByteOrder.LITTLE_ENDIAN)
-      val shortBuffer = byteBuffer.asShortBuffer()
-      val data = config.data
-      data.buffer = shortBuffer
+//      val byteBuffer = ByteBuffer.allocateDirect(
+//        config.buffered.periods.samplesPerPeriod * java.lang.Short.BYTES
+//      )
+//      byteBuffer.order(ByteOrder.LITTLE_ENDIAN)
+//      val shortBuffer = byteBuffer.asShortBuffer()
+//      val data = config.data
+//      data.buffer = shortBuffer
 
       try {
         while (!stopped) {
 
           val readCount = snd_pcm_readi(
             pcm_handle,
-            shortBuffer,
+            data.buffer,
             writeSize
           )
 
           require(readCount.intValue() == samplesPerRead)
-
-          shortBuffer.rewind()
 
           data.next
 
@@ -220,6 +218,6 @@ case class AlsaCaptureConfig(
 )
 
 trait SoundProcessor {
-  var buffer: ShortBuffer
+  def buffer: ShortBuffer
   def next: Unit
 }

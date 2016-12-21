@@ -178,12 +178,12 @@ class AlsaPlayback(
       try {
         while (!stopped) {
           shortBuffer.rewind()
-
           data.next
+
 
           val written = snd_pcm_writei(
             pcm_handle,
-            shortBuffer,
+            byteBuffer,
             writeSize
           )
 
@@ -211,7 +211,7 @@ class AlsaPlayback(
 
 
 case class AlsaSampledAudioConfig(
-  samplesPerSecond: Sounds.SamplesPerSecond = 44100
+  samplesPerSecond: Sounds.SamplesPerSecond = 48000
 ) {
 }
 

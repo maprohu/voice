@@ -36,3 +36,11 @@ val Target = Rpis.Home.tunneled
 
 }
 
+object RunAlsaCaptureLocal {
+  def main(args: Array[String]): Unit = {
+
+    new CaptureAlsa()
+      .run("plughw:0,0")
+//      .run("hw:0,0")
+  }
+}

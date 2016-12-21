@@ -96,6 +96,7 @@ object Sounds {
     val wavePeriodsPerSecond = requestedFrequency
 
     val samplesPerWavePeriod = (samplesPerSecond / wavePeriodsPerSecond).toInt
+    println(samplesPerWavePeriod)
 
     (0 until samplesPerWavePeriod)
       .map({ x =>

@@ -25,6 +25,17 @@ class PlayAlsa extends Requestable with StrictLogging {
 
     val mixer = new MixerSound(buffered.periods)
 
+    mixer
+      .play(
+        Sounds.repeatInfinitely(
+          Sounds.singleWavePeriod(
+            freq,
+            buffered.periods.sampled
+          ),
+          buffered.periods
+        )
+      )
+
     val player = new AlsaPlayback(
       AlsaPlaybackConfig(
         device = device,
