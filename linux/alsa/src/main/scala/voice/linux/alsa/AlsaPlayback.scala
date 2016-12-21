@@ -112,6 +112,15 @@ class AlsaPlayback(
         )
       }
 
+//      logger.info(s"hw params resample")
+//      alsaSuccess {
+//        snd_pcm_hw_params_set_rate_resample(
+//          pcm_handle,
+//          params,
+//          1
+//        )
+//      }
+
       logger.info(s"hw params rate")
       alsaSuccess {
         snd_pcm_hw_params_set_rate_near(
@@ -211,7 +220,7 @@ class AlsaPlayback(
 
 
 case class AlsaSampledAudioConfig(
-  samplesPerSecond: Sounds.SamplesPerSecond = 48000
+  samplesPerSecond: Sounds.SamplesPerSecond = 16000
 ) {
 }
 

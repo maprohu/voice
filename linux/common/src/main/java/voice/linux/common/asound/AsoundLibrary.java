@@ -262,6 +262,11 @@ public interface AsoundLibrary extends Library {
      */
     int snd_pcm_hw_params_set_buffer_size(Pointer pcm, Pointer params, NativeLong val);
     /**
+     * Original signature : <code>int snd_pcm_hw_params_set_rate_resample(snd_pcm_t*, snd_pcm_hw_params_t*, unsigned int)</code><br>
+     * <i>native declaration : ..\voice\local\headers\\usr\include\alsa\pcm.h:750</i><br>
+     */
+    int snd_pcm_hw_params_set_rate_resample(Pointer pcm, Pointer params, int val);
+    /**
      * \defgroup Error Error handling<br>
      *  Error handling macros and functions.<br>
      *  \{<br>
