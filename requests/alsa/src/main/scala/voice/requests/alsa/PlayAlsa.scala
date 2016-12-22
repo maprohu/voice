@@ -61,8 +61,8 @@ class PlayAlsa extends Requestable with StrictLogging {
     )
 
     player.start()
-    logger.info("waiting a little")
-    Thread.sleep(1000)
+//    logger.info("waiting a little")
+//    Thread.sleep(1000)
     logger.info("cancelling alsa playback")
     player.cancel()
 

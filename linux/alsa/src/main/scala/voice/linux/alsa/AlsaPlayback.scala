@@ -190,19 +190,19 @@ class AlsaPlayback(
       data.buffer = shortBuffer
 
       try {
-        while (!stopped) {
-          shortBuffer.rewind()
-          data.next
-
-
-          val written = snd_pcm_writei(
-            pcm_handle,
-            byteBuffer,
-            writeSize
-          )
-
-          require(written.intValue() == samplesPerWrite)
-        }
+//        while (!stopped) {
+//          shortBuffer.rewind()
+//          data.next
+//
+//
+//          val written = snd_pcm_writei(
+//            pcm_handle,
+//            byteBuffer,
+//            writeSize
+//          )
+//
+//          require(written.intValue() == samplesPerWrite)
+//        }
 
         logger.info(s"drain")
         snd_pcm_drain(pcm_handle)
