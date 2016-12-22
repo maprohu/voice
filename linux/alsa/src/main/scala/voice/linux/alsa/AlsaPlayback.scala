@@ -2,7 +2,7 @@ package voice.linux.alsa
 
 import java.nio.{Buffer, ByteBuffer, ByteOrder, ShortBuffer}
 
-import com.sun.jna.{NativeLong, Pointer}
+import com.sun.jna.{Native, NativeLong, Pointer}
 import com.sun.jna.ptr.{IntByReference, NativeLongByReference, PointerByReference}
 import com.typesafe.scalalogging.StrictLogging
 import monix.execution.Cancelable
@@ -55,7 +55,12 @@ class AlsaPlayback(
 
       logger.info(s"allocating hw params")
 
-      val params = AsoundTools.snd_pcm_hw_params_alloc()
+//      val params = AsoundTools.snd_pcm_hw_params_alloc()
+      val paramsBuffer = ByteBuffer.allocateDirect(
+        snd_pcm_hw_params_sizeof().intValue()
+      )
+      val params = Native.getDirectBufferPointer(paramsBuffer)
+
 
       logger.info(s"hw params any")
 
@@ -220,7 +225,7 @@ class AlsaPlayback(
 
 
 case class AlsaSampledAudioConfig(
-  samplesPerSecond: Sounds.SamplesPerSecond = 16000
+  samplesPerSecond: Sounds.SamplesPerSecond = 48000
 ) {
 }
 

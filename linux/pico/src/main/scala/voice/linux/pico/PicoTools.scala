@@ -168,10 +168,10 @@ class PicoInstance extends StrictLogging with LogTools {
   def tts(
     text: String
   ) = {
-    pico_putTextUtf8(
-      picoSystem
-
-    )
+//    pico_putTextUtf8(
+//      picoSystem
+//
+//    )
 
   }
 

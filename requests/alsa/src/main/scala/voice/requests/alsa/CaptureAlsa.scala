@@ -18,11 +18,21 @@ class CaptureAlsa extends Requestable with StrictLogging {
   }
 
   def run(
-    device : String = "default",
-    freq: Double = 440
+    device : String = "plughw:1,0"
+  ) = {
+    val buffered = AlsaBufferedAudioConfig()
+
+    runBuffered(
+      device,
+      buffered
+    )
+  }
+
+  def runBuffered(
+    device : String = "plughw:1,0",
+    buffered: AlsaBufferedAudioConfig
   ) = {
     logger.info("starting alsa capture")
-    val buffered = AlsaBufferedAudioConfig()
 
     val buffers = new util.LinkedList[ShortBuffer]()
 
@@ -60,38 +70,8 @@ class CaptureAlsa extends Requestable with StrictLogging {
 
     logger.info("stopped alsa capture")
 
-    val sound = new Sound {
-      val i = buffers.iterator()
+    buffers
 
-      override def next: Unit = {
-        if (i.hasNext) {
-          val b = i.next()
-          b.rewind()
-          buffer.put(b)
-        } else {
-          while (buffer.hasRemaining) buffer.put(0.toShort)
-        }
-      }
-    }
-
-    val player = new AlsaPlayback(
-      AlsaPlaybackConfig(
-        device,
-        buffered,
-        sound
-      )
-    )
-
-    player.start()
-    logger.info("waiting a little")
-    Thread.sleep(3000)
-    logger.info("cancelling alsa playback")
-    player.cancel()
-
-    logger.info("waiting for player thread")
-    player.join()
-
-    logger.info("stopped alsa playback")
   }
 
 }

@@ -1,6 +1,6 @@
 package voice.requests.alsa
 
-import java.io.{InputStream, OutputStream}
+import java.io.{InputStream, ObjectInputStream, OutputStream}
 import java.nio.{ByteBuffer, ByteOrder}
 
 import com.typesafe.scalalogging.StrictLogging
@@ -13,14 +13,15 @@ import voice.linux.alsa._
 class PlayAlsa extends Requestable with StrictLogging {
 
   override def request(ctx: RootContext, in: InputStream, out: OutputStream): Unit = {
-    run()
+    val dis = new ObjectInputStream(in)
+    val device = dis.readObject().asInstanceOf[String]
+    run(device)
   }
 
   def run(
-    device : String = "default",
+    device : String = "plughw:1,0",
     freq: Double = 440
   ) = {
-    logger.info("starting alsa playback")
     val buffered = AlsaBufferedAudioConfig()
 
     val mixer = new MixerSound(buffered.periods)
@@ -35,6 +36,21 @@ class PlayAlsa extends Requestable with StrictLogging {
           buffered.periods
         )
       )
+
+    runSound(
+      device,
+      buffered,
+      mixer
+    )
+
+
+  }
+  def runSound(
+    device : String = "plughw:1,0",
+    buffered: AlsaBufferedAudioConfig,
+    mixer: Sound
+  ) = {
+    logger.info("starting alsa playback")
 
     val player = new AlsaPlayback(
       AlsaPlaybackConfig(

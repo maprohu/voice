@@ -161,7 +161,6 @@ class AlsaCapture(
       logger.info(s"buffer: ${buffer.getValue.longValue()}")
 
 
-
       val writeSize = new NativeLong(
         samplesPerPeriod
       )
