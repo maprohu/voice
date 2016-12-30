@@ -10,10 +10,13 @@ import org.mapdb.{DBMaker, Serializer}
 object RunMapDB {
 
   def main(args: Array[String]): Unit = {
+    val dir =
+      new File("../voice/target/mapdb/test")
+    dir.getParentFile.mkdirs()
     val db =
       DBMaker
         .fileDB(
-          new File("../voice/target/mapdb")
+          dir
         )
         .fileMmapEnableIfSupported()
         .make()

@@ -15,9 +15,9 @@ import scala.util.Random
   */
 object RunRecordSyllables {
 
-  val SampleRate = 48000
   val RawFileName = "../voice/testing/target/syllables.raw"
   val MetaFileName = "../voice/testing/target/syllables.meta"
+  val SampleRate = 48000
   val RecordingFormat = new AudioFormat(
     SampleRate,
     16,
