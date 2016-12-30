@@ -87,14 +87,14 @@ object RunTrainingPlaying {
           })
       )
       .toSeq
-      .sortBy(x => -x._2)
-      .filter({
-        case (s, id) =>
-          import Consonants._
-          import Vowels._
-
-          s == Syllable(P, I)
-      })
+//      .sortBy(x => -x._2)
+//      .filter({
+//        case (s, id) =>
+//          import Consonants._
+//          import Vowels._
+//
+//          s == Syllable(P, I)
+//      })
       .takeWhile({
         case (s, id) =>
           play(s, id)
