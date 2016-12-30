@@ -183,6 +183,11 @@
             <version>2-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>voice</groupId>
+            <artifactId>voice-storage</artifactId>
+            <version>2-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>toolbox6</groupId>
             <artifactId>toolbox6-logging</artifactId>
             <version>2-SNAPSHOT</version>

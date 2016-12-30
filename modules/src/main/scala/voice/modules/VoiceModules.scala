@@ -157,6 +157,7 @@ object VoiceModules extends ModulesBase(
     JarTree8Modules.Client,
     RpiModules.Installer,
     Core,
+    Storage,
 //    VoiceRpiModules.Core,
 //    Extra8Modules.Hello,
     Toolbox6Modules.Logging,

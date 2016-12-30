@@ -70,8 +70,8 @@ object Syllables {
 
   val Items =
     (for {
-      c <- Consonants.values
-      v <- Vowels.values
+      c <- Consonants.values.toSeq
+      v <- Vowels.values.toSeq
     } yield {
       Syllable(c, v)
     }).toVector
