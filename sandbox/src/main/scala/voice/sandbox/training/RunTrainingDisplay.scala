@@ -8,7 +8,7 @@ object RunTrainingDisplay {
   def main(args: Array[String]): Unit = {
     import voice.storage.Consonants._
     import voice.storage.Vowels._
-    Display.show()
+    Display.show(P, I )
   }
 
 }
