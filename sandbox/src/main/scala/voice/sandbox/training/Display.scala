@@ -30,7 +30,6 @@ object Display {
     def toggleVisible = {
       visible = !visible
     }
-
   }
 
 
@@ -46,14 +45,27 @@ object Display {
         .data
         .get(s)
         .toSeq
-        .flatMap({ ids =>
+        .map({ ids =>
           ids
             .map({ id =>
+              TrainingDB
+                .recordingData
+                .get(id)
+            })
+        })
+
+    showData(datas)
+  }
+
+  def showData(byteArraysSeq: Seq[Seq[Array[Byte]]]) = {
+    val datas =
+      byteArraysSeq
+        .flatMap({ byteArrays =>
+          byteArrays
+            .map({ byteArray =>
               val sb = ByteBuffer
                 .wrap(
-                  TrainingDB
-                    .recordingData
-                    .get(id)
+                  byteArray
                 )
                 .order(ByteOrder.LITTLE_ENDIAN)
                 .asShortBuffer()
@@ -115,7 +127,7 @@ object Display {
 
 
 
-        g2.setColor(BLACK)
+        g2.setColor(WHITE)
         g2.draw(
           new Line2D.Double(
             0, 0,
@@ -140,6 +152,8 @@ object Display {
       }
     }
     plot.setPreferredSize(new Dimension(400, 150))
+    plot.setOpaque(true)
+    plot.setBackground(BLACK)
 
     val frame = new JFrame()
     frame.setDefaultCloseOperation(

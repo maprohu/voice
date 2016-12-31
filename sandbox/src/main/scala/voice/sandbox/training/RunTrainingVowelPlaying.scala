@@ -81,20 +81,19 @@ object RunTrainingVowelPlaying {
           .vowelRecordingMeta
           .get()
           .data
+          .toSeq
           .flatMap({
             case (s, ids) =>
               ids.map(id => (s, id))
           })
       )
-      .toSeq
-//      .sortBy(x => -x._2)
-//      .filter({
-//        case (s, id) =>
-//          import Consonants._
-//          import Vowels._
-//
-//          s == Syllable(P, I)
-//      })
+      .sortBy(x => x._2)
+      .filter({
+        case (s, id) =>
+          import Vowels._
+
+          s == E
+      })
       .takeWhile({
         case (s, id) =>
           play(s, id)
