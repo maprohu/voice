@@ -6,6 +6,7 @@ import monix.execution.Cancelable
 import monix.execution.cancelables.CompositeCancelable
 import org.mapdb.{DBMaker, Serializer}
 import voice.storage.Syllables.Syllable
+import voice.storage.Vowels
 
 /**
   * Created by maprohu on 30-12-2016.
@@ -14,7 +15,9 @@ object DBEntity extends Enumeration {
   val
 
     RecordingMeta,
-    RecordingData
+    RecordingData,
+    VowelRecordingMeta,
+    VowelRecordingData
 
   = Value
 }
@@ -75,6 +78,24 @@ object TrainingDB {
       .createOrOpen()
   }
 
+  lazy val vowelRecordingMeta = {
+    db
+      .atomicVar(
+        DBEntity.VowelRecordingMeta.toString,
+        Serializer.JAVA.asInstanceOf[Serializer[VowelRecordings]],
+        VowelRecordings()
+      )
+      .createOrOpen()
+  }
+
+  lazy val vowelRecordingData = {
+    db
+      .treeMap(DBEntity.VowelRecordingData.toString)
+      .keySerializer(Serializer.LONG)
+      .valueSerializer(Serializer.BYTE_ARRAY)
+      .createOrOpen()
+  }
+
 
 
 
@@ -83,6 +104,11 @@ object TrainingDB {
 case class Recordings(
   nextId : Long = 0,
   data: Map[Syllable, Vector[Long]] = Map()
+)
+
+case class VowelRecordings(
+  nextId : Long = 0,
+  data: Map[Vowels.Value, Vector[Long]] = Map()
 )
 
 
