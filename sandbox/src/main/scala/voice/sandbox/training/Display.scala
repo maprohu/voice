@@ -19,7 +19,7 @@ object Display {
   def main(args: Array[String]): Unit = {
     import Consonants._
     import Vowels._
-    show(P, O)
+    show(S, O)
   }
 
   class Line(
