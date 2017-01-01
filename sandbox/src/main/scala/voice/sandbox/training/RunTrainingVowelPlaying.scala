@@ -92,7 +92,7 @@ object RunTrainingVowelPlaying {
         case (s, id) =>
           import Vowels._
 
-          s == EE
+          s == AA
       })
       .takeWhile({
         case (s, id) =>
