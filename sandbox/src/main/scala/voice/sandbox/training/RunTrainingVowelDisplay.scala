@@ -9,7 +9,7 @@ object RunTrainingVowelDisplay {
 
   def main(args: Array[String]): Unit = {
     import voice.storage.Vowels._
-    show(O)
+    show(A)
   }
 
   def show(s: Vowels.Value) = {
