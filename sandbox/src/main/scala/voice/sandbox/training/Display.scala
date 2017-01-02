@@ -33,26 +33,33 @@ object Display {
   }
 
 
-  def show(
+  def data(
     c: Consonants.Value,
     v: Vowels.Value
   ) = {
     val s = Syllable(c, v)
-    val datas =
-      TrainingDB
-        .recordingMeta
-        .get()
-        .data
-        .get(s)
-        .toSeq
-        .map({ ids =>
-          ids
-            .map({ id =>
-              TrainingDB
-                .recordingData
-                .get(id)
-            })
-        })
+
+    TrainingDB
+      .recordingMeta
+      .get()
+      .data
+      .get(s)
+      .toSeq
+      .map({ ids =>
+        ids
+          .map({ id =>
+            TrainingDB
+              .recordingData
+              .get(id)
+          })
+      })
+  }
+
+  def show(
+    c: Consonants.Value,
+    v: Vowels.Value
+  ) = {
+    val datas = data(c, v)
 
     showData(datas)
   }

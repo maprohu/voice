@@ -22,6 +22,7 @@ object Vowels extends Enumeration {
 
 }
 
+@SerialVersionUID(-158241716158044665L)
 object Consonants extends Enumeration {
   def Consonant = Value
 
@@ -53,6 +54,7 @@ object Consonants extends Enumeration {
   val V = Consonant
   val Z = Consonant
   val ZS = Consonant
+  val F = Consonant
 
 }
 

@@ -3,7 +3,7 @@ package voice.sandbox.training
 import java.io.{ByteArrayOutputStream, FileOutputStream}
 import javax.sound.sampled.{AudioFormat, AudioSystem}
 
-import voice.storage.Syllables
+import voice.storage.{Syllables, Vowels}
 import voice.storage.Syllables.Syllable
 
 import scala.io.StdIn
@@ -144,8 +144,16 @@ object RunTrainingRecording {
       .takeWhile(record)
       .foreach(_ => ())
 
+    val vowelsSeq = Vowels.values.toIndexedSeq
+
     Iterator
-      .continually(Syllables.Items(Random.nextInt(Syllables.Items.length)))
+      .continually({
+        import voice.storage.Consonants._
+        val c = F
+        val v = vowelsSeq(Random.nextInt(vowelsSeq.size))
+        Syllable(c, v)
+//        Syllables.Items(Random.nextInt(Syllables.Items.length))
+      })
       .takeWhile({ s =>
         val ids =
           TrainingDB

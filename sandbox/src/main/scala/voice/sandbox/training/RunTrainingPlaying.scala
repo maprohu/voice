@@ -20,6 +20,7 @@ object RunTrainingPlaying {
   line.open(RunTrainingRecording.RecordingFormat, RunTrainingRecording.BufferSize * 2)
   line.start()
 
+
   def play(s: Syllable, id: Long) : Boolean = {
     println(s.string)
 
@@ -87,14 +88,15 @@ object RunTrainingPlaying {
           })
       )
       .toSeq
-//      .sortBy(x => -x._2)
-//      .filter({
-//        case (s, id) =>
-//          import Consonants._
-//          import Vowels._
-//
-//          s == Syllable(P, I)
-//      })
+      .sortBy(x => -x._2)
+      .filter({
+        case (s, id) =>
+          import Consonants._
+          import Vowels._
+
+//          s == Syllable(F, I)
+        s.consonant == F
+      })
       .takeWhile({
         case (s, id) =>
           play(s, id)
