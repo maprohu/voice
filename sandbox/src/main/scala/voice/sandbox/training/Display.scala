@@ -57,24 +57,31 @@ object Display {
     showData(datas)
   }
 
-  def showData(byteArraysSeq: Seq[Seq[Array[Byte]]]) = {
-    val datas =
-      byteArraysSeq
-        .flatMap({ byteArrays =>
-          byteArrays
-            .map({ byteArray =>
-              val sb = ByteBuffer
-                .wrap(
-                  byteArray
-                )
-                .order(ByteOrder.LITTLE_ENDIAN)
-                .asShortBuffer()
+  def toShort(
+    byteArraysSeq: Seq[Seq[Array[Byte]]]
+  ) = {
+    byteArraysSeq
+      .flatMap({ byteArrays =>
+        byteArrays
+          .map({ byteArray =>
+            val sb = ByteBuffer
+              .wrap(
+                byteArray
+              )
+              .order(ByteOrder.LITTLE_ENDIAN)
+              .asShortBuffer()
 
-              val a = Array.ofDim[Short](sb.capacity())
-              sb.get(a)
-              a
-            })
-        })
+            val a = Array.ofDim[Short](sb.capacity())
+            sb.get(a)
+            a
+          })
+      })
+  }
+
+  def showData(
+    byteArraysSeq: Seq[Seq[Array[Byte]]]
+  ) = {
+    val datas = toShort(byteArraysSeq)
 
     val lines =
       datas

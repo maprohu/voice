@@ -75,7 +75,10 @@ object VoiceModules extends ModulesBase(
     mvn.`com.badlogicgames.gdx:gdx-backend-lwjgl:jar:1.9.4`,
     mvn.`com.badlogicgames.gdx:gdx-platform:jar:natives-desktop:1.9.4`,
     mvn.`com.github.yannrichet:JMathPlot:jar:1.0.1`,
-    mvn.`org.mapdb:mapdb:jar:3.0.2`
+    mvn.`org.mapdb:mapdb:jar:3.0.2`,
+    mvn.`org.jogamp.jogl:jogl-all-main:jar:2.3.2`,
+    mvn.`org.jogamp.gluegen:gluegen-rt-main:jar:2.3.2`
+
   )
 
   object Common extends ScalaModule(

@@ -12,37 +12,14 @@ import org.jtransforms.fft.FloatFFT_1D
 
 object RunVoiceVisual {
 
-
-  def logicProvider() : GameLogic = new AudioLogic(100)
-
   def main(args: Array[String]) {
-
-    val listener = new ApplicationAdapter {
-      var logic : GameLogic = null
-      override def create(): Unit = {
-        logic = logicProvider()
-      }
-
-      override def render(): Unit = {
-        logic.render
-      }
-
-      override def resize(width: Int, height: Int): Unit = {
-        logic.resize(width, height)
-      }
-    }
-
-    val app = new LwjglApplication(listener)
+    GameRunner.run(() => new AudioLogic(100))
   }
 
 }
 
 
 
-trait GameLogic {
-  def render : Unit
-  def resize(width: Int, height: Int): Unit = ()
-}
 
 
 
