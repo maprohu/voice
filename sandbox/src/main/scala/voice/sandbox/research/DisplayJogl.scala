@@ -106,9 +106,10 @@ object DisplayJogl {
 
     val audio =
       sinuses(
-        Sinus(1, 10),
-        Sinus(20, 1),
-        Sinus(200, 1)
+        Sinus(10, 10),
+        Sinus(20, 1)
+//        Sinus(20, 1),
+//        Sinus(400, 1)
       )
 
     implicit val source = Source(
@@ -118,13 +119,19 @@ object DisplayJogl {
       audio
     )
 
+    val mass = 1
+    val omega = 20
+    val stiffness = omega * omega
+    val damping = Math.sqrt( 4 * stiffness * mass ) / 2
+
+
     val springs =
       Seq(
         Spring(
           baseStiffness = 0,
-          audioStiffness = 40000,
-          damping = Math.sqrt(4*40000) / 2,
-          mass = 1,
+          audioStiffness = stiffness,
+          damping = damping,
+          mass = mass,
           BLUE
         )
       )
