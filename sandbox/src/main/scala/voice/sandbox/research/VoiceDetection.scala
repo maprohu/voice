@@ -24,7 +24,7 @@ object VoiceDetection {
 
     val sds =
       data(
-        F, UE
+        H, UE
       )
       .take(4)
 

@@ -85,12 +85,12 @@ object Samples {
     sampleData: Array[Double]
   ) : RenderedLine = {
     sampleData
-
       .zipWithIndex
       .map({ case (y, idx) =>
         (idx.toDouble, y)
       })
       .toVector
+
   }
 
   def render(

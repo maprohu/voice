@@ -77,7 +77,8 @@ object VoiceModules extends ModulesBase(
     mvn.`com.github.yannrichet:JMathPlot:jar:1.0.1`,
     mvn.`org.mapdb:mapdb:jar:3.0.2`,
     mvn.`org.jogamp.jogl:jogl-all-main:jar:2.3.2`,
-    mvn.`org.jogamp.gluegen:gluegen-rt-main:jar:2.3.2`
+    mvn.`org.jogamp.gluegen:gluegen-rt-main:jar:2.3.2`,
+    mvn.`com.lihaoyi:ammonite-ops_2.11:jar:0.8.0`
 
   )
 
