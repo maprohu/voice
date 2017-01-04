@@ -14,6 +14,22 @@ import com.jogamp.opengl.{GLAutoDrawable, GLEventListener}
   */
 object DisplayJogl {
 
+  import Color._
+  val colors = Vector(
+    RED,
+    BLUE,
+    GREEN,
+    YELLOW,
+    BROWN,
+    PURPLE
+  )
+
+  def color(idx: Int) = {
+    colors(idx % colors.length)
+  }
+
+
+
   case class Sinus(
     freq: Double,
     amp: Double,
@@ -35,19 +51,6 @@ object DisplayJogl {
     }
   }
 
-  case class Spring(
-    baseStiffness: Double,
-    audioStiffness: Double,
-    damping: Double,
-    mass: Double,
-    color: Color
-  )
-
-  case class SpringState(
-    time: Double,
-    position: Double,
-    velocity: Double
-  )
 
   case class Source(
     from: Double,
@@ -63,107 +66,9 @@ object DisplayJogl {
     )
   }
 
-  def simulate(
-    spring: Spring
-  )(implicit
-    source: Source
-  ) : RenderedLine = {
-    source
-      .rendered
-      .scanLeft(
-        SpringState(source.from, 0, 0)
-      )({ (state, audio) =>
-        val (time, audioPosition) = audio
-
-        val baseForce = - state.position * spring.baseStiffness
-        val audioForce = (audioPosition - state.position) * spring.audioStiffness
-        val dampingForce = - state.velocity * spring.damping
-        val timeDifference = time - state.time
-
-        val totalForce = baseForce + audioForce + dampingForce
-        val acceleration = totalForce / spring.mass
-
-        val velocityDifference = timeDifference * acceleration
-        val positionDifference = timeDifference * state.velocity
-
-        SpringState(
-          time = time,
-          position = state.position + positionDifference,
-          velocity = state.velocity + velocityDifference
-        )
-      })
-      .map({ s =>
-        (s.time, s.position)
-      })
-  }
-
-  def main(args: Array[String]): Unit = {
-    import Color._
-
-    val from = 0.0
-    val to = 2 * Math.PI
-    val step = 10e-4
-
-    val audio =
-      sinuses(
-        Sinus(10, 10),
-        Sinus(20, 1)
-//        Sinus(20, 1),
-//        Sinus(400, 1)
-      )
-
-    implicit val source = Source(
-      from,
-      to,
-      step,
-      audio
-    )
-
-    val mass = 1
-    val omega = 20
-    val stiffness = omega * omega
-    val damping = Math.sqrt( 4 * stiffness * mass ) / 2
 
 
-    val springs =
-      Seq(
-        Spring(
-          baseStiffness = 0,
-          audioStiffness = stiffness,
-          damping = damping,
-          mass = mass,
-          BLUE
-        )
-      )
 
-    val simulatedSprings =
-      springs
-        .map({ s =>
-          new LineState(
-            simulate(s),
-            s.color
-          )
-        })
-
-    val renderedAudio =
-      render(
-        from,
-        to,
-        step,
-        Seq(
-          Line(
-            audio,
-            RED
-          )
-        )
-      )
-
-    show(
-      from,
-      to,
-      renderedAudio ++ simulatedSprings
-    )
-  }
 
   type LineFunction = Double => Double
 
@@ -204,7 +109,21 @@ object DisplayJogl {
       .toVector
   }
 
-  def render(
+  def linesStates(
+    lines: Seq[RenderedLine]
+  ) : Seq[LineState] = {
+    lines
+      .zipWithIndex
+      .map({
+        case (l, idx) =>
+          new LineState(
+            l,
+            color(idx)
+          )
+      })
+  }
+
+  def renderLines(
     from: Double,
     to: Double,
     step: Double,
@@ -255,14 +174,14 @@ object DisplayJogl {
 
 
     import Color._
-//    val colors = Vector(
-//      RED,
-//      BLUE,
-//      GREEN,
-//      YELLOW,
-//      BROWN,
-//      PURPLE
-//    )
+    val colors = Vector(
+      RED,
+      BLUE,
+      GREEN,
+      YELLOW,
+      BROWN,
+      PURPLE
+    )
 
     var frameMark = 0.0
     var grabbing = Option.empty[Int]
