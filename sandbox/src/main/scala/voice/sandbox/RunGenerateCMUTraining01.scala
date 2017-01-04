@@ -34,10 +34,11 @@ object RunGenerateCMUTraining01 {
 
 
   import ammonite.ops._
-  val dir = pwd / up / 'voice / 'target / 'cmu01
+  val dir = pwd / up / 'voice / 'local / 'cmutrain / 'cmu01
   val textDat = dir / "text.dat"
   val cmuDir = dir / 'cmu
   val wavDir = cmuDir / 'wav
+  val etcDir = cmuDir / 'etc
   val speaker1Dir = wavDir / speaker1
   val tmpFile = dir / "tmp.wav"
 
@@ -91,7 +92,6 @@ object RunRecordCMUTrainging01 {
 
     val info = new DataLine.Info(classOf[TargetDataLine], Format)
     val line = AudioSystem.getLine(info).asInstanceOf[TargetDataLine]
-    line.open(Format)
 
     data
       .zipWithIndex
@@ -114,6 +114,7 @@ object RunRecordCMUTrainging01 {
             )
 
             StdIn.readLine("waiting...")
+            line.open(Format)
             line.flush()
             line.start()
 
@@ -133,6 +134,7 @@ object RunRecordCMUTrainging01 {
             StdIn.readLine("recording...")
             line.stop()
             line.drain()
+            line.close()
             thread.join()
 
             mv(tmpFile, wavFile)
@@ -161,7 +163,8 @@ object RunGenerateCMUText01 {
     Syllables(Random.nextInt(Syllables.length))
   }
 
-  val RecordingCount = 200
+//  val RecordingCount = 200
+  val RecordingCount = 2
 
   def main(args: Array[String]): Unit = {
     import ammonite.ops._
@@ -196,9 +199,11 @@ object RunGenerateCMUMeta01 {
   import RunGenerateCMUText01._
   import RunRecordCMUTrainging01._
 
+  val TestingRatio = 2
+
   def main(args: Array[String]): Unit = {
 
-    val dic = cmuDir / s"$dbName.dic"
+    val dic = etcDir / s"$dbName.dic"
 
     write.over(
       dic,
@@ -207,7 +212,7 @@ object RunGenerateCMUMeta01 {
       """.stripMargin
     )
 
-    val phone = cmuDir / s"$dbName.phone"
+    val phone = etcDir / s"$dbName.phone"
 
     write.over(
       phone,
@@ -215,25 +220,25 @@ object RunGenerateCMUMeta01 {
         |U
         |F
         |I
-      """.stripMargin
+        |SIL""".stripMargin
     )
 
     val fileIds = (0 until RecordingCount)
-    val fileNames = fileIds.map(i => s"${speaker1}/${RunRecordCMUTrainging01.fileName(i)}")
+    val fileNames = fileIds.map(i => s"${speaker1}/${RunRecordCMUTrainging01.fileName(i)}\n")
 
-    val testCount = RecordingCount / 10
+    val testCount = RecordingCount / TestingRatio
     val trainCount = RecordingCount - testCount
 
-    val trainFileIds = cmuDir / s"${dbName}_train.fileids"
+    val trainFileIds = etcDir / s"${dbName}_train.fileids"
     write.over(
       trainFileIds,
-      fileNames.take(trainCount).mkString("\n")
+      fileNames.take(trainCount).mkString("")
     )
 
-    val testFileIds = cmuDir / s"${dbName}_test.fileids"
+    val testFileIds = etcDir / s"${dbName}_test.fileids"
     write.over(
       testFileIds,
-      fileNames.drop(trainCount).mkString("\n")
+      fileNames.drop(trainCount).mkString("")
     )
 
     val data = RunRecordCMUTrainging01.readMeta
@@ -243,25 +248,25 @@ object RunGenerateCMUMeta01 {
         .zipWithIndex
         .map({
           case (d, idx) =>
-            s"<s> ${d.flatten.mkString(" ")} </s> (${fileName(idx)})"
+            s"<s> ${d.flatten.mkString(" ")} </s> (${fileName(idx)})\n"
         })
 
     
 
 
-    val trainTranscript = cmuDir / s"${dbName}_train.transcription"
+    val trainTranscript = etcDir / s"${dbName}_train.transcription"
     write.over(
       trainTranscript,
-      transcripts.take(trainCount).mkString("\n")
+      transcripts.take(trainCount).mkString("")
     )
 
-    val testTranscript = cmuDir / s"${dbName}_test.transcription"
+    val testTranscript = etcDir / s"${dbName}_test.transcription"
     write.over(
       testTranscript,
-      transcripts.drop(trainCount).mkString("\n")
+      transcripts.drop(trainCount).mkString("")
     )
 
-    val filler = cmuDir / s"${dbName}.filler"
+    val filler = etcDir / s"${dbName}.filler"
     write.over(
       filler,
       """<s> SIL
