@@ -163,8 +163,8 @@ object RunGenerateCMUText01 {
     Syllables(Random.nextInt(Syllables.length))
   }
 
-//  val RecordingCount = 200
-  val RecordingCount = 2
+  val RecordingCount = 200
+//  val RecordingCount = 2
 
   def main(args: Array[String]): Unit = {
     import ammonite.ops._
@@ -251,7 +251,7 @@ object RunGenerateCMUMeta01 {
             s"<s> ${d.flatten.mkString(" ")} </s> (${fileName(idx)})\n"
         })
 
-    
+
 
 
     val trainTranscript = etcDir / s"${dbName}_train.transcription"
@@ -272,6 +272,15 @@ object RunGenerateCMUMeta01 {
       """<s> SIL
         |</s> SIL
         |<sil> SIL
+      """.stripMargin
+    )
+
+    val jsgf = etcDir / s"${dbName}.jsgf"
+    write.over(
+      jsgf,
+      """#JSGF V1.0;
+        |grammar csufidb;
+        |public <csuorfi> = CSU | FI ;
       """.stripMargin
     )
 
