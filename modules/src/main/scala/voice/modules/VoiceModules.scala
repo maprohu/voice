@@ -176,7 +176,8 @@ object VoiceModules extends ModulesBase(
     VoiceRequestModules.Alsa,
     mvn.`com.typesafe.akka:akka-stream_2.11:jar:2.4.14`,
     mvn.`com.jssrc:jssrc:jar:1.0.1`,
-    mvn.`com.nativelibs4java:jnaerator:jar:0.12`
+    mvn.`com.nativelibs4java:jnaerator:jar:0.12`,
+    mvn.`com.ibm:couchdb-scala_2.11:jar:0.7.2`
   )
 
 
