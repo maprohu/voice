@@ -61,7 +61,8 @@ object RunVoice {
     VoiceAndroidModules.Packaging,
     VoiceImplModules.Common,
     VoiceImplModules.Threads,
-    VoiceImplModules.Testing
+    VoiceImplModules.Testing,
+    CGModules.Core
 //    VoiceRpiModules.Core
   )
 

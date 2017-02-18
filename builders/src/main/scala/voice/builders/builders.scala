@@ -35,6 +35,11 @@ object build_voice_impl extends mvnmod.builder.ModuleBuilder(
   "./impl"
 )
            
+object build_voice_cg extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./cg"
+)
+           
 object build_voice_modules extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./modules"
@@ -198,6 +203,11 @@ object build_voice_impl_threads extends mvnmod.builder.ModuleBuilder(
 object build_voice_impl_testing extends mvnmod.builder.ModuleBuilder(
   voice.modules.Place.RootPath,
   "./impl/testing"
+)
+           
+object build_voice_cg_core extends mvnmod.builder.ModuleBuilder(
+  voice.modules.Place.RootPath,
+  "./cg/core"
 )
            
        
